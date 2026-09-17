@@ -16,6 +16,7 @@ from agents.upload_agent import publish
 from agents.voice_agent import narrate
 from analytics.cost import video_cost
 from automation.jobs import (
+    RESUME_LOCKED_STATUSES,
     approve_video,
     load_checkpoint,
     mark_failed,
@@ -144,6 +145,25 @@ def produce(
     work = CONTENT_DIR / "videos" / video_id
     work.mkdir(parents=True, exist_ok=True)
     checkpoint = load_checkpoint(video_id) if resume_id else {}
+    if resume_id and checkpoint.get("status") in RESUME_LOCKED_STATUSES:
+        return {
+            "id": video_id,
+            "channel_id": checkpoint.get("channel_id") or channel.id,
+            "status": checkpoint["status"],
+            "filepath": checkpoint.get("filepath") or "",
+            "resumed": False,
+            "error": "resume_locked",
+            "hint": (
+                "Bu video terminal durumda; --resume durumu değiştirmez. "
+                "Onay için: python -m automation approve --id "
+                f"{video_id} --upload"
+                if checkpoint["status"] in {"awaiting_approval", "approved"}
+                else "Yeni üretim için resume kullanmayın."
+            ),
+            "qa": checkpoint.get("qa") or {},
+            "require_human_approval": settings.require_human_approval,
+            "media_providers": status_report(),
+        }
     completed = set(checkpoint.get("completed_stages") or [])
     idea_id = checkpoint.get("qa", {}).get("idea_id") or _id()
     script_id = checkpoint.get("script_id") or checkpoint.get("qa", {}).get("script_id") or _id()

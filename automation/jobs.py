@@ -23,6 +23,17 @@ STAGES = [
     "failed",
 ]
 
+# Resume must not re-enter post-QA / upload for these statuses (duplicate publish risk).
+RESUME_LOCKED_STATUSES = frozenset(
+    {
+        "awaiting_approval",
+        "approved",
+        "rejected",
+        "uploading",
+        "uploaded",
+    }
+)
+
 
 def load_checkpoint(video_id: str) -> dict[str, Any]:
     with get_session() as session:
