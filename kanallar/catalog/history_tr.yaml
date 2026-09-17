@@ -1,0 +1,131 @@
+- id: gobeklitepe
+  title: Göbeklitepe
+  hook: Şanlıurfa'daki Göbeklitepe, Stonehenge'den binlerce yıl önce dikildi. Tarım henüz yokken tapınak vardı.
+  facts:
+    - T biçimli dikilitaşların üzerinde tilki, yaban domuzu ve turna kabartmaları durur.
+    - Avcı-toplayıcılar bu anıtı yapmak için yüzlerce kişiyi bir araya getirdi.
+    - Bitince üstünü toprakla örttüler. Binlerce yıl sessiz kaldı.
+  closer: Medeniyet önce kaseyi değil, ortak bir hikayeyi inşa etmiş olabilir.
+  tags: [göbeklitepe, anadolu, arkeoloji]
+  visual: T-shaped pillars under a starry urfa sky
+
+- id: piri-reis
+  title: Piri Reis Haritası
+  hook: 1513'te Piri Reis, kayıp haritalardan bir dünya haritası derledi. Antarktika tartışması buradan doğdu.
+  facts:
+    - Haritanın kaynağı arasında Kristof Kolomb'un kayıp bir haritası da sayılır.
+    - Güney Amerika'nın doğu kıyısı şaşırtıcı ayrıntıdadır.
+    - Asıl mucize kehanet değil; denizcinin kaynakları birleştirme cesaretidir.
+  closer: Harita, dünyayı olduğu gibi değil; o gün bilinen dünyayı gösterir.
+  tags: [piri reis, harita, osmanlı]
+  visual: antique portolan map with gold compass
+
+- id: iskenderiye
+  title: İskenderiye Kütüphanesi
+  hook: Antik dünyanın en büyük kütüphanesi bir günde yok olmadı. Defalarca yaralandı.
+  facts:
+    - Gemilerden kitap kopyalanır, aslı bazen geri verilmezdi.
+    - Yangınlar, kuşatmalar ve ihmal birikerek koleksiyonu eritti.
+    - Kaybolan şey ragalar değil; tartışmanın sürekliliğiydi.
+  closer: Bir kütüphane yandığında dumanı yüzyıllarca sürer.
+  tags: [iskenderiye, kütüphane, antik]
+  visual: burning scrolls in a colonnade night
+
+- id: ayasofya
+  title: Ayasofya'nın Kubbesi
+  hook: 537'de açılan Ayasofya'nın kubbesi, çağdaşlarına gökyüzünün zincirle asılı geldi.
+  facts:
+    - Mimarlar Anthemios ve Isidoros, matematikçiydi.
+    - Kubbe depremlerde yıkıldı, her seferinde biraz daha akıllıca yeniden kuruldu.
+    - İçerideki altın mozaikler, ışığı taşın içinden geliyormuş gibi dağıtır.
+  closer: İstanbul'un silueti, bir mühendislik duasının gölgesidir.
+  tags: [ayasofya, istanbul, mimari]
+  visual: golden dome interior with falling light
+
+- id: ipek-yolu
+  title: İpek Yolu'nun Tozu
+  hook: İpek Yolu sadece kumaş taşımadı. Din, virüs, tarif ve kelime de taşıdı.
+  facts:
+    - Çin ipeği Roma'da altınla yarışırdı.
+    - Kervansaraylar, gecenin güvenli limanıydı.
+    - Veba da bu yollardan yürüdü. Bağlantı hem armağan hem risktir.
+  closer: Küreselleşme yeni değil; sadece artık daha hızlı.
+  tags: [ipek yolu, ticaret, orta asya]
+  visual: caravan silhouette on a dusk steppe
+
+- id: rossetta
+  title: Rosetta Taşı
+  hook: 1799'da bir taş bulundu. Üzerinde aynı metin üç yazıyla yazılmıştı. Mısır böylece yeniden konuştu.
+  facts:
+    - Hiyeroglif, demotik ve Yunanca yan yanaydı.
+    - Champollion, kral adlarındaki kartuşlardan kapıyı araladı.
+    - Taş bir ganimetti; anlamı ise bütün insanlığın oldu.
+  closer: Kaybolmuş bir dil, ikinci bir çeviriyle geri döner.
+  tags: [rosetta, mısır, yazı]
+  visual: dark basalt stele with three scripts
+
+- id: viking-amerika
+  title: Vikingler Amerika'da
+  hook: Kolomb'dan beş yüzyıl önce, Vikingler Newfoundland kıyısına ev kurdu. Yerinin adı L'Anse aux Meadows.
+  facts:
+    - Sagalar Vinland diye bir yer anlatırdı. Uzun süre masal sandık.
+    - 1960'larda demirhane ve ev kalıntıları efsaneyi kazıya çevirdi.
+    - Kalıcı olmadılar; ama Atlas Okyanusu'nu erken geçtiler.
+  closer: Keşif, ilk ayak değil; geride bırakılan izdir.
+  tags: [viking, amerika, keşif]
+  visual: turf longhouse on a cold atlantic shore
+
+- id: magna-carta
+  title: Magna Carta
+  hook: 1215'te İngiliz baronları kralı bir çayıra çağırdı. İmza, kralın da yasaya bağlı olduğunu yazdı.
+  facts:
+    - Belge hemen işe yaramadı. Defalarca iptal edildi, yeniden yazıldı.
+    - Asıl gücü sonradan geldi: keyfi iktidara sınır fikri.
+    - Modern anayasaların gölgesinde bu çayır durur.
+  closer: Özgürlük bazen bir savaş değil, imzalanmış bir sınırdır.
+  tags: [magna carta, hukuk, ingiltere]
+  visual: wax seal on vellum in forest light
+
+- id: osmanli-kahve
+  title: Kahvenin İstanbul'u
+  hook: 16. yüzyılda kahve İstanbul'a geldi. Kahvehane, fincandan önce bir meclisti.
+  facts:
+    - Ulema ve yeniçeri aynı tezgahın gölgesinde tartışırdı.
+    - Yasaklandı, yakıldı, yine açıldı. Fikir, fincan kadar sıcaktı.
+    - Avrupa kahveyi bu şehirden öğrendi.
+  closer: Bir içecek değil; şehrin oturma düzeni değişti.
+  tags: [kahve, istanbul, osmanlı]
+  visual: copper cezve and cafe lanterns
+
+- id: kutubia-yok-topkapi
+  title: Topkapı'nın Harem Kapısı
+  hook: Topkapı Sarayı bir gösteriş sarayı değildi. İmparatorluk, avluların sessizliğinden yönetildi.
+  facts:
+    - Fatih'ten itibaren padişah burada yaşadı, burada karar verdi.
+    - Hazine, kutsal emanetler ve divan aynı tepedeydi.
+    - Sarayın asıl silahı duvar değil; bilgiye kimlerin gireceğidir.
+  closer: Güç, altın odada değil; kapısı dar koridordadır.
+  tags: [topkapi, osmanlı, istanbul]
+  visual: tiled corridor with latticed light
+
+- id: copernicus
+  title: Dünyayı Kımıldatan Kitap
+  hook: Kopernik, Dünya'yı evrenin merkezinden aldı. Kitabı öldüğü yıl basıldı.
+  facts:
+    - Model mükemmel değildi; yörüngeler hâlâ çemberdi.
+    - Asıl darbe gurura indi: gökyüzü bize göre dönmüyordu.
+    - Galileo, Kepler ve Newton bu kapıdan geçti.
+  closer: Bazı kitaplar gezegeni değil, bakışı yerinden eder.
+  tags: [kopernik, bilim tarihi, astronomi]
+  visual: antique orrery and handwritten circles
+
+- id: yazinin-dogusu
+  title: Yazının İlk Hesabı
+  hook: Yazı şiir için doğmadı. Mezopotamya'da arpa, koyun ve borcu saymak için doğdu.
+  facts:
+    - Kil tabletler ıslanırsa bozulmasın diye pişirildi. Yangın onları korudu.
+    - Çivi yazısı, işaretleri sese bağlayınca hikaye de yazılabildi.
+    - Muhasebe, edebiyatın kapısını açtı.
+  closer: İlk yazar bir şair değil; ambarın kapısını tutan kâtip olabilir.
+  tags: [yazı, mezopotamya, sümer]
+  visual: cuneiform tablet glowing in dust

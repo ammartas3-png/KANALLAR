@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Stüdyo · Kanallar{% endblock %}
+{% block body %}
+<section class="hero">
+  <p class="eyebrow">Otomasyonlu YouTube stüdyosu</p>
+  <h1>Konuyu seçer, sesi üretir, Shorts’u kurar.</h1>
+  <p class="lede">İki hazır kanal var. Her üretim senaryo, sahne kartı, kapak ve MP4 çıkarır. YouTube yüklemesi isteğe bağlı ve varsayılan olarak gizli.</p>
+  <div class="stats">
+    <div><strong>{{ counts.jobs }}</strong><span>iş</span></div>
+    <div><strong>{{ counts.ready }}</strong><span>hazır video</span></div>
+    <div><strong>{{ counts.uploaded }}</strong><span>yükleme</span></div>
+  </div>
+</section>
+<section class="grid">
+  {% for channel in channels %}
+  <article class="card channel" style="--accent: {{ channel.accent }}; --primary: {{ channel.primary }}">
+    <div class="card-head">
+      <p class="kicker">{{ channel.niche }} · {{ channel.format }}</p>
+      <h2>{{ channel.name }}</h2>
+      <p>{{ channel.tagline }}</p>
+    </div>
+    <dl>
+      <div><dt>Kalan konu</dt><dd>{{ channel.topics_left }}/{{ channel.topics_total }}</dd></div>
+      <div><dt>Ses</dt><dd>{{ channel.voice }}</dd></div>
+    </dl>
+    <div class="actions">
+      <button class="btn primary" data-produce="{{ channel.id }}">Video üret</button>
+      <a class="btn ghost" href="/channels/{{ channel.id }}">Kanalı aç</a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

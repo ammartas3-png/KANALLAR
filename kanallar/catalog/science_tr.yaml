@@ -1,0 +1,197 @@
+- id: ahtapot-uc-kalp
+  title: Ahtapotun Üç Kalbi
+  hook: Ahtapotun üç kalbi var. İkisi solungaçlara, biri bedene kan pompalar.
+  facts:
+    - Çiftleşme sırasında bedeni besleyen kalp durur. Bu yüzden ahtapot yüzmek yerine sürünmeyi tercih eder.
+    - Kanı bakır temelli hemocyanin taşır; bu yüzden kanı mavi görünür.
+    - Kolunun içinde de nöron vardır. Beyin emir verir, kol kendi başına karar alabilir.
+  closer: Denizin zekası, tek bir kafada değil; bütün vücuda yayılmış durumda.
+  tags: [ahtapot, biyoloji, okyanus]
+  visual: deep ocean ink and copper light
+
+- id: tardigrad
+  title: Su Ayısı Ölmez mi?
+  hook: Tardigrad, kaynar suya, buzula ve uzay vakumuna dayanabilen milimetrelik bir hayvandır.
+  facts:
+    - Kuruduğunda metabolizmasını neredeyse sıfıra indirir. Bu haline tun denir.
+    - 2007'de tardigradlar açık uzaya çıkarıldı. Bir kısmı Dünya'ya canlı döndü.
+    - Radyasyona insandan yüzlerce kat daha dayanıklıdır.
+  closer: En sert zırh kas değil; hayatı durdurup tekrar başlatabilmektir.
+  tags: [tardigrad, uzay, dayanıklılık]
+  visual: microscopic crystal creature in starlight
+
+- id: voyager-altin-plak
+  title: Voyager'ın Altın Plağı
+  hook: 1977'de iki uzay aracı, Dünya'nın sesini altın bir plağa kazıyıp yıldızlara gönderdi.
+  facts:
+    - Plakta 55 dilde selam, müzik, kalp atışı ve bir bebeğin ağlaması var.
+    - Voyager 1, şu an Güneş Sistemi'nin dışında. İnsan yapımı en uzak nesnedir.
+    - Sinyali hâlâ geliyor; cevap için onlarca yıl bekleriz.
+  closer: Belki kimse dinlemez. Yine de kendimizi evrene tanıtmaya değer bulduk.
+  tags: [voyager, uzay, nasa]
+  visual: gold record floating in deep space
+
+- id: noron-yildiz
+  title: Bir Çay Kaşığı Yıldız
+  hook: Nötron yıldızından bir çay kaşığı madde, yaklaşık 1 milyar ton gelir.
+  facts:
+    - Bu yıldızlar, dev bir yıldızın çökmesiyle oluşur. Atomlar ezilir, geriye nötron kalır.
+    - Bazıları saniyede yüzlerce kez döner. Adları pulsar.
+    - Yüzeyindeki yerçekimi, Dünya'dakinden yüz milyar kat daha güçlü olabilir.
+  closer: Evrenin en ağır şeyleri bazen en küçük görünenlerdir.
+  tags: [nötron yıldızı, fizik, uzay]
+  visual: spinning dense star with blue jets
+
+- id: simsek-gunes
+  title: Şimşek Güneş'ten Sıcak
+  hook: Bir şimşeğin kanalı, Güneş'in yüzeyinden beş kat daha sıcak olabilir.
+  facts:
+    - Güneş yüzeyi yaklaşık 5500 derece. Şimşek ise 30 bin dereceye yaklaşır.
+    - Işığı görürsün, sesi sonra gelir. Her üç saniye yaklaşık bir kilometredir.
+    - Dünya'da her saniye onlarca şimşek düşer.
+  closer: Gökyüzü bazen Güneş'i geride bırakacak kadar öfkelenir.
+  tags: [şimşek, hava, fizik]
+  visual: violet lightning over dark plains
+
+- id: agac-konusur
+  title: Ağaçlar Konuşur
+  hook: Ormandaki ağaçlar köklerinin altındaki mantar ağıyla birbirine mesaj gönderir.
+  facts:
+    - Bu ağa kimi araştırmacılar Wood Wide Web diyor.
+    - Yaşlı bir ağaç, gölgede kalan yavruya karbon ve su aktarabilir.
+    - Böcek saldırısına uğrayan bir ağaç, komşularına kimyasal uyarı bırakır.
+  closer: Orman tek tek ağaç değil; yeraltında çalışan bir şehirdir.
+  tags: [orman, ekoloji, ağaç]
+  visual: glowing roots under a dark forest
+
+- id: bal-bozulmaz
+  title: Bal Neden Bozulmaz
+  hook: Arkeologlar, binlerce yıllık bal kavanozları açtı. Bal hâlâ yenilebilir durumdaydı.
+  facts:
+    - Baldaki su oranı düşüktür. Bakteriler içinde çoğalamaz.
+    - Doğal asitliği ve hidrojen peroksit, mikropları durdurur.
+    - Kristalleşmesi bozulduğu anlamına gelmez; sadece şekli değişir.
+  closer: Arılar, insanlardan önce son kullanma tarihi olmayan bir gıda icat etti.
+  tags: [bal, kimya, arı]
+  visual: amber honey in stone jar
+
+- id: kara-delik-zaman
+  title: Kara Deliğin Saati
+  hook: Kara deliğe yaklaştıkça saatlerin daha yavaş işlediğini Einstein söyledi. Haklıydı.
+  facts:
+    - 2019'da Event Horizon Telescope, bir kara deliğin gölgesini fotoğrafladı.
+    - Işık bile kaçamaz; bu yüzden adı kara.
+    - Merkezindeki tekillikte, bildiğimiz fizik kuralları susar.
+  closer: En karanlık yer, zamanın da en ağır aktığı yer olabilir.
+  tags: [kara delik, einstein, uzay]
+  visual: orange accretion disk around black void
+
+- id: muz-dna
+  title: Muzla Akrabayız
+  hook: İnsan DNA'sının yaklaşık yüzde 60'ı muzla ortak görünür. Bu bizi muz yapmaz.
+  facts:
+    - Temel hücre işleri — enerji, bölünme, onarım — canlıların çoğunda benzerdir.
+    - Ortak genler, ortak atadan kalan eski talimatlardır.
+    - Fark, tarifte değil; tarifin nasıl kullanıldığındadır.
+  closer: Akrabalık bazen görünüşte değil, hücrenin mutfağındadır.
+  tags: [dna, genetik, evrim]
+  visual: dna helix beside a banana silhouette
+
+- id: octupus-kamuflaj
+  title: Deri Düşünen Hayvan
+  hook: Ahtapot, bir saniyeden kısa sürede renk ve doku değiştirir. Bunu gözüyle değil, derisiyle de yapar.
+  facts:
+    - Kromotofor denen kesecikler açılıp kapanarak rengi değiştirir.
+    - Bazı türler, etrafındaki deseni neredeyse piksel piksel kopyalar.
+    - Beyni koluna dağılmıştır; kamuflaj refleks kadar karardır.
+  closer: Saklanmanın en iyi yolu, olduğun yere dönüşmektir.
+  tags: [kamuflaj, ahtapot, evrim]
+  visual: octopus blending into coral mosaic
+
+- id: evren-echo
+  title: Büyük Patlama'nın Fısıltısı
+  hook: Televizyonunun eski karıncalanmasının bir kısmı, 13.8 milyar yıllık bir yankıydı.
+  facts:
+    - Buna kozmik mikrodalga arka plan ışıması denir.
+    - Evren şeffaf hale geldiğinde saçılan ilk ışıktır.
+    - Sıcaklığı bugün eksi 270 derece civarına kadar soğumuştur.
+  closer: Gökyüzündeki statik, yaratılışın soğumuş fotoğrafıdır.
+  tags: [büyük patlama, kozmoloji, fizik]
+  visual: faint microwave glow across the night sky
+
+- id: ari-dans
+  title: Arının Dans Haritası
+  hook: Bir işçi arı, çiçeğin yerini anlatmak için dans eder. Bu bir haritadır.
+  facts:
+    - Dansın açısı Güneş'e göredir. Süre ise mesafeyi söyler.
+    - Kovan karanlıktır; arkadaşları titreşimi ve kokuyu okur.
+    - Tek bir keşif, tüm koloniyi doğru tarlaya yönlendirebilir.
+  closer: Dil bazen kelime değil; doğru açıyla sallanan bir gövdedir.
+  tags: [arı, iletişim, biyoloji]
+  visual: golden bees in geometric dance
+
+- id: uyku-temizlik
+  title: Beyin Geceleri Çöp Atar
+  hook: Uyurken beynin, gün içinde biriken atıkları yıkayan bir temizlik sistemi devreye girer.
+  facts:
+    - Bu ağa glifatik sistem denir.
+    - Hücreler biraz büzülür, aradaki sıvı daha rahat akar.
+    - Uykusuzluk, bu yıkamayı aksatır; dikkat ve bellek düşer.
+  closer: Uyumak tembellik değil; beynin gece vardiyasıdır.
+  tags: [uyku, beyin, sağlık]
+  visual: night-blue brain with flowing light
+
+- id: ay-uzaklasiyor
+  title: Ay Kaçıyor
+  hook: Ay her yıl Dünya'dan yaklaşık 3.8 santimetre uzaklaşıyor. Tıpkı tırnak uzaması gibi.
+  facts:
+    - Okyanus gelgitleri bu kaçışı frenleyerek enerji çalar.
+    - Günün uzunluğu da yavaş yavaş artıyor.
+    - Milyonlarca yıl sonra tam Güneş tutulması kaybolabilir; Ay gökyüzünde küçülecek.
+  closer: En yakın komşumuz bile sessizce veda ediyor.
+  tags: [ay, gelgit, astronomi]
+  visual: receding moon over a tidal sea
+
+- id: cam-sivi
+  title: Cam Katı mı?
+  hook: Eski katedrallerin camları altta daha kalın diye camın aktığı söylenir. Bu bir efsanedir.
+  facts:
+    - Ortaçağ camcıları düzgün levha yapamazdı; kalın tarafı alta koyarlardı.
+    - Cam, atom düzeni bozulmuş bir katıdır. Akışkan gibi davranmaz.
+    - Oda sıcaklığında akması için evrenin yaşından uzun zaman gerekir.
+  closer: Bazen eski cam değil, eski hikaye akar.
+  tags: [cam, malzeme, efsane]
+  visual: stained glass geometry in dark chapel
+
+- id: karga-zeka
+  title: Karganın Alet Çantası
+  hook: Yeni Kaledonya kargası, dalı kancaya çevirip oyuktan böcek çıkarır. Bunu kimse öğretmez.
+  facts:
+    - Kargalar yüzleri hatırlar ve kuşaklar boyunca kin güdebilir.
+    - Aleti kullanmakla kalmaz, aleti başka aletle de yapabilir.
+    - Problem çözme testi bazı çocukların skoruna yaklaşır.
+  closer: Zeka iki ayakta değil; doğru sorunu çözmekte gizlidir.
+  tags: [karga, zeka, evrim]
+  visual: black crow holding a hooked twig
+
+- id: suc-orani-yok
+  title: Dünya'daki Su Nereden
+  hook: Okyanusların bir kısmı, gezegenin içinden ve uzaydan gelen buzlu kayalardan gelmiş olabilir.
+  facts:
+    - Erken Dünya çok sıcaktı; suyun bir kısmı buharla kaçtı.
+    - Kuyruklu yıldız ve asteroitler buz taşıdı.
+    - Bugün okyanus, gezegenin yüzeyini ince bir film gibi kaplar.
+  closer: Mavi gezegen, aslında ince bir su kabuğudur.
+  tags: [okyanus, dünya, su]
+  visual: pale blue marble with thin water shell
+
+- id: qbit-degil-isirisi
+  title: Biber Neden Yakıyor
+  hook: Acı biberin yaktığı dilin değil, sinirin kendisidir. Capsaicin, ısı alarmını çalar.
+  facts:
+    - Beyin bunu gerçek yanık gibi okur; ağızda ateş yokken ateş hissi doğar.
+    - Süt, yağlı olduğu için capsaicin'i dağıtır. Su ise yakıcıyı gezdirir.
+    - Kuşlar acıyı hissetmez; tohumu uzağa taşırlar.
+  closer: Bitki, memeliyi kovmak için sinir sistemimizi ödünç aldı.
+  tags: [biber, sinir, kimya]
+  visual: red chili and glowing nerve lines
