@@ -1,15 +1,16 @@
 # NEXT_STEPS.md
 
-Ordered plan. **No new feature work in this audit turn.**  
-Principle: finish the loop you already have before adding tools.
+Ordered plan against `PROJECT_GOAL.md` / `GOAL_GAP_MATRIX.md`.  
+Principle: finish the **core feedback loop** with tools already installed before adding anything new.
 
 ---
 
 ## Phase 0 — Freeze (now)
 
-1. Stop adding renderers, agents, or channels.
+1. Stop adding renderers, agents, channels, frameworks, or GitHub repos.
 2. Treat `automation/pipeline.py` + `apps/studio` as the only product surface.
-3. Do not install n8n, Remotion Whisper, browser-use, or paid video APIs.
+3. Do not install n8n, Remotion Whisper, browser-use, LangGraph, or paid video APIs.
+4. Any new dependency must beat an installed tool on cost, quality, or operability.
 
 ---
 
