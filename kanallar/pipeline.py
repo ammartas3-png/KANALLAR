@@ -72,7 +72,9 @@ def _run_steps(
 
     store.update(job_id, step="narrating")
     audio_path = work / "narration.mp3"
-    synthesize(script["narration"], audio_path, channel)
+    script["voice_engine"] = synthesize(script["narration"], audio_path, channel)
+    (work / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
+    store.update(job_id, script_json=json.dumps(script, ensure_ascii=False))
 
     store.update(job_id, step="designing", audio_path=str(audio_path))
     slides: list[Path] = []

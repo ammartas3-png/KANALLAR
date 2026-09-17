@@ -1,0 +1,40 @@
+id: channel_01
+name: Bilim Dakikası
+tagline: 60 saniyede bir bilimsel gerçeği öğren
+youtube_channel_id: ""
+niche: science
+language: tr
+country: TR
+format: shorts
+catalog: catalog.yaml
+prompt: >
+  Türkçe, net, tek iddialı cümlelerle konuş. Abartma, korku satma.
+  Hook ilk 2 saniyede somut bir gerçek söylesin. Sahne başına bir fikir.
+cta: Beğen, takip et, bir sonraki gerçeği kaçırma.
+description_footer: |
+  Bu video eğitim amaçlıdır. Anlatım orijinaldir; görseller ve ses bu stüdyoda üretilmiştir.
+  Sentetik ses ve otomatik kurgu kullanılmıştır.
+
+  #bilim #shortsvideo #öğren
+brand:
+  primary: "#0A0E17"
+  accent: "#F4B942"
+  text: "#F4F1E8"
+  muted: "#9AA3B5"
+voice:
+  provider: auto
+  voice: tr-TR-AhmetNeural
+  rate: "+4%"
+  language: tr
+upload:
+  privacy: private
+  category_id: "28"
+  made_for_kids: false
+  default_language: tr
+  tags:
+    - bilim
+    - kısa video
+    - bilim dakikası
+    - bilimsel gerçekler
+  frequency_per_day: 1
+  schedule_hour: 20

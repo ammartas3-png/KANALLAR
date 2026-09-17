@@ -1,61 +1,54 @@
 # Kanallar
 
-Otomasyonlu YouTube stüdyosu. Kanal profilinden konuyu seçer, orijinal senaryo yazar, sentetik ses üretir, sahne kartlarını ve kapağı çizer, Shorts MP4’ünü kurar. YouTube yüklemesi resmi Data API ile ve varsayılan olarak **gizli**dir.
+Tek kanallı YouTube Shorts fabrikası. OpenMontage akışını (research → idea → script → assets → voice → captions → render → QA) yerelde, düşük maliyetle çalıştırır.
 
-Hazır kanallar:
+**MVP kanalı:** `channels/channel_01` — Bilim Dakikası (TR, 9:16). İkinci kanala geçilmez; çekirdek ısınana kadar tek hat.
 
-| Kanal | Biçim | Dil | Katalog |
-| --- | --- | --- | --- |
-| **Bilim Dakikası** | Shorts 9:16 | Türkçe | 18 bilimsel konu |
-| **Tarih Kısa** | Shorts 9:16 | Türkçe | 12 tarih sahnesi |
+## Ne çalışır
 
-## Hızlı başlangıç
+```
+Research → Idea → Script → Assets → Voice → Video + Captions → QA → (opsiyonel Upload) → Analytics → Director
+```
+
+- Katalog + Wikipedia + `yt-dlp` metadata (indirme yok)
+- Orijinal senaryo JSON (`hook`, `scenes`, `cta`, `estimated_duration`)
+- TTS: edge-tts → gTTS → espeak-ng
+- FFmpeg: slayt, zoom/pan, ses normalize, ASS altyazı, 1080×1920 encode
+- Remotion şablonu: `apps/remotion` (HOOK → 3 sahne → CTA). Varsayılan renderer FFmpeg ($0)
+- QA: çözünürlük, 9:16, süre, ses, caption, dosya boyutu
+- YouTube Data API v3 yükleme (private). Analytics API hazır, credential isteğe bağlı
+- PostgreSQL şeması `database/schema.sql` — geliştirmede SQLite fallback
+- Agent log + `cost_per_video`
+- Basit stüdyo: `python3 -m automation studio`
+
+## Kurulum
 
 ```bash
 python3 -m pip install -r requirements.txt
-python3 -m kanallar channels
-python3 -m kanallar produce bilim-dakikasi
-python3 -m kanallar studio --host 127.0.0.1 --port 8080
+cp .env.example .env
+# PostgreSQL (önerilen):
+#   createdb kanallar
+#   DATABASE_URL=postgresql+psycopg://… .env içine
+python3 -m automation channel
+python3 -m automation produce --topic ahtapot-uc-kalp
+python3 -m automation studio --host 127.0.0.1 --port 8080
 ```
 
-Stüdyo arayüzü `http://127.0.0.1:8080` adresinde açılır. `Video üret` kuyruğa iş koyar; bitince videoyu oynatır ve MP4 indirir.
+Ortam: Python 3.11+, Node 20+, FFmpeg.
 
-Belirli bir konu:
+Eski CLI hâlâ durur: `python3 -m kanallar produce bilim-dakikasi`.
 
-```bash
-python3 -m kanallar produce bilim-dakikasi --topic ahtapot-uc-kalp
-python3 -m kanallar produce tarih-kisa --topic gobeklitepe
-```
+## YouTube
 
-## Yeni kanal
+1. YouTube Data API v3 + OAuth masaüstü istemcisi
+2. `client_secret.json`
+3. `python3 -m automation produce --upload` — video **private** gider
 
-`channels/yeni-kanal.yaml` ekleyin. `catalog` alanı `kanallar/catalog/` altındaki bir YAML dosyasına işaret eder. Her konu `id`, `title`, `hook`, `facts`, `closer`, `tags` ister.
+Browser ile Studio’ya tıklamak yok. Resmi API yoksa üretim yerel kalır.
 
-Cron ile günlük üretim:
+## Bilinçli olarak sonraya bırakılanlar
 
-```bash
-0 9 * * * cd /path/to/KANALLAR && python3 -m kanallar produce bilim-dakikasi
-```
-
-## YouTube yükleme
-
-1. [Google Cloud Console](https://console.cloud.google.com/) içinde YouTube Data API v3’ü açın.
-2. OAuth masaüstü istemcisi oluşturun, JSON’u `client_secret.json` olarak koyun.
-3. İlk yüklemede tarayıcıda hesabı onaylayın. Token `token.json` içine yazılır.
-4. Stüdyodan veya CLI’dan yükleyin:
-
-```bash
-python3 -m kanallar upload <job_id>
-```
-
-Videolar `private` gider. Toplu spam yükleme için tasarlanmadı.
-
-## Ne üretilir, ne üretilmez
-
-- Senaryolar katalogdaki orijinal metinlerden kurulur; başka kanallardan kopyalanmaz.
-- Görseller Pillow ile çizilir, ses `edge-tts` (yoksa `espeak-ng`) ile üretilir.
-- Telifli müzik katılmaz.
-- Açıklamada sentetik ses / otomatik kurgu belirtilir.
+OpenViking, browser-use (sadece `research/browser.py` soyutlama), n8n, Redis, LangGraph, Kubernetes, Ruflo, swarm, ücretli AI video. Codebase Memory MCP isteğe bağlı; yerel indeks: `python3 scripts/index_codebase.py`.
 
 ## Test
 
