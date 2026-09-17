@@ -10,14 +10,14 @@ Tek kanallı YouTube Shorts fabrikası. OpenMontage akışını (research → id
 Research → Idea → Script → Assets → Voice → Video + Captions → QA → (opsiyonel Upload) → Analytics → Director
 ```
 
-- Katalog + Wikipedia + `yt-dlp` metadata (indirme yok)
+- Katalog + Wikipedia özet/most-read trend + `yt-dlp` metadata (indirme yok)
 - Orijinal senaryo JSON (`hook`, `scenes`, `cta`, `estimated_duration`)
 - TTS: edge-tts → gTTS → espeak-ng
 - FFmpeg: slayt, zoom/pan, ses normalize, ASS altyazı, 1080×1920 encode
 - Remotion şablonu: `apps/remotion` (HOOK → 3 sahne → CTA). Varsayılan renderer FFmpeg ($0)
 - QA: çözünürlük, 9:16, süre, ses, caption, dosya boyutu
 - YouTube Data API v3 yükleme (private). Analytics API hazır, credential isteğe bağlı
-- PostgreSQL şeması `database/schema.sql` — geliştirmede SQLite fallback
+- PostgreSQL şeması `database/schema.sql` + `scripts/bootstrap_db.sh` — CI/SQLite fallback
 - Agent log + `cost_per_video`
 - Basit stüdyo: `python3 -m automation studio`
 
@@ -26,9 +26,9 @@ Research → Idea → Script → Assets → Voice → Video + Captions → QA �
 ```bash
 python3 -m pip install -r requirements.txt
 cp .env.example .env
-# PostgreSQL (önerilen):
-#   createdb kanallar
-#   DATABASE_URL=postgresql+psycopg://… .env içine
+bash scripts/bootstrap_db.sh
+# .env içinde DATABASE_URL postgres satırını aç
+cd apps/remotion && npm install && cd ../..
 python3 -m automation channel
 python3 -m automation produce --topic ahtapot-uc-kalp
 python3 -m automation studio --host 127.0.0.1 --port 8080

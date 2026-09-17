@@ -29,7 +29,7 @@ def collect(window: str = "24h", **kwargs) -> dict:
                     likes=stats.get("likes", 0),
                     comments=stats.get("comments", 0),
                     collected_at=datetime.now(timezone.utc),
-                    window=window,
+                    time_window=window,
                 )
             )
             snapshots += 1

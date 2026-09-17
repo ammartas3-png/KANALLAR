@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS analytics (
     impressions INTEGER DEFAULT 0,
     ctr DOUBLE PRECISION DEFAULT 0,
     collected_at TIMESTAMPTZ DEFAULT now(),
-    window TEXT DEFAULT '1h'
+    time_window TEXT DEFAULT '1h'
 );
 
 CREATE TABLE IF NOT EXISTS experiments (

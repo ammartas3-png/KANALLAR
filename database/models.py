@@ -91,7 +91,7 @@ class AnalyticsSnapshot(Base):
     impressions: Mapped[int] = mapped_column(Integer, default=0)
     ctr: Mapped[float] = mapped_column(Float, default=0)
     collected_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    window: Mapped[str] = mapped_column(String(16), default="1h")
+    time_window: Mapped[str] = mapped_column(String(16), default="1h")
 
 
 class Experiment(Base):
