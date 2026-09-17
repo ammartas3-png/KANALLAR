@@ -269,6 +269,7 @@ def produce(
                 rendered.get("captions"),
                 script,
                 video_id=video_id,
+                script_id=script_id,
                 log_input={"file": str(rendered["video"])},
             )
             save_checkpoint(video_id, "qa", qa_result=qa)
