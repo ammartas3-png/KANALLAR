@@ -16,5 +16,11 @@ def publish(channel: ChannelConfig, script: dict, video: Path, thumb: Path | Non
             "token_usage": 0,
             "api_cost": 0,
         }
-    result = upload_short(channel, script, video, thumb)
+    result = upload_short(
+        channel,
+        script,
+        video,
+        thumb,
+        playlist_id=channel.upload.playlist_id or None,
+    )
     return {**result, "status": "uploaded", "token_usage": 0, "api_cost": 0}

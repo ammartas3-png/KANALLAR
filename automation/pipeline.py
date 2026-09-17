@@ -56,6 +56,11 @@ def produce(channel_id: str | None = None, topic_id: str | None = None, upload: 
     idea = ideate(channel, brief, video_id=video_id, log_input={"topic": brief["topic"]})
     script = write_script(channel, idea, video_id=video_id, log_input={"topic": idea["topic"]})
     assets = plan_assets(channel, script, video_id=video_id, log_input={"engine": "local"})
+    if assets.get("commons_refs"):
+        lines = ["", "Görsel referans (Wikimedia Commons, gömülmedi):"]
+        for ref in assets["commons_refs"][:3]:
+            lines.append(f"- {ref.get('title')} {ref.get('page')} ({ref.get('license')})")
+        script["description"] = script["description"].rstrip() + "\n" + "\n".join(lines)
     voice = narrate(channel, script, work, video_id=video_id, log_input={"chars": len(script["narration"])})
     rendered = compose_short(channel, script, Path(voice["audio"]), work)
     qa = inspect(rendered["video"], rendered["captions"], script, video_id=video_id, log_input={"file": str(rendered["video"])})

@@ -15,19 +15,29 @@ def collect(window: str = "24h", **kwargs) -> dict:
     with get_session() as session:
         uploads = session.query(Upload).filter(Upload.youtube_video_id != "").all()
         for row in uploads:
+            report: dict = {}
+            try:
+                from youtube.analytics import fetch_video_report
+
+                report = fetch_video_report(row.youtube_video_id) or {}
+            except Exception as exc:
+                errors.append(f"analytics:{exc}")
             try:
                 stats = fetch_video_stats(row.youtube_video_id)
             except YouTubeConfigError as exc:
                 errors.append(str(exc))
                 break
-            if not stats:
+            if not stats and not report:
                 continue
             session.add(
                 AnalyticsSnapshot(
                     video_id=row.video_id,
-                    views=stats.get("views", 0),
-                    likes=stats.get("likes", 0),
-                    comments=stats.get("comments", 0),
+                    views=int(report.get("views") or stats.get("views") or 0),
+                    likes=int(report.get("likes") or stats.get("likes") or 0),
+                    comments=int(report.get("comments") or stats.get("comments") or 0),
+                    shares=int(report.get("shares") or 0),
+                    subscribers_gained=int(report.get("subscribersGained") or 0),
+                    average_view_duration=float(report.get("averageViewDuration") or 0),
                     collected_at=datetime.now(timezone.utc),
                     time_window=window,
                 )

@@ -56,6 +56,26 @@ def normalize_audio(src: Path, dest: Path) -> Path:
     return dest
 
 
+def detect_black(path: Path) -> list[str]:
+    result = subprocess.run(
+        ["ffmpeg", "-i", str(path), "-vf", "blackdetect=d=0.4:pix_th=0.10", "-an", "-f", "null", "-"],
+        capture_output=True,
+        text=True,
+    )
+    text = result.stderr or ""
+    return [line for line in text.splitlines() if "black_start" in line]
+
+
+def detect_silence(path: Path) -> list[str]:
+    result = subprocess.run(
+        ["ffmpeg", "-i", str(path), "-af", "silencedetect=n=-40dB:d=1.2", "-f", "null", "-"],
+        capture_output=True,
+        text=True,
+    )
+    text = result.stderr or ""
+    return [line for line in text.splitlines() if "silence_start" in line]
+
+
 def validate_short(path: Path) -> dict:
     data = probe(path)
     video = next((s for s in data.get("streams", []) if s.get("codec_type") == "video"), None)
@@ -72,4 +92,6 @@ def validate_short(path: Path) -> dict:
         "is_9_16": height > 0 and abs((width / height) - (9 / 16)) < 0.03,
         "is_1080x1920": width == 1080 and height == 1920,
         "size_bytes": int(data.get("format", {}).get("size") or 0),
+        "black_segments": detect_black(path),
+        "silence_segments": detect_silence(path),
     }

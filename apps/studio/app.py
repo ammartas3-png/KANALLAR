@@ -40,15 +40,11 @@ def home(request: Request) -> HTMLResponse:
 
 @app.post("/api/produce")
 def api_produce(topic: str | None = None) -> dict:
-    result_box: dict = {}
-
     def _run() -> None:
-        result_box["data"] = produce(topic_id=topic)
+        produce(topic_id=topic)
 
-    thread = threading.Thread(target=_run, daemon=True)
-    thread.start()
-    thread.join()
-    return result_box.get("data") or {"error": "üretim başarısız"}
+    threading.Thread(target=_run, daemon=True).start()
+    return {"status": "started"}
 
 
 @app.get("/api/stats")

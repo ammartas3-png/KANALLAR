@@ -54,10 +54,26 @@ def _client(readonly: bool = False):
     return build("youtube", "v3", credentials=creds)
 
 
-def upload_short(channel: ChannelConfig, script: dict[str, Any], video: Path, thumb: Path | None) -> dict[str, str]:
+def upload_short(
+    channel: ChannelConfig,
+    script: dict[str, Any],
+    video: Path,
+    thumb: Path | None,
+    publish_at: str | None = None,
+    playlist_id: str | None = None,
+) -> dict[str, str]:
     from googleapiclient.http import MediaFileUpload
 
+    from youtube.playlists import add_to_playlist
+
     youtube = _client()
+    status: dict[str, Any] = {
+        "privacyStatus": channel.upload.privacy,
+        "selfDeclaredMadeForKids": channel.upload.made_for_kids,
+    }
+    if publish_at:
+        status["privacyStatus"] = "private"
+        status["publishAt"] = publish_at
     body = {
         "snippet": {
             "title": script["title"][:100],
@@ -67,10 +83,7 @@ def upload_short(channel: ChannelConfig, script: dict[str, Any], video: Path, th
             "defaultLanguage": channel.upload.default_language,
             "defaultAudioLanguage": channel.language,
         },
-        "status": {
-            "privacyStatus": channel.upload.privacy,
-            "selfDeclaredMadeForKids": channel.upload.made_for_kids,
-        },
+        "status": status,
     }
     media = MediaFileUpload(str(video), mimetype="video/mp4", resumable=True)
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
@@ -83,6 +96,8 @@ def upload_short(channel: ChannelConfig, script: dict[str, Any], video: Path, th
             videoId=video_id,
             media_body=MediaFileUpload(str(thumb), mimetype="image/png"),
         ).execute()
+    if playlist_id:
+        add_to_playlist(video_id, playlist_id)
     return {"youtube_id": video_id, "youtube_url": f"https://youtu.be/{video_id}"}
 
 

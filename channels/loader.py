@@ -24,6 +24,7 @@ class UploadRules(BaseModel):
     tags: list[str] = Field(default_factory=list)
     frequency_per_day: int = 1
     schedule_hour: int = 20
+    playlist_id: str = ""
 
 
 class VoiceProfile(BaseModel):
