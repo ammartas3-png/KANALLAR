@@ -9,10 +9,18 @@ from youtube.api import credentials_status, upload_short
 
 @log_agent("UploadAgent")
 def publish(channel: ChannelConfig, script: dict, video: Path, thumb: Path | None, **kwargs) -> dict:
-    if not credentials_status()["client_secrets"]:
+    status = credentials_status()
+    if not status["client_secrets"]:
         return {
             "status": "skipped",
             "reason": "YouTube OAuth yok. client_secret.json eklenince private yükleme açılır.",
+            "token_usage": 0,
+            "api_cost": 0,
+        }
+    if not status["token"]:
+        return {
+            "status": "skipped",
+            "reason": "token.json yok. Bir kez OAuth onayı yapın (docs/OPERATOR_CHECKLIST.md).",
             "token_usage": 0,
             "api_cost": 0,
         }

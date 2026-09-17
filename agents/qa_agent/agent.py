@@ -26,16 +26,22 @@ def inspect(video_path: Path, captions_path: Path | None, script: dict, **kwargs
     checks["script_present"] = bool(script.get("hook") and script.get("scenes"))
     checks["no_long_black"] = len(meta.get("black_segments") or []) == 0
     checks["has_voice"] = len(meta.get("silence_segments") or []) < 3
-    checks["not_duplicate"] = not _duplicate_narration(script.get("narration") or "")
+    checks["not_duplicate"] = not _duplicate_narration(
+        script.get("narration") or "",
+        exclude_script_id=kwargs.get("script_id"),
+    )
     checks["copyright_safe"] = True
     details["duplicate_of"] = None if checks["not_duplicate"] else "existing_script"
     ok = all(checks.values())
     return {"ok": ok, "checks": checks, "details": details, "token_usage": 0, "api_cost": 0}
 
 
-def _duplicate_narration(narration: str) -> bool:
+def _duplicate_narration(narration: str, exclude_script_id: str | None = None) -> bool:
     if not narration.strip():
         return False
     with get_session() as session:
-        rows = session.query(Script).filter(Script.script == narration).all()
+        query = session.query(Script).filter(Script.script == narration)
+        if exclude_script_id:
+            query = query.filter(Script.id != exclude_script_id)
+        rows = query.all()
     return len(rows) >= 1

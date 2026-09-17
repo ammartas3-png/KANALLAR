@@ -17,6 +17,10 @@
     <p>{{ channel.tagline }}</p>
     <button id="produce">Video üret</button>
     <p id="status" class="kicker"></p>
+    <p class="kicker">
+      Onay kapısı: {{ "AÇIK" if require_human_approval else "kapalı" }}
+      · Media: local={{ media.local.configured }} / kie={{ media.kie.configured }} / hf={{ media.higgsfield.configured }}
+    </p>
     <section class="stats">
       <div><b>{{ stats.produced_today }}</b><span>bugün üretilen</span></div>
       <div><b>{{ stats.published }}</b><span>yayın</span></div>
@@ -24,6 +28,20 @@
       <div><b>{{ stats.views_7d }}</b><span>7g izlenme</span></div>
       <div><b>{{ stats.average_video_cost }}</b><span>ortalama maliyet</span></div>
       <div><b>{{ stats.agent_runs }}</b><span>agent kaydı</span></div>
+    </section>
+    <section>
+      <h2>Onay bekleyen</h2>
+      {% for item in pending %}
+      <article data-video-id="{{ item.id }}">
+        <strong>{{ item.id }}</strong>
+        <span>{{ '%.0f'|format(item.duration) }}s</span>
+        {% if item.filepath %}<a href="/media/{{ item.id }}">izle</a>{% endif %}
+        <button class="approve" data-id="{{ item.id }}">Onayla + yükle</button>
+        <button class="reject" data-id="{{ item.id }}">Reddet</button>
+      </article>
+      {% else %}
+      <p>Onay bekleyen video yok.</p>
+      {% endfor %}
     </section>
     <section>
       <h2>Kazanan / kaybeden hook</h2>
