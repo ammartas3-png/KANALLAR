@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} · Kanallar{% endblock %}
+{% block body %}
+<article class="job-page" data-job="{{ job.id }}" data-status="{{ job.status }}">
+  <p class="eyebrow"><a href="/channels/{{ channel.id }}">{{ channel.name }}</a> · {{ job.topic_id }}</p>
+  <h1>{{ job.title }}</h1>
+  <p class="status-line"><span class="status {{ job.status }}" data-step>{{ steps.get(job.step, job.status) }}</span></p>
+  {% if job.error %}<p class="error">{{ job.error }}</p>{% endif %}
+
+  <div class="split">
+    <div class="player-wrap">
+      {% if job.has_video %}
+      <video controls playsinline src="/media/jobs/{{ job.id }}/video"></video>
+      {% else %}
+      <div class="player-ph">Video hazırlanıyor…</div>
+      {% endif %}
+      {% if job.has_thumb %}
+      <img class="thumb" src="/media/jobs/{{ job.id }}/thumb" alt="Kapak">
+      {% endif %}
+    </div>
+    <aside>
+      <h3>Senaryo</h3>
+      {% if job.scenes %}
+      <ol class="scenes">
+        {% for scene in job.scenes %}
+        <li><span>{{ scene.role }}</span>{{ scene.text }}</li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="empty">Senaryo yazılıyor.</p>
+      {% endif %}
+      <div class="actions">
+        {% if job.has_video %}
+        <a class="btn ghost" href="/media/jobs/{{ job.id }}/video" download>MP4 indir</a>
+        {% endif %}
+        {% if youtube.client_secrets and job.has_video and job.status != 'uploaded' %}
+        <form method="post" action="/api/jobs/{{ job.id }}/upload">
+          <button class="btn primary" type="submit">YouTube’a gizle yükle</button>
+        </form>
+        {% endif %}
+        {% if job.youtube_url %}
+        <a class="btn primary" href="{{ job.youtube_url }}" target="_blank" rel="noreferrer">YouTube’da aç</a>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+</article>
+{% endblock %}

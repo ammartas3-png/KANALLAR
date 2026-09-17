@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kanallar · Stüdyo</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header>
+    <strong>KANALLAR</strong>
+    <span>{{ "YouTube bağlı" if youtube.client_secrets else "Yerel MVP" }}</span>
+  </header>
+  <main>
+    <p class="kicker">{{ channel.niche }} · tek kanal MVP</p>
+    <h1>{{ channel.name }}</h1>
+    <p>{{ channel.tagline }}</p>
+    <button id="produce">Video üret</button>
+    <p id="status" class="kicker"></p>
+    <section class="stats">
+      <div><b>{{ stats.produced_today }}</b><span>bugün üretilen</span></div>
+      <div><b>{{ stats.published }}</b><span>yayın</span></div>
+      <div><b>{{ stats.views_24h }}</b><span>24s izlenme</span></div>
+      <div><b>{{ stats.views_7d }}</b><span>7g izlenme</span></div>
+      <div><b>{{ stats.average_video_cost }}</b><span>ortalama maliyet</span></div>
+      <div><b>{{ stats.agent_runs }}</b><span>agent kaydı</span></div>
+    </section>
+    <section>
+      <h2>Kazanan / kaybeden hook</h2>
+      <p>Win: {{ stats.winning_hooks|join(", ") or "—" }} · Fail: {{ stats.failed_hooks|join(", ") or "—" }}</p>
+    </section>
+    <section>
+      <h2>Videolar</h2>
+      {% for video in stats.videos %}
+      <article>
+        <strong>{{ video.id }}</strong>
+        <span>{{ video.status }} · {{ '%.0f'|format(video.duration) }}s · ${{ video.cost }}</span>
+        {% if video.filepath %}<a href="/media/{{ video.id }}">izle</a>{% endif %}
+      </article>
+      {% else %}
+      <p>Henüz video yok.</p>
+      {% endfor %}
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

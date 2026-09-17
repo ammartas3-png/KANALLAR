@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Kanallar{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="top">
+    <a class="mark" href="/">KANALLAR</a>
+    <nav>
+      <a href="/">Stüdyo</a>
+      <span class="pill">{% if youtube.client_secrets %}YouTube bağlı{% else %}Yerel üretim{% endif %}</span>
+    </nav>
+  </header>
+  <main>
+    {% block body %}{% endblock %}
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "codebase-memory": {
+      "command": "codebase-memory-mcp",
+      "args": ["serve"],
+      "disabled": true,
+      "note": "Optional. Install https://github.com/DeusData/codebase-memory-mcp then enable. Local fallback: python3 scripts/index_codebase.py"
+    }
+  }
+}
