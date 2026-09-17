@@ -33,3 +33,36 @@ if (button) {
     }
   });
 }
+
+document.querySelectorAll("button.approve").forEach((el) => {
+  el.addEventListener("click", async () => {
+    const id = el.dataset.id;
+    el.disabled = true;
+    el.textContent = "Yükleniyor…";
+    try {
+      const response = await fetch(`/api/approve/${id}?upload=true`, { method: "POST" });
+      if (!response.ok) throw new Error(await response.text());
+      window.location.reload();
+    } catch (error) {
+      el.disabled = false;
+      el.textContent = "Onayla + yükle";
+      alert(error);
+    }
+  });
+});
+
+document.querySelectorAll("button.reject").forEach((el) => {
+  el.addEventListener("click", async () => {
+    const id = el.dataset.id;
+    if (!window.confirm(`${id} reddedilsin mi?`)) return;
+    el.disabled = true;
+    try {
+      const response = await fetch(`/api/reject/${id}`, { method: "POST" });
+      if (!response.ok) throw new Error(await response.text());
+      window.location.reload();
+    } catch (error) {
+      el.disabled = false;
+      alert(error);
+    }
+  });
+});

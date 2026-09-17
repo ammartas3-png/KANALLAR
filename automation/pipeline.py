@@ -15,10 +15,19 @@ from agents.script_agent import write_script
 from agents.upload_agent import publish
 from agents.voice_agent import narrate
 from analytics.cost import video_cost
+from automation.jobs import (
+    approve_video,
+    load_checkpoint,
+    mark_failed,
+    reject_video,
+    save_checkpoint,
+)
 from channels.loader import ChannelConfig, load_channel
 from config.paths import CONTENT_DIR, ensure_runtime_dirs
+from config.settings import get_settings
 from database.models import Channel, Experiment, Idea, Script, Upload, Video
 from database.session import get_session, init_db
+from media.router import status_report
 from memory.store import mark_used
 from video.compose import compose_short
 
@@ -43,104 +52,287 @@ def seed_channel(channel: ChannelConfig) -> None:
             )
 
 
-def produce(channel_id: str | None = None, topic_id: str | None = None, upload: bool = False) -> dict:
-    init_db()
-    ensure_runtime_dirs()
-    channel = load_channel(channel_id)
-    seed_channel(channel)
-    video_id = _id()
-    work = CONTENT_DIR / "videos" / video_id
-    work.mkdir(parents=True, exist_ok=True)
-
-    brief = research(channel, topic_id=topic_id, video_id=video_id, log_input={"topic_id": topic_id})
-    idea = ideate(channel, brief, video_id=video_id, log_input={"topic": brief["topic"]})
-    script = write_script(channel, idea, video_id=video_id, log_input={"topic": idea["topic"]})
-    assets = plan_assets(channel, script, video_id=video_id, log_input={"engine": "local"})
-    if assets.get("commons_refs"):
-        lines = ["", "Görsel referans (Wikimedia Commons, gömülmedi):"]
-        for ref in assets["commons_refs"][:3]:
-            lines.append(f"- {ref.get('title')} {ref.get('page')} ({ref.get('license')})")
-        script["description"] = script["description"].rstrip() + "\n" + "\n".join(lines)
-    voice = narrate(channel, script, work, video_id=video_id, log_input={"chars": len(script["narration"])})
-    rendered = compose_short(channel, script, Path(voice["audio"]), work)
-    qa = inspect(rendered["video"], rendered["captions"], script, video_id=video_id, log_input={"file": str(rendered["video"])})
-
-    idea_id, script_id = _id(), _id()
+def _persist_shell(video_id: str, channel_id: str, idea: dict, script: dict, idea_id: str, script_id: str) -> None:
     with get_session() as session:
-        session.add(
-            Idea(
-                id=idea_id,
-                channel_id=channel.id,
-                topic=idea["topic"],
-                source="catalog",
-                score=float(idea.get("novelty_score") or 0),
-                status="used",
-                payload_json=json.dumps(idea, ensure_ascii=False),
-            )
-        )
-        session.add(
-            Script(
-                id=script_id,
-                idea_id=idea_id,
-                hook=script["hook"],
-                script=script["narration"],
-                cta=script["cta"],
-                version=1,
-                payload_json=json.dumps(script, ensure_ascii=False),
-            )
-        )
-        session.add(
-            Video(
-                id=video_id,
-                channel_id=channel.id,
-                script_id=script_id,
-                filepath=str(rendered["video"]),
-                duration=float(rendered["duration"]),
-                status="qa_passed" if qa["ok"] else "qa_failed",
-                qa_json=json.dumps(qa, ensure_ascii=False),
-            )
-        )
-        session.add(
-            Experiment(
-                video_id=video_id,
-                hook_type=script.get("hook_type") or "fact",
-                video_style=assets.get("engine") or "cards",
-                voice=voice.get("engine") or "",
-                duration=float(rendered["duration"]),
-                title_style="topic_hook",
-                result="pending",
-            )
-        )
-
-    mark_used(channel.id, idea["topic_id"])
-    (work / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    upload_result = {"status": "not_requested"}
-    if not qa["ok"]:
-        upload_result = {"status": "blocked_qa"}
-    elif upload:
-        upload_result = publish(
-            channel,
-            script,
-            rendered["video"],
-            rendered["thumb"],
-            video_id=video_id,
-            log_input={"privacy": channel.upload.privacy},
-        )
-        with get_session() as session:
+        idea_row = session.get(Idea, idea_id)
+        if idea_row is None:
             session.add(
-                Upload(
-                    id=_id(),
-                    video_id=video_id,
-                    youtube_video_id=upload_result.get("youtube_id") or "",
-                    title=script["title"],
-                    description=script["description"],
-                    status=upload_result.get("status") or "pending",
+                Idea(
+                    id=idea_id,
+                    channel_id=channel_id,
+                    topic=idea["topic"],
+                    source="catalog",
+                    score=float(idea.get("novelty_score") or 0),
+                    status="used",
+                    payload_json=json.dumps(idea, ensure_ascii=False),
                 )
             )
-            row = session.get(Video, video_id)
-            if row is not None:
-                row.status = "uploaded" if upload_result.get("status") == "uploaded" else row.status
+        else:
+            idea_row.topic = idea["topic"]
+            idea_row.score = float(idea.get("novelty_score") or 0)
+            idea_row.status = "used"
+            idea_row.payload_json = json.dumps(idea, ensure_ascii=False)
+
+        script_row = session.get(Script, script_id)
+        if script_row is None:
+            session.add(
+                Script(
+                    id=script_id,
+                    idea_id=idea_id,
+                    hook=script["hook"],
+                    script=script["narration"],
+                    cta=script["cta"],
+                    version=1,
+                    payload_json=json.dumps(script, ensure_ascii=False),
+                )
+            )
+        else:
+            script_row.hook = script["hook"]
+            script_row.script = script["narration"]
+            script_row.cta = script["cta"]
+            script_row.payload_json = json.dumps(script, ensure_ascii=False)
+
+        video_row = session.get(Video, video_id)
+        if video_row is None:
+            session.add(
+                Video(
+                    id=video_id,
+                    channel_id=channel_id,
+                    script_id=script_id,
+                    filepath="",
+                    duration=0,
+                    status="queued",
+                    qa_json="{}",
+                )
+            )
+        else:
+            video_row.script_id = script_id
+            video_row.channel_id = channel_id
+
+
+def _record_upload(video_id: str, script: dict, upload_result: dict) -> None:
+    with get_session() as session:
+        session.add(
+            Upload(
+                id=_id(),
+                video_id=video_id,
+                youtube_video_id=upload_result.get("youtube_id") or "",
+                title=script["title"],
+                description=script["description"],
+                status=upload_result.get("status") or "pending",
+            )
+        )
+        row = session.get(Video, video_id)
+        if row is not None and upload_result.get("status") == "uploaded":
+            row.status = "uploaded"
+
+
+def produce(
+    channel_id: str | None = None,
+    topic_id: str | None = None,
+    upload: bool = False,
+    force_upload: bool = False,
+    resume_id: str | None = None,
+) -> dict:
+    init_db()
+    ensure_runtime_dirs()
+    settings = get_settings()
+    channel = load_channel(channel_id)
+    seed_channel(channel)
+
+    video_id = resume_id or _id()
+    work = CONTENT_DIR / "videos" / video_id
+    work.mkdir(parents=True, exist_ok=True)
+    checkpoint = load_checkpoint(video_id) if resume_id else {}
+    completed = set(checkpoint.get("completed_stages") or [])
+    idea_id = checkpoint.get("qa", {}).get("idea_id") or _id()
+    script_id = checkpoint.get("script_id") or checkpoint.get("qa", {}).get("script_id") or _id()
+
+    # Create Video row early so stage checkpoints persist from research onward.
+    with get_session() as session:
+        if session.get(Video, video_id) is None:
+            # Placeholder idea/script rows (updated after script stage).
+            if session.get(Idea, idea_id) is None:
+                session.add(
+                    Idea(
+                        id=idea_id,
+                        channel_id=channel.id,
+                        topic="pending",
+                        source="catalog",
+                        status="draft",
+                        payload_json="{}",
+                    )
+                )
+            if session.get(Script, script_id) is None:
+                session.add(
+                    Script(
+                        id=script_id,
+                        idea_id=idea_id,
+                        payload_json="{}",
+                    )
+                )
+            session.add(
+                Video(
+                    id=video_id,
+                    channel_id=channel.id,
+                    script_id=script_id,
+                    filepath="",
+                    duration=0,
+                    status="queued",
+                    qa_json=json.dumps({"idea_id": idea_id, "script_id": script_id}, ensure_ascii=False),
+                )
+            )
+
+    try:
+        if "research" not in completed:
+            brief = research(channel, topic_id=topic_id, video_id=video_id, log_input={"topic_id": topic_id})
+            (work / "brief.json").write_text(json.dumps(brief, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_checkpoint(video_id, "research", brief_topic=brief.get("topic"), idea_id=idea_id, script_id=script_id)
+        else:
+            brief = json.loads((work / "brief.json").read_text(encoding="utf-8"))
+
+        if "idea" not in completed:
+            idea = ideate(channel, brief, video_id=video_id, log_input={"topic": brief["topic"]})
+            (work / "idea.json").write_text(json.dumps(idea, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_checkpoint(video_id, "idea", topic=idea.get("topic"), idea_id=idea_id, script_id=script_id)
+        else:
+            idea = json.loads((work / "idea.json").read_text(encoding="utf-8"))
+
+        if "script" not in completed:
+            script = write_script(channel, idea, video_id=video_id, log_input={"topic": idea["topic"]})
+            (work / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_checkpoint(video_id, "script", title=script.get("title"), idea_id=idea_id, script_id=script_id)
+        else:
+            script = json.loads((work / "script.json").read_text(encoding="utf-8"))
+
+        _persist_shell(video_id, channel.id, idea, script, idea_id, script_id)
+
+        if "assets" not in completed:
+            assets = plan_assets(
+                channel,
+                script,
+                video_id=video_id,
+                quality=settings.media_quality,
+                log_input={"engine": settings.media_quality},
+            )
+            if assets.get("commons_refs"):
+                lines = ["", "Görsel referans (Wikimedia Commons, gömülmedi):"]
+                for ref in assets["commons_refs"][:3]:
+                    lines.append(f"- {ref.get('title')} {ref.get('page')} ({ref.get('license')})")
+                script["description"] = script["description"].rstrip() + "\n" + "\n".join(lines)
+                (work / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
+            (work / "assets.json").write_text(json.dumps(assets, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_checkpoint(video_id, "assets", media_provider=assets.get("provider"))
+        else:
+            assets = json.loads((work / "assets.json").read_text(encoding="utf-8"))
+
+        if "voice" not in completed:
+            voice = narrate(channel, script, work, video_id=video_id, log_input={"chars": len(script["narration"])})
+            (work / "voice.json").write_text(json.dumps(voice, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_checkpoint(video_id, "voice", voice_engine=voice.get("engine"))
+        else:
+            voice = json.loads((work / "voice.json").read_text(encoding="utf-8"))
+
+        if "render" not in completed:
+            rendered = compose_short(channel, script, Path(voice["audio"]), work)
+            (work / "render.json").write_text(
+                json.dumps(
+                    {
+                        "video": str(rendered["video"]),
+                        "thumb": str(rendered["thumb"]),
+                        "captions": str(rendered["captions"]) if rendered.get("captions") else "",
+                        "duration": rendered["duration"],
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+            save_checkpoint(
+                video_id,
+                "render",
+                filepath=str(rendered["video"]),
+                duration=rendered["duration"],
+            )
+        else:
+            render_meta = json.loads((work / "render.json").read_text(encoding="utf-8"))
+            rendered = {
+                "video": Path(render_meta["video"]),
+                "thumb": Path(render_meta["thumb"]) if render_meta.get("thumb") else None,
+                "captions": Path(render_meta["captions"]) if render_meta.get("captions") else None,
+                "duration": render_meta["duration"],
+            }
+
+        if "qa" not in completed:
+            qa = inspect(
+                rendered["video"],
+                rendered.get("captions"),
+                script,
+                video_id=video_id,
+                log_input={"file": str(rendered["video"])},
+            )
+            save_checkpoint(video_id, "qa", qa_result=qa)
+        else:
+            qa = load_checkpoint(video_id).get("qa", {}).get("qa_result") or {"ok": True}
+
+        with get_session() as session:
+            if session.query(Experiment).filter(Experiment.video_id == video_id).count() == 0:
+                session.add(
+                    Experiment(
+                        video_id=video_id,
+                        hook_type=script.get("hook_type") or "fact",
+                        video_style=assets.get("engine") or "cards",
+                        voice=voice.get("engine") or "",
+                        duration=float(rendered["duration"]),
+                        title_style="topic_hook",
+                        result="pending",
+                    )
+                )
+
+        mark_used(channel.id, idea["topic_id"])
+
+        upload_result = {"status": "not_requested"}
+        final_status = "ready"
+
+        if not qa.get("ok"):
+            save_checkpoint(video_id, "failed", failed_stage="qa", qa_result=qa)
+            upload_result = {"status": "blocked_qa"}
+            final_status = "qa_failed"
+        elif settings.require_human_approval and not force_upload:
+            save_checkpoint(video_id, "awaiting_approval", qa_result=qa, filepath=str(rendered["video"]))
+            upload_result = {
+                "status": "awaiting_approval",
+                "hint": "Onay için: python -m automation approve --id " + video_id + " --upload",
+            }
+            final_status = "awaiting_approval"
+            if upload:
+                upload_result["note"] = (
+                    "REQUIRE_HUMAN_APPROVAL=true; --upload yok sayıldı. "
+                    "Önce onaylayın veya --force-upload kullanın."
+                )
+        elif upload or force_upload:
+            save_checkpoint(video_id, "uploading")
+            upload_result = publish(
+                channel,
+                script,
+                rendered["video"],
+                rendered.get("thumb"),
+                video_id=video_id,
+                log_input={"privacy": channel.upload.privacy},
+            )
+            _record_upload(video_id, script, upload_result)
+            if upload_result.get("status") == "uploaded":
+                save_checkpoint(video_id, "uploaded", youtube_id=upload_result.get("youtube_id"))
+                final_status = "uploaded"
+            else:
+                final_status = upload_result.get("status") or "upload_pending"
+        else:
+            save_checkpoint(video_id, "qa", qa_result=qa, filepath=str(rendered["video"]))
+            final_status = "ready"
+
+    except Exception as exc:  # noqa: BLE001 — job boundary
+        mark_failed(video_id, stage="produce", error=str(exc))
+        raise
 
     learn(channel.id, video_id=video_id, log_input={"after": video_id})
     cost = video_cost(video_id)
@@ -151,24 +343,57 @@ def produce(channel_id: str | None = None, topic_id: str | None = None, upload: 
 
     public = CONTENT_DIR / "public" / f"{video_id}.mp4"
     public.parent.mkdir(parents=True, exist_ok=True)
-    if rendered["video"].exists():
-        shutil.copy2(rendered["video"], public)
+    video_path = Path(rendered["video"])
+    if video_path.exists():
+        shutil.copy2(video_path, public)
 
     return {
         "id": video_id,
         "channel_id": channel.id,
         "topic": idea["topic"],
         "title": script["title"],
-        "status": "ready" if qa["ok"] else "qa_failed",
+        "status": final_status,
         "qa": qa,
         "voice_engine": voice.get("engine"),
         "duration": rendered["duration"],
         "filepath": str(rendered["video"]),
-        "thumb": str(rendered["thumb"]),
+        "thumb": str(rendered["thumb"]) if rendered.get("thumb") else "",
         "cost_per_video": cost,
         "upload": upload_result,
-        "assets": assets["engine"],
+        "assets": assets.get("engine"),
+        "media_provider": assets.get("provider"),
+        "media_providers": status_report(),
+        "require_human_approval": settings.require_human_approval,
     }
+
+
+def approve_and_maybe_upload(video_id: str, upload: bool = True) -> dict:
+    """Mark video approved; optionally publish to YouTube."""
+    init_db()
+    result = approve_video(video_id)
+    if not result.get("ok"):
+        return result
+    if not upload:
+        return result
+
+    checkpoint = load_checkpoint(video_id)
+    channel = load_channel(checkpoint.get("channel_id"))
+    work = CONTENT_DIR / "videos" / video_id
+    script = json.loads((work / "script.json").read_text(encoding="utf-8"))
+    render_meta = json.loads((work / "render.json").read_text(encoding="utf-8"))
+    video = Path(render_meta["video"])
+    thumb = Path(render_meta["thumb"]) if render_meta.get("thumb") else None
+    save_checkpoint(video_id, "uploading")
+    upload_result = publish(channel, script, video, thumb, video_id=video_id, log_input={"approved": True})
+    _record_upload(video_id, script, upload_result)
+    if upload_result.get("status") == "uploaded":
+        save_checkpoint(video_id, "uploaded", youtube_id=upload_result.get("youtube_id"))
+    return {**result, "upload": upload_result}
+
+
+def reject(video_id: str, reason: str = "") -> dict:
+    init_db()
+    return reject_video(video_id, reason=reason)
 
 
 def refresh_analytics(window: str = "24h") -> dict:

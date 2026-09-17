@@ -28,6 +28,19 @@ class Settings(BaseSettings):
     youtube_token: str = "token.json"
     youtube_api_key: str = ""
     pexels_api_key: str = ""
+    # Media gateways (optional until keys exist)
+    kie_api_key: str = ""
+    kie_callback_url: str = ""
+    kie_default_image_model: str = ""
+    kie_default_video_model: str = ""
+    kie_default_voice_model: str = ""
+    hf_api_key_id: str = ""
+    hf_api_key_secret: str = ""
+    hf_default_image_endpoint: str = ""
+    hf_default_video_endpoint: str = ""
+    hf_default_voice_endpoint: str = ""
+    require_human_approval: bool = True
+    media_quality: str = "local"  # local | auto | cheap | premium
 
 
 @lru_cache

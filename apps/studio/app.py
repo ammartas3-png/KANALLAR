@@ -9,16 +9,19 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from analytics.queries import dashboard_stats
-from automation.pipeline import produce
+from automation.jobs import list_awaiting_approval
+from automation.pipeline import approve_and_maybe_upload, produce, reject
 from channels.loader import load_channel
 from config.paths import APPS_DIR, CONTENT_DIR
+from config.settings import get_settings
 from database.models import Video
 from database.session import get_session, init_db
+from media.router import status_report
 from youtube.api import credentials_status
 
 WEB = APPS_DIR / "studio"
 templates = Jinja2Templates(directory=str(WEB / "templates"))
-app = FastAPI(title="Kanallar", version="0.2.0")
+app = FastAPI(title="Kanallar", version="0.3.0")
 app.mount("/static", StaticFiles(directory=str(WEB / "static")), name="static")
 
 
@@ -31,10 +34,18 @@ def _startup() -> None:
 def home(request: Request) -> HTMLResponse:
     channel = load_channel()
     stats = dashboard_stats()
+    settings = get_settings()
     return templates.TemplateResponse(
         request,
         "index.html",
-        {"channel": channel, "stats": stats, "youtube": credentials_status()},
+        {
+            "channel": channel,
+            "stats": stats,
+            "youtube": credentials_status(),
+            "pending": list_awaiting_approval(),
+            "media": status_report(),
+            "require_human_approval": settings.require_human_approval,
+        },
     )
 
 
@@ -45,6 +56,32 @@ def api_produce(topic: str | None = None) -> dict:
 
     threading.Thread(target=_run, daemon=True).start()
     return {"status": "started"}
+
+
+@app.post("/api/approve/{video_id}")
+def api_approve(video_id: str, upload: bool = True) -> dict:
+    result = approve_and_maybe_upload(video_id, upload=upload)
+    if not result.get("ok"):
+        raise HTTPException(400, result)
+    return result
+
+
+@app.post("/api/reject/{video_id}")
+def api_reject(video_id: str, reason: str = "") -> dict:
+    result = reject(video_id, reason=reason)
+    if not result.get("ok"):
+        raise HTTPException(400, result)
+    return result
+
+
+@app.get("/api/pending")
+def api_pending() -> list:
+    return list_awaiting_approval()
+
+
+@app.get("/api/media-status")
+def api_media_status() -> dict:
+    return status_report()
 
 
 @app.get("/api/stats")
