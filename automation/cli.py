@@ -5,16 +5,18 @@ import json
 import os
 
 from analytics.queries import dashboard_stats
+from automation.bootstrap import bootstrap_cloud_secrets
 from automation.jobs import list_awaiting_approval, load_checkpoint
 from automation.pipeline import approve_and_maybe_upload, produce, refresh_analytics, reject
 from channels.loader import load_channel
 from database.session import init_db
 from media.router import status_report
+from storage import storage_status
 from youtube.api import credentials_status
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="kanallar", description="YouTube Shorts fabrikası")
+    parser = argparse.ArgumentParser(prog="kanallar", description="YouTube Shorts fabrikası (cloud-first)")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("channel", help="Aktif MVP kanalı")
     produce_p = sub.add_parser("produce", help="Research → video → QA (varsayılan: onay bekler)")
@@ -36,10 +38,13 @@ def main(argv: list[str] | None = None) -> int:
     job_p = sub.add_parser("job", help="Checkpoint durumu")
     job_p.add_argument("--id", required=True)
     sub.add_parser("media-status", help="MediaProvider (local/kie/higgsfield) durumu")
+    sub.add_parser("storage-status", help="Object storage durumu")
+    sub.add_parser("bootstrap", help="Env JSON secret'larından OAuth dosyalarını yaz")
     sub.add_parser("analytics", help="YouTube analitikleri (varsa)")
     sub.add_parser("dashboard-data", help="Özet JSON")
-    studio = sub.add_parser("studio", help="Basit stüdyo")
-    studio.add_argument("--host", default=os.environ.get("KANALLAR_HOST", "127.0.0.1"))
+    sub.add_parser("worker", help="Cloud worker: studio + scheduler (Mac gerekmez)")
+    studio = sub.add_parser("studio", help="Sadece stüdyo API")
+    studio.add_argument("--host", default=os.environ.get("KANALLAR_HOST", "0.0.0.0"))
     studio.add_argument("--port", type=int, default=int(os.environ.get("KANALLAR_PORT", "8080")))
     args = parser.parse_args(argv)
 
@@ -79,13 +84,25 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "media-status":
         print(json.dumps(status_report(), ensure_ascii=False, indent=2))
         return 0
+    if args.command == "storage-status":
+        print(json.dumps(storage_status(), ensure_ascii=False, indent=2))
+        return 0
+    if args.command == "bootstrap":
+        print(json.dumps(bootstrap_cloud_secrets(), ensure_ascii=False, indent=2))
+        return 0
     if args.command == "analytics":
         print(json.dumps(refresh_analytics(), ensure_ascii=False, indent=2))
         return 0
     if args.command == "dashboard-data":
         print(json.dumps(dashboard_stats(), ensure_ascii=False, indent=2))
         return 0
+    if args.command == "worker":
+        from automation.worker import main as worker_main
+
+        worker_main()
+        return 0
     if args.command == "studio":
+        bootstrap_cloud_secrets()
         import uvicorn
         from apps.studio.app import app
 

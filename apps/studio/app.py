@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from analytics.queries import dashboard_stats
+from automation.bootstrap import bootstrap_cloud_secrets
 from automation.jobs import list_awaiting_approval
 from automation.pipeline import approve_and_maybe_upload, produce, reject
 from channels.loader import load_channel
@@ -17,17 +18,33 @@ from config.settings import get_settings
 from database.models import Video
 from database.session import get_session, init_db
 from media.router import status_report
+from storage import storage_status
 from youtube.api import credentials_status
 
 WEB = APPS_DIR / "studio"
 templates = Jinja2Templates(directory=str(WEB / "templates"))
-app = FastAPI(title="Kanallar", version="0.3.0")
+app = FastAPI(title="Kanallar", version="0.4.0")
 app.mount("/static", StaticFiles(directory=str(WEB / "static")), name="static")
 
 
 @app.on_event("startup")
 def _startup() -> None:
+    bootstrap_cloud_secrets()
     init_db()
+
+
+@app.get("/health")
+def health() -> dict:
+    settings = get_settings()
+    yt = credentials_status()
+    return {
+        "ok": True,
+        "run_mode": settings.run_mode,
+        "youtube": yt,
+        "storage": storage_status(),
+        "media": status_report(),
+        "pending": len(list_awaiting_approval()),
+    }
 
 
 @app.get("/", response_class=HTMLResponse)

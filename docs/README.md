@@ -2,11 +2,12 @@
 
 Cloud-first Shorts factory architecture audit (2026-09-17).
 
-Start here: **[OPERATOR_CHECKLIST.md](OPERATOR_CHECKLIST.md)** (senin yapacakların) · audit: **[FINAL_AUDIT_REPORT.md](FINAL_AUDIT_REPORT.md)**
+Start here: **[CLOUD_DEPLOY.md](CLOUD_DEPLOY.md)** · **[OPERATOR_CHECKLIST.md](OPERATOR_CHECKLIST.md)** · audit: **[FINAL_AUDIT_REPORT.md](FINAL_AUDIT_REPORT.md)**
 
 | Doc | Purpose |
 | --- | --- |
-| OPERATOR_CHECKLIST.md | Operatör aksiyon listesi (TR) |
+| CLOUD_DEPLOY.md | Mac’siz deploy (Docker / worker) |
+| OPERATOR_CHECKLIST.md | Operatör aksiyon listesi (TR, cloud-first) |
 | CURRENT_ARCHITECTURE.md | What exists now |
 | INSTALLED_TOOLS_AUDIT.md | KEEP/REMOVE/OPTIONAL/NOT CONFIGURED/BROKEN |
 | GITHUB_REPOSITORIES_AUDIT.md | Required vs do-not-install repos |

@@ -1,24 +1,10 @@
 from __future__ import annotations
 
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.triggers.cron import CronTrigger
+"""Legacy scheduler entry — prefer `python -m automation.worker` for cloud."""
 
-from automation.pipeline import produce, refresh_analytics
-from channels.loader import load_channel
+from automation.worker import build_scheduler, main
 
-
-def build_scheduler() -> BlockingScheduler:
-    channel = load_channel()
-    scheduler = BlockingScheduler(timezone="UTC")
-    scheduler.add_job(lambda: produce(channel.id), CronTrigger(hour=8, minute=0), id="daily_produce")
-    scheduler.add_job(lambda: refresh_analytics("1h"), CronTrigger(minute=0), id="analytics_hourly")
-    scheduler.add_job(lambda: refresh_analytics("24h"), CronTrigger(hour=7, minute=30), id="analytics_daily")
-    return scheduler
-
-
-def main() -> None:
-    scheduler = build_scheduler()
-    scheduler.start()
+__all__ = ["build_scheduler", "main"]
 
 
 if __name__ == "__main__":
