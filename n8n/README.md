@@ -2,10 +2,13 @@
 
 ## Primary (Cursor theme) — use these first
 
-Import / live:
+**Use this one:**
 
-- `n8n/workflows/primary/youtube-otomasyon.json` — research + Gemini + Apify + Sheets + Telegram
-- `n8n/workflows/primary/youtube-paylasim.json` — Prototipal render + Telegram + YouTube (with `DRY_RUN` guard)
+- `n8n/workflows/primary/youtube-full-pipeline.json` — **tek workflow** (otomasyon + paylasim)
+
+Backups (optional):
+
+- `youtube-otomasyon.json` / `youtube-paylasim.json` — ayrı halleri
 
 See `docs/PRIMARY_STACK.md`.
 
