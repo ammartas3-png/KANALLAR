@@ -5,23 +5,26 @@ Kanallar Hybrid parçaları **sonra** performans için eklenir.
 
 ## Canlı n8n (inactive)
 
-| Workflow | ID | Nodes |
-|----------|-----|------:|
-| PRIMARY: youtube-otomasyon (Cursor) | `ceTtnEGNt5srPnQm` | 47 |
-| PRIMARY: youtube-paylasim (Cursor+safety) | `WGeALMqtdsab3kkw` | 21 |
-| Kanallar Hybrid (önceki omurga, referans) | `pOUFteeJt9G8chOL` | 32 |
+| Workflow | ID | Nodes | Kullan |
+|----------|-----|------:|--------|
+| **PRIMARY: YouTube Full Pipeline (otomasyon+paylasim)** | `Xu72EtzVvMUHnBvO` | 71 | **EVET — tek workflow** |
+| PRIMARY: youtube-otomasyon (Cursor) | `ceTtnEGNt5srPnQm` | 47 | Yedek (ayrı) |
+| PRIMARY: youtube-paylasim (Cursor+safety) | `WGeALMqtdsab3kkw` | 21 | Yedek (ayrı) |
+| Kanallar Hybrid Shorts | `pOUFteeJt9G8chOL` | 32 | Upgrade kit |
 
-## Akış (ana tema)
+## Tek canvas akış
 
 ```
-[otomasyon]
-Form → Gemini keywords → Apify YouTube scrape → Gemini konu/başlık/sahne
-→ Google Sheets → Telegram onay
+[A — otomasyon]
+Form → Gemini → Apify → Sheets → Telegram onay
+        ↓ (onaylandi)
+[B — paylasim]
+tarih → Sheets → Prototipal VIDEO → Telegram → DRY_RUN guard → YouTube
 
-[paylasim]
-Schedule → Sheets tarih/içerik → Prototipal VIDEO olustur → poll
-→ Telegram onay → indir → DRY_RUN guard → YouTube Upload (n8n node)
+(+ B ayrıca Schedule ile de tetiklenebilir — bekleyen satırlar)
 ```
+
+Dosya: `n8n/workflows/primary/youtube-full-pipeline.json`
 
 ## Bizden eklenecek / eklendi performans noktaları
 
