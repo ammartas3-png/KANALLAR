@@ -7,11 +7,14 @@ Kanallar Hybrid parçaları **sonra** performans için eklenir.
 
 **Tek kullan:** `PRIMARY: YouTube Full (sade)` (`Xu72EtzVvMUHnBvO`)
 
-Nasıl çalışır (repo’da her zaman güncel): [`N8N_HOW_IT_WORKS.md`](N8N_HOW_IT_WORKS.md).
+Nasıl çalışır: [`N8N_HOW_IT_WORKS.md`](N8N_HOW_IT_WORKS.md).
 
-İçerik = Cursor iki şablon + ince ekler: `DRY_RUN?`, A→B köprü, **SEO preflight**.
+Canvas: üst = araştırma/prompt, alt = video/YouTube (orijinal Cursor kutuları, arada boşluk).
+Ekler: SEO preflight + `DRY_RUN?` + onaylandi→tarih köprüsü.
 
-Ayrı `otomasyon` / `paylasim` / Hybrid = yedek.
+Canlıda silinen (bizim kopyalar): ayrı otomasyon, ayrı paylasim, Hybrid Shorts.  
+Repo yedekleri: `n8n/workflows/primary/*` + `n8n/archive/` (eski stub’lar).
+
 
 ## Bizden eklenecek / eklendi performans noktaları
 

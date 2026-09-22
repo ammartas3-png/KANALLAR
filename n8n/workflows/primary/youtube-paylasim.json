@@ -1,5 +1,5 @@
 {
-  "name": "PRIMARY: youtube-paylasim (Cursor+safety)",
+  "name": "youtube-paylasim (backup)",
   "nodes": [
     {
       "parameters": {
@@ -427,97 +427,26 @@
       "name": "Sticky Note3"
     },
     {
-      "id": "236c3364-3a7d-4934-833b-43198c2485dd",
-      "name": "Kanallar safety flags",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2568,
-        -368
-      ],
-      "parameters": {
-        "jsCode": "const dry = String($env.DRY_RUN || 'true').toLowerCase() === 'true';\nconst auto = String($env.AUTO_PUBLISH || 'false').toLowerCase() === 'true';\nconst allow = (!dry) && (auto || true); // human already approved via Telegram; still block dry_run\nreturn [{ json: { ...$input.first().json, dry_run: dry, auto_publish: auto, allow_upload: !dry } }];"
-      }
-    },
-    {
-      "id": "fd87a660-b70e-4f65-996c-7a9643a02b65",
-      "name": "Allow YouTube upload?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        2728,
-        -368
-      ],
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "adf8668b-07ab-4848-823a-468657ef8a3d",
-              "leftValue": "={{$json.allow_upload}}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      }
-    },
-    {
-      "id": "e11268ce-3e54-4a7a-a713-b3e5189b8866",
-      "name": "Telegram: DRY_RUN blocked upload",
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        2968,
-        -208
-      ],
-      "parameters": {
-        "operation": "sendMessage",
-        "chatId": "1240141730",
-        "text": "⏸️ DRY_RUN=true — YouTube upload atlandı. Worker/env: DRY_RUN=false yapınca gerçek yükleme açılır. Video hazır ve onaylı.",
-        "additionalFields": {
-          "appendAttribution": false
-        }
-      },
-      "webhookId": "25cf6bff-94d7-4436-8e7c-ae3eb7e2ad97",
-      "credentials": {
-        "telegramApi": {
-          "id": "CnjYVDcTJNiA0igk",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "id": "3240b75b-09b6-49ba-9aee-87f22dfec717",
+      "id": "de068f20-dabb-4d20-905f-42c97ec9cdb0",
       "name": "SEO preflight",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        932,
-        -40
+        752,
+        60
       ],
       "parameters": {
-        "jsCode": "// AgentTube-inspired packaging check before paid Prototipal call\nconst row = $input.first().json;\nconst title = String(row.baslik || row.title || '').trim();\nconst desc = String(row.aciklama || row.description || '').trim();\nconst format = String(row.format || 'short').toLowerCase();\nconst maxTitle = format.includes('long') ? 60 : 40;\nconst issues = [];\nif (!title) issues.push('baslik bos');\nelse if (title.length > maxTitle) issues.push(`baslik ${title.length}>${maxTitle}`);\nif (!desc) issues.push('aciklama bos');\nelse if (desc.length < 20) issues.push('aciklama cok kisa');\nconst ok = issues.length === 0;\nreturn [{ json: { ...row, seo_ok: ok, seo_issues: issues.join('; ') || 'ok', seo_title_len: title.length } }];"
+        "jsCode": "const row=$input.first().json; const title=String(row.baslik||'').trim(); const desc=String(row.aciklama||'').trim(); const maxTitle=40; const issues=[]; if(!title)issues.push('baslik bos'); else if(title.length>maxTitle)issues.push('baslik uzun'); if(!desc||desc.length<20)issues.push('aciklama'); return [{json:{...row,seo_ok:issues.length===0,seo_issues:issues.join('; ')||'ok'}}];"
       }
     },
     {
-      "id": "26a0bf92-100d-4ad0-a316-f162b184227e",
+      "id": "dabb3031-893a-4ab7-adb6-8f4151118a98",
       "name": "SEO OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1112,
-        -40
+        972,
+        60
       ],
       "parameters": {
         "conditions": {
@@ -529,7 +458,7 @@
           },
           "conditions": [
             {
-              "id": "f0baf988-3f63-4f59-980c-99290577f304",
+              "id": "37379aa5-0f9e-4ad3-9392-9ccf4ae2a092",
               "leftValue": "={{ $json.seo_ok }}",
               "rightValue": true,
               "operator": {
@@ -545,23 +474,81 @@
       }
     },
     {
-      "id": "92008932-76b3-45f0-866d-da5516088a50",
-      "name": "SEO fail Telegram",
+      "id": "f12ce285-c243-4cac-b406-7dd87c32bc0d",
+      "name": "SEO fail",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1312,
-        120
+        1192,
+        220
       ],
       "parameters": {
         "operation": "sendMessage",
         "chatId": "1240141730",
-        "text": "=SEO preflight FAIL — Prototipal atlandi\\nBaslik: {{$json.baslik}}\\nSorun: {{$json.seo_issues}}",
+        "text": "=SEO FAIL\n{{$json.seo_issues}}",
         "additionalFields": {
           "appendAttribution": false
         }
       },
-      "webhookId": "ebf93e44-c950-47ec-8c62-e89d7e97c7c2",
+      "webhookId": "36197fed-453a-4b26-a8ef-5305586e9778",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "ef657b03-6c04-48e9-8590-597bc10f9ec3",
+      "name": "DRY_RUN?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2748,
+        -368
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "49b0c6f7-01af-4715-8981-3230b8604942",
+              "leftValue": "={{String($env.DRY_RUN || 'true').toLowerCase()}}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "8da62bc3-1525-4770-ad0f-47c38eca5f57",
+      "name": "DRY_RUN skip",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2988,
+        -188
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "DRY_RUN skip",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "eb40c46f-a538-4bda-9765-d9759ec31ccb",
       "credentials": {
         "telegramApi": {
           "id": "CnjYVDcTJNiA0igk",
@@ -570,6 +557,7 @@
       }
     }
   ],
+  "pinData": {},
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -711,7 +699,7 @@
       "main": [
         [
           {
-            "node": "Kanallar safety flags",
+            "node": "DRY_RUN?",
             "type": "main",
             "index": 0
           }
@@ -723,35 +711,6 @@
         [
           {
             "node": "If3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Kanallar safety flags": {
-      "main": [
-        [
-          {
-            "node": "Allow YouTube upload?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Allow YouTube upload?": {
-      "main": [
-        [
-          {
-            "node": "Upload a video",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Telegram: DRY_RUN blocked upload",
             "type": "main",
             "index": 0
           }
@@ -780,7 +739,25 @@
         ],
         [
           {
-            "node": "SEO fail Telegram",
+            "node": "SEO fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY_RUN?": {
+      "main": [
+        [
+          {
+            "node": "Upload a video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DRY_RUN skip",
             "type": "main",
             "index": 0
           }
@@ -788,8 +765,15 @@
       ]
     }
   },
+  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null
+  "versionId": "43679e52-ac0c-49b6-96ff-beb29427c573",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "003a9ae3dba371754ae5d918b688a4b816eee1ca87966505b27018250488ab53"
+  },
+  "id": "cuCh1RuatDjapp46",
+  "tags": []
 }

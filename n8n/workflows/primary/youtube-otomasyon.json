@@ -1,5 +1,5 @@
 {
-  "name": "PRIMARY: youtube-otomasyon (Cursor)",
+  "name": "youtube-otomasyon",
   "nodes": [
     {
       "parameters": {
@@ -1636,6 +1636,7 @@
       }
     }
   ],
+  "pinData": {},
   "connections": {
     "On form submission": {
       "main": [
@@ -2129,8 +2130,15 @@
       ]
     }
   },
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null
+  "versionId": "0168c0f4-26b7-4e26-ad74-b05194859312",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "003a9ae3dba371754ae5d918b688a4b816eee1ca87966505b27018250488ab53"
+  },
+  "id": "QAGvLcg3YvpU0vNy",
+  "tags": []
 }

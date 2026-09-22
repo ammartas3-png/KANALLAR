@@ -2,32 +2,37 @@
 
 Kanallar’ın **birincil işletim sistemi n8n**. Repo’yu her açtığında buradan başla.
 
-## Primary workflow (tek canvas)
+## Primary (tek workflow)
 
-| Repo file | Live name |
-|-----------|-----------|
+| Repo | Live n8n |
+|------|----------|
 | `workflows/primary/youtube-full-pipeline.json` | **PRIMARY: YouTube Full (sade)** |
+
+Canvas düzeni:
+- **Üst blok** — araştırma + prompt + konu onayı (sarı/yeşil kutular)
+- **Alt blok** — tarih → SEO → Prototipal → video onayı → YouTube
 
 ```
 Form / Schedule
-  → Gemini + Apify research
-  → Sheets queue + scene prompts
+  → Gemini + Apify
+  → Sheets + scene prompts
   → Telegram (konu)
   → SEO preflight
-  → Prototipal video + poll
+  → Prototipal + poll
   → Telegram (video)
-  → DRY_RUN? → YouTube Upload
+  → DRY_RUN? → YouTube
 ```
 
-Full explanation: [`docs/N8N_HOW_IT_WORKS.md`](../docs/N8N_HOW_IT_WORKS.md).
+Detay: [`docs/N8N_HOW_IT_WORKS.md`](../docs/N8N_HOW_IT_WORKS.md)
 
-## Backups (optional)
+## Backups (opsiyonel, canlıda yok)
 
-- `workflows/primary/youtube-otomasyon.json` — sadece araştırma
-- `workflows/primary/youtube-paylasim.json` — sadece üretim/yayın
-- `workflows/kanallar-shorts-factory.json` — Hybrid / worker upgrade
+- `workflows/primary/youtube-otomasyon.json`
+- `workflows/primary/youtube-paylasim.json`
 
-## n8n Variables
+Eski Hybrid / stub’lar: `n8n/archive/` (kullanma).
+
+## Variables
 
 ```
 DRY_RUN=true
@@ -36,11 +41,11 @@ AUTO_PUBLISH=false
 
 ## Credentials
 
-Google Gemini · Google Sheets · Telegram · YouTube · Apify · Prototipal.
+Gemini · Sheets · Telegram · YouTube · Apify · Prototipal.
 
-## Absolute rules
+## Rules
 
-1. Workflow’ları credential + dry-run doğrulanmadan **aktif etme**.
-2. Secret’leri JSON’a yazma (Apify token → credential).
-3. YouTube upload sadece Gate2 + `DRY_RUN=false` iken.
-4. Davranış değişince **önce** `n8n/workflows/` güncelle — GitHub her zaman n8n’in nasıl çalıştığını göstersin.
+1. Credential + dry-run olmadan **aktif etme**.
+2. Secret JSON’a yazma.
+3. Canlıda sadece **Full (sade)** kalsın; kopya PRIMARY / Hybrid silindi.
+4. Davranış değişince önce git’teki `primary/` JSON’u güncelle.
