@@ -1225,7 +1225,8 @@
             "approvalType": "double"
           }
         },
-        "options": {}
+        "options": {},
+        "chatId": "8715342169"
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,

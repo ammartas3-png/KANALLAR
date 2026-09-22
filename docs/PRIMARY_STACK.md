@@ -34,7 +34,7 @@ Repo yedekleri: `n8n/workflows/primary/*` + `n8n/archive/` (eski stub’lar).
 
 - Google Gemini (PaLM) API  
 - Google Sheets OAuth  
-- Telegram  
+- Telegram (chat id `8715342169` — @istanbul1453_1923)  
 - YouTube OAuth (**n8n node** — ikinci Google consent gerekebilir)  
 - Apify token (URL içinde / credential)  
 - Prototipal gateway erişimi  

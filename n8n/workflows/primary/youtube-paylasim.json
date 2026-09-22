@@ -304,7 +304,8 @@
             "approvalType": "double"
           }
         },
-        "options": {}
+        "options": {},
+        "chatId": "8715342169"
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
@@ -345,7 +346,8 @@
             "approvalType": "double"
           }
         },
-        "options": {}
+        "options": {},
+        "chatId": "8715342169"
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
@@ -484,7 +486,7 @@
       ],
       "parameters": {
         "operation": "sendMessage",
-        "chatId": "1240141730",
+        "chatId": "8715342169",
         "text": "=SEO FAIL\n{{$json.seo_issues}}",
         "additionalFields": {
           "appendAttribution": false
@@ -542,7 +544,7 @@
       ],
       "parameters": {
         "operation": "sendMessage",
-        "chatId": "1240141730",
+        "chatId": "8715342169",
         "text": "DRY_RUN skip",
         "additionalFields": {
           "appendAttribution": false
