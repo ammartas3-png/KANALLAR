@@ -70,12 +70,45 @@ def home(request: Request) -> HTMLResponse:
 
 
 @app.post("/api/produce")
-def api_produce(topic: str | None = None) -> dict:
+def api_produce(topic: str | None = None, idea_id: str | None = None, channel_id: str | None = None) -> dict:
+    """Start media pipeline ONLY for an approved topic (or explicit topic_id)."""
+
     def _run() -> None:
-        produce(topic_id=topic)
+        topic_key = topic
+        if idea_id and not topic_key:
+            from database.models import Idea
+            import json as _json
+
+            with get_session() as session:
+                idea = session.get(Idea, idea_id)
+                if idea is None:
+                    return
+                try:
+                    payload = _json.loads(idea.payload_json or "{}")
+                except _json.JSONDecodeError:
+                    payload = {}
+                topic_key = payload.get("topic_id") or idea.topic
+            produce(channel_id=channel_id, topic_id=topic_key)
+        else:
+            produce(channel_id=channel_id, topic_id=topic_key)
 
     threading.Thread(target=_run, daemon=True).start()
-    return {"status": "started"}
+    return {"status": "started", "topic": topic, "idea_id": idea_id}
+
+
+@app.post("/api/research")
+def api_research(channel_id: str | None = None, limit: int = 15) -> dict:
+    """Gate #1 prep: candidates + shortlist. Does NOT spend on Kie/render."""
+    from automation.topics import generate_topic_candidates
+
+    return generate_topic_candidates(channel_id=channel_id, limit=limit)
+
+
+@app.get("/api/topics/pending")
+def api_topics_pending(channel_id: str | None = None) -> list:
+    from automation.topics import get_pending_topics
+
+    return get_pending_topics(channel_id=channel_id)
 
 
 @app.post("/api/approve/{video_id}")
@@ -136,24 +169,46 @@ def api_issue_topic_approval(idea_id: str, channel_id: str = "") -> dict:
 
 
 @app.post("/api/approvals/topic/decide")
-def api_decide_topic(token: str, decision: str, feedback: str = "") -> dict:
+def api_decide_topic(
+    token: str,
+    decision: str,
+    feedback: str = "",
+    start_produce: bool = True,
+) -> dict:
+    """Gate #1 decision. On APPROVE, optionally start hybrid produce (media after approval)."""
     from automation.approvals import consume_topic_approval
     from database.models import Idea
     from database.states import ApprovalDecision, IdeaStatus
+    import json as _json
 
     result = consume_topic_approval(token, decision=decision, feedback=feedback)
     if not result.get("ok"):
         raise HTTPException(400, result)
+    topic_id = None
+    channel_id = result.get("channel_id") or ""
     with get_session() as session:
         idea = session.get(Idea, result["idea_id"])
         if idea is not None:
+            channel_id = channel_id or idea.channel_id
             if result["decision"] in {ApprovalDecision.APPROVE}:
                 idea.status = IdeaStatus.TOPIC_APPROVED
+                try:
+                    payload = _json.loads(idea.payload_json or "{}")
+                except _json.JSONDecodeError:
+                    payload = {}
+                topic_id = payload.get("topic_id") or idea.topic
             elif result["decision"] == ApprovalDecision.REJECT:
                 idea.status = IdeaStatus.TOPIC_REJECTED
             elif result["decision"] in {ApprovalDecision.REVISE, ApprovalDecision.NEW_IDEAS}:
                 idea.status = IdeaStatus.TOPIC_REVISION_REQUESTED
-    return result
+    out = {**result, "topic_id": topic_id, "produce": None}
+    if result["decision"] == ApprovalDecision.APPROVE and start_produce and topic_id:
+        def _run() -> None:
+            produce(channel_id=channel_id or None, topic_id=topic_id)
+
+        threading.Thread(target=_run, daemon=True).start()
+        out["produce"] = {"status": "started", "topic_id": topic_id}
+    return out
 
 
 @app.post("/api/approvals/video")

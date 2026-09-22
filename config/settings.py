@@ -52,8 +52,10 @@ class Settings(BaseSettings):
     max_generation_retries: int = 2
     max_media_regenerations: int = 2
     topic_similarity_cooldown_days: int = 45
-    # Media: kie (primary) → higgsfield → local cards. Keys missing ⇒ local.
-    media_quality: str = "auto"  # local | auto | cheap | premium
+    # Media: hybrid = local cards + Kie only on wow/hook scenes when keyed
+    media_quality: str = "hybrid"  # local | hybrid | auto | cheap | premium
+    kie_wow_roles_only: bool = True  # hook/cta only when hybrid
+    max_kie_scenes_per_video: int = 1
     # Telegram approval (n8n holds bot token; worker may verify shared secret)
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
