@@ -8,7 +8,9 @@
 | 2026-09-22 | Media: Kie.ai primary, Higgsfield secondary | Operator choice; local fallback if keys missing |
 | 2026-09-22 | Render default FFmpeg; Remotion optional | Best cost/perf; Remotion license risk for automation |
 | 2026-09-22 | Do not vendor OpenMontage | AGPL + duplicates stack |
-| 2026-09-22 | No n8n YouTube node | Avoid second OAuth; keep Mac token on worker |
+| 2026-09-22 | Primary path may use n8n YouTube Upload node | Matches Cursor templates; worker OAuth remains optional fallback |
+| 2026-09-22 | Primary OS docs always explain n8n (`N8N_HOW_IT_WORKS`) | GitHub must show how production runs |
+| 2026-09-22 | Borrow AgentTube patterns only (SEO preflight now) | Do not vendor their Node/SQLite app |
 | 2026-09-22 | `AUTO_PUBLISH=false`, `DRY_RUN=true` defaults | Absolute safety |
 | 2026-09-22 | **Hybrid money path** | Topic gate before media; local cards default; ≤1 Kie wow scene |
 | 2026-09-22 | Research = catalog + Wikipedia most-read signals | Cheap, auditable scores — not “LLM viral” |
