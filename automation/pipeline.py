@@ -30,6 +30,7 @@ from database.models import Channel, Experiment, Idea, Script, Upload, Video
 from database.session import get_session, init_db
 from media.router import status_report
 from memory.store import mark_used
+from storage import sync_video_artifacts
 from video.compose import compose_short
 
 
@@ -368,6 +369,18 @@ def produce(
     if video_path.exists():
         shutil.copy2(video_path, public)
 
+    storage_meta = {"backend": "skipped", "urls": {}}
+    try:
+        storage_meta = sync_video_artifacts(
+            video_id,
+            video_path,
+            Path(rendered["thumb"]) if rendered.get("thumb") else None,
+        )
+        current = load_checkpoint(video_id).get("status") or final_status
+        save_checkpoint(video_id, current, storage=storage_meta)
+    except Exception as exc:  # noqa: BLE001 — storage must not kill a good render
+        storage_meta = {"backend": "error", "error": str(exc), "urls": {}}
+
     return {
         "id": video_id,
         "channel_id": channel.id,
@@ -385,6 +398,8 @@ def produce(
         "media_provider": assets.get("provider"),
         "media_providers": status_report(),
         "require_human_approval": settings.require_human_approval,
+        "storage": storage_meta,
+        "preview_url": (storage_meta.get("urls") or {}).get("video") or "",
     }
 
 

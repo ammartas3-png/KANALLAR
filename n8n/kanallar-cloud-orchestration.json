@@ -1,0 +1,164 @@
+{
+  "name": "Kanallar — Cloud orchestration (not production brain)",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Triggers Kanallar cloud worker only. YouTube OAuth stays on the worker (YOUTUBE_TOKEN_JSON). Do not rebuild video pipeline inside n8n."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "sched-daily",
+      "name": "Daily 08:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.KANALLAR_BASE_URL}}/health",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "http-health",
+      "name": "Worker health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.ok}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "if-healthy",
+      "name": "Healthy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/produce",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "http-produce",
+      "name": "Start produce",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [760, -80]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "minutes"
+      },
+      "id": "wait-render",
+      "name": "Wait ~3 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1000, -80],
+      "webhookId": "kanallar-wait-produce"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/pending",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "http-pending",
+      "name": "List pending approval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1240, -80]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst pending = items[0].json;\nconst list = Array.isArray(pending) ? pending : [];\nconst base = $env.KANALLAR_BASE_URL || '';\nif (!list.length) {\n  return [{ json: { message: 'Onay bekleyen video yok', count: 0, studio: base + '/' } }];\n}\nconst lines = list.map(v => `- ${v.id} (${Math.round(v.duration||0)}s) izle: ${base}/media/${v.id}`);\nreturn [{\n  json: {\n    count: list.length,\n    message: `Onay bekleyen ${list.length} video:\\n` + lines.join('\\n') + `\\n\\nStudio: ${base}/`,\n    first_id: list[0].id,\n    studio: base + '/'\n  }\n}];"
+      },
+      "id": "fmt-pending",
+      "name": "Format notify text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1480, -80]
+    },
+    {
+      "parameters": {
+        "content": "## Sonraki adım (manuel veya Telegram/Slack node ekle)\n\n1. `message` alanındaki Studio linkini aç (telefon/Dell)\n2. Videoyu izle → **Onayla + yükle**\n3. YouTube yükleme **worker** üzerinde çalışır (Mac token secret ile)\n\nİstersen bu node'dan sonra Telegram / Slack / Email node bağla; `{{$json.message}}` gönder.\n\n**YouTube node kullanma** — OAuth zaten Mac'te alındı; ikinci bağlama gereksiz ve karışır.",
+        "height": 320,
+        "width": 420
+      },
+      "id": "note-approve",
+      "name": "Note: approve in Studio",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1720, -200]
+    },
+    {
+      "parameters": {
+        "content": "## Worker unhealthy\n\n`KANALLAR_BASE_URL` yanlış veya worker kapalı.\nÖnce Docker/Railway deploy + `/health` kontrol et.\nn8n video üretmez.",
+        "height": 200,
+        "width": 300
+      },
+      "id": "note-unhealthy",
+      "name": "Note: unhealthy",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [760, 120]
+    }
+  ],
+  "connections": {
+    "Daily 08:00 UTC": {
+      "main": [[{ "node": "Worker health", "type": "main", "index": 0 }]]
+    },
+    "Worker health": {
+      "main": [[{ "node": "Healthy?", "type": "main", "index": 0 }]]
+    },
+    "Healthy?": {
+      "main": [
+        [{ "node": "Start produce", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Start produce": {
+      "main": [[{ "node": "Wait ~3 min", "type": "main", "index": 0 }]]
+    },
+    "Wait ~3 min": {
+      "main": [[{ "node": "List pending approval", "type": "main", "index": 0 }]]
+    },
+    "List pending approval": {
+      "main": [[{ "node": "Format notify text", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "kanallar" },
+    { "name": "orchestration-only" }
+  ],
+  "pinData": {},
+  "versionId": "1"
+}

@@ -1,101 +1,64 @@
-# Operatör kontrol listesi (senin yapman gerekenler)
+# Operatör kontrol listesi — cloud-first (Mac local yok)
 
-Kod tarafındaki entegrasyonlar hazır. Aşağıdakiler **senin** hesabında / panellerinde yapılmalı.
-Sırlar (API key, token) asla GitHub’a commit edilmez.
+Kod cloud worker olarak çalışır. Laptop’ta kurulum **gerekmez**.
+Detay: [CLOUD_DEPLOY.md](CLOUD_DEPLOY.md)
 
----
-
-## 1) Zorunlu — YouTube OAuth (yükleme için)
-
-1. Google Cloud Console’da YouTube Data API v3 (+ istenirse YouTube Analytics API) açık olsun.
-2. OAuth **Desktop** client JSON’u proje kökünde `client_secret.json` olarak dursun (zaten yüklediysen tamam).
-3. **Bir kez** tarayıcıda Google hesabıyla onay ver → `token.json` oluşsun.
-   - Cloud agent senin Mac’inde tarayıcı açamaz; bunu kendi makinenizde veya her zaman açık bir sunucuda yapın.
-4. Kontrol:
-   ```bash
-   python -m automation channel
-   ```
-   `token: true` görmelisin.
+Sırları asla GitHub’a veya chate yapıştırma.
 
 ---
 
-## 2) Video üret → izle → onayla → yükle
+## Senin yapman gerekenler (sadece paneller / tarayıcı)
+
+### 1) Hosting (zorunlu — Cursor kapalıyken üretim için)
+1. Railway / Fly / Render / herhangi bir VM
+2. Bu repoyu deploy et (`Dockerfile` veya `docker compose`)
+3. Açık port **8080** → Studio + `/health`
+
+### 2) Postgres (zorunlu production)
+1. Neon/Supabase/RDS veya compose `db`
+2. Secret: `DATABASE_URL=postgresql+psycopg://...`
+
+### 3) YouTube (yükleme için)
+1. Google Cloud’da YouTube Data API (+ Analytics) açık
+2. OAuth client JSON → secret `YOUTUBE_CLIENT_SECRETS_JSON`
+3. Bir kez token al → secret `YOUTUBE_TOKEN_JSON`  
+   (Mac şart değil; geçici VM veya daha önce alınmış token)
+
+### 4) Onay (her gün)
+1. Tarayıcıda `https://<worker-host>/`
+2. Videoyu izle → **Onayla + yükle** veya **Reddet**
+3. Private Short kanalda görünsün
+
+### 5) Opsiyonel
+| Secret | Ne |
+|--------|-----|
+| `STORAGE_BACKEND=s3` + R2/S3 keys | Kalıcı preview |
+| `KIE_API_KEY` + model id | AI medya |
+| `HF_API_KEY_ID` / `HF_API_KEY_SECRET` | Premium fallback |
+| `WORKER_PRODUCE_CRON` | Üretim saati (UTC) |
+
+---
+
+## Kontrol (sunucuda veya GitHub Actions — Mac değil)
 
 ```bash
-# Üret (varsayılan: YouTube’a yüklemez, awaiting_approval olur)
-python -m automation produce
-
-# Onay bekleyenler
-python -m automation pending
-
-# İzle (stüdyo veya content/videos/<id>/final.mp4)
-python -m automation studio
-
-# Onayla + private yükle
-python -m automation approve --id <VIDEO_ID> --upload
-```
-
-Stüdyoda da **Onayla + yükle** / **Reddet** butonları var.
-
-Onay kapısını kapatmak (önerilmez): `.env` içinde `REQUIRE_HUMAN_APPROVAL=false`  
-Acil atlama: `produce --force-upload` (dikkatli kullan).
-
----
-
-## 3) Opsiyonel — Kie.ai (birincil AI medya)
-
-1. https://kie.ai hesabı aç, kredi yükle.
-2. API key: https://kie.ai/api-key → `.env` `KIE_API_KEY=...`
-3. Model id’lerini market’ten seç: https://kie.ai/market  
-   Örnek alanlar: `KIE_DEFAULT_IMAGE_MODEL`, `KIE_DEFAULT_VIDEO_MODEL`, `KIE_DEFAULT_VOICE_MODEL`
-4. Kaliteyi aç: `MEDIA_QUALITY=auto` (veya `cheap`)
-5. Kontrol: `python -m automation media-status` → `kie.configured: true`
-
-Not: V1 assembler hâlâ FFmpeg kartları kullanır; Kie seçimi plan/routing’e yazılır. Clip indirme sonraki adım.
-
----
-
-## 4) Opsiyonel — Higgsfield (yedek / premium)
-
-1. Higgsfield Cloud’dan `HF_API_KEY_ID` + `HF_API_KEY_SECRET` al.
-2. Endpoint’leri docs’tan doldur: https://docs.higgsfield.ai  
-   `HF_DEFAULT_IMAGE_ENDPOINT`, `HF_DEFAULT_VIDEO_ENDPOINT`, (varsa) voice.
-3. `MEDIA_QUALITY=premium` veya Kie yokken auto fallback.
-
----
-
-## 5) Opsiyonel — Üretim bulutu (Cursor kapalıyken çalışsın)
-
-| Ne | Neden |
-|----|--------|
-| PostgreSQL (Neon/Supabase/RDS) | `DATABASE_URL` — SQLite yalnızca deneme |
-| Object storage (R2/S3/GCS) | final mp4, ses, thumb kalıcı |
-| Always-on worker (VM / Railway / Fly / Render) | `produce` + `analytics` zamanlayıcı |
-| Secrets (env / vault) | OAuth + Kie/HF anahtarları |
-
-n8n **zorunlu değil**; ileride yalnızca cron / Slack “onay?” bildirimi için.
-
----
-
-## 6) Kontrol komutları
-
-```bash
+curl https://<host>/health
+# veya container içinde:
+python -m automation storage-status
 python -m automation media-status
 python -m automation pending
-python -m automation job --id <VIDEO_ID>
-python -m automation analytics   # token + Analytics API gerekir
 ```
 
 ---
 
-## Senin yapılacaklar (kısa)
+## Kısa checklist
 
-1. [ ] `token.json` üret (OAuth bir kez)
-2. [ ] `produce` çalıştır, videoyu izle
-3. [ ] `approve --id … --upload` ile private Short doğrula
-4. [ ] (İsteğe bağlı) Kie key + market model id’leri
-5. [ ] (İsteğe bağlı) Higgsfield key + endpoint’ler
-6. [ ] (İsteğe bağlı) Postgres + storage + always-on host
-7. [ ] YouTube kanalının doğru Google hesabına bağlı olduğundan emin ol
+1. [ ] Cloud host deploy
+2. [ ] `DATABASE_URL`
+3. [ ] `YOUTUBE_CLIENT_SECRETS_JSON` + `YOUTUBE_TOKEN_JSON`
+4. [ ] `/health` → ok
+5. [ ] Studio’dan 1 video onayla
+6. [ ] (İsteğe) R2/S3
+7. [ ] (İsteğe) Kie/HF
 
-Sorular / sırlar: değerleri chate yapıştırma; sadece “ekledim / eklemedim” de.
+Local `pip install` / Mac terminal **bu listede yok**.
