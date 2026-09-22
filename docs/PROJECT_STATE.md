@@ -1,21 +1,21 @@
 # PROJECT_STATE.md
 
-**Milestone:** Single PRIMARY full pipeline (otomasyon+paylasim merged)  
+**Milestone:** n8n-first primary + AgentTube pattern (SEO)  
 **Updated:** 2026-09-22
 
 ## What works
-- **One workflow to use:** `PRIMARY: YouTube Full Pipeline (otomasyon+paylasim)` (71 nodes) on live n8n
-- Section A = research/prompt; Section B = Prototipal + YouTube with DRY_RUN guard
-- Bridge: `onaylandi` → paylasim path
-- Split PRIMARY workflows kept as backup only
+- **One workflow:** `PRIMARY: YouTube Full (sade)` on live n8n (`Xu72EtzVvMUHnBvO`)
+- Repo always documents n8n: `docs/N8N_HOW_IT_WORKS.md` + root `README.md`
+- Gates: Telegram konu + video; `DRY_RUN?` before YouTube
+- **SEO preflight** before Prototipal (AgentTube idea, n8n Code node)
+- Hybrid / worker = upgrade kit only
 
 ## Current milestone
-Operate the merged pipeline; link credentials; dry-run smoke test.
+Keep git + live n8n in sync; credentials + dry-run smoke test.
 
 ## Active issues
 - Credentials still need linking in n8n UI
-- Apify/Prototipal/YouTube OAuth on n8n side
-- Postgres dual-gate upgrades still next
+- Analytics learning loop not wired yet
 
 ## Next task
-User opens **Full Pipeline** only, connects credentials, sets `DRY_RUN=true`, runs form once.
+Operator: open Full (sade), link credentials, `DRY_RUN=true`, run form once.

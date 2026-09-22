@@ -15,3 +15,6 @@
 | 2026-09-22 | **PRIMARY = Cursor `youtube-otomasyon` + `youtube-paylasim`** | Operator chose their templates as main theme |
 | 2026-09-22 | Kanallar Hybrid becomes upgrade kit | Add DRY_RUN (done), dual-gate tokens, cheap FFmpeg fallback, analytics later |
 | 2026-09-22 | GitHub: borrow SaarD00/Autotube/n8n-shorts patterns; skip OpenMontage/MoneyPrinter | Stars ≠ production fit; AGPL/spam risk |
+
+| 2026-09-22 | Primary OS = n8n; docs always explain n8n | Repo clarity for operators |
+| 2026-09-22 | Borrow AgentTube patterns (SEO now, analytics later); do not vendor Node app | Keep Cursor/n8n stack |

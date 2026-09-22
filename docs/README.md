@@ -1,22 +1,16 @@
 # docs/
 
-Cloud-first Shorts factory architecture audit (2026-09-17).
-
-Start here: **[CLOUD_DEPLOY.md](CLOUD_DEPLOY.md)** · **[OPERATOR_CHECKLIST.md](OPERATOR_CHECKLIST.md)** · audit: **[FINAL_AUDIT_REPORT.md](FINAL_AUDIT_REPORT.md)**
+**Start here for how production runs:** [`N8N_HOW_IT_WORKS.md`](N8N_HOW_IT_WORKS.md) · [`../n8n/README.md`](../n8n/README.md)
 
 | Doc | Purpose |
 | --- | --- |
-| CLOUD_DEPLOY.md | Mac’siz deploy (Docker / worker) |
-| OPERATOR_CHECKLIST.md | Operatör aksiyon listesi (TR, cloud-first) |
-| [../n8n/README.md](../n8n/README.md) | n8n = cron/bildirim only (YouTube OAuth worker’da) |
-| CURRENT_ARCHITECTURE.md | What exists now |
-| INSTALLED_TOOLS_AUDIT.md | KEEP/REMOVE/OPTIONAL/NOT CONFIGURED/BROKEN |
-| GITHUB_REPOSITORIES_AUDIT.md | Required vs do-not-install repos |
-| MISSING_COMPONENTS.md | Gaps vs product brief |
-| DUPLICATE_OR_UNNECESSARY_TOOLS.md | Dual stack & dead weight |
-| RECOMMENDED_CLOUD_ARCHITECTURE.md | Target design |
-| CLOUD_SERVICES_REQUIRED.md | Accounts/keys (names only) |
-| IMPLEMENTATION_ROADMAP.md | Phased plan |
-| KIE_AND_HIGGSFIELD_CHECK.md | Gateway-specific audit |
+| N8N_HOW_IT_WORKS.md | **Canonical** — how n8n runs Shorts production |
+| PRIMARY_STACK.md | Which live workflow to use |
+| IDEAS_FROM_AGENTTUBE.md | Patterns from darkzOGx (no full clone) |
+| PROJECT_STATE.md | What’s done / next |
+| ARCHITECTURE.md | Target hybrid + worker |
+| GITHUB_RESEARCH.md | External repos — patterns only |
+| CLOUD_DEPLOY.md | Deploy notes |
+| OPERATOR_CHECKLIST.md | Operator checklist (TR) |
 
-Root-level `CURRENT_ARCHITECTURE.md` / `NEXT_STEPS.md` etc. are earlier drafts; **`docs/` is authoritative for this audit.**
+Older audit files below remain historical; prefer the rows above for day-to-day work.
