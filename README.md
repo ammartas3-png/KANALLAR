@@ -1,35 +1,21 @@
 # Kanallar
 
-Cloud-first **AI YouTube Shorts** factory.
+Cloud-first YouTube Shorts factory.
 
-- **n8n Cloud** orchestrates schedules, Telegram approvals, retries.
-- **Python worker** runs research → script → Kie/Higgsfield/local media → FFmpeg render → QC → YouTube Data API.
-- **Two human gates (Telegram):** topic before media; final video before publish.
-- Defaults: `AUTO_PUBLISH=false`, `DRY_RUN=true`.
+## Primary stack (Cursor templates)
 
-Read: [`AGENTS.md`](AGENTS.md) → [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) → [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+n8n workflows:
 
-## Channels (MVP)
+1. **youtube-otomasyon** — Form → Gemini → Apify → Sheets → Telegram  
+2. **youtube-paylasim** — Schedule → Prototipal video → Telegram → YouTube (`DRY_RUN` guard)
 
-- `channel_01` / Bilim Dakikası
-- `tarih-kisa`, `bilim-dakikasi` YAML configs
+Docs: [`docs/PRIMARY_STACK.md`](docs/PRIMARY_STACK.md) · [`docs/GITHUB_RESEARCH.md`](docs/GITHUB_RESEARCH.md) · [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md)
 
-## Quick start
+## Upgrade kit (our hybrid — add when needed)
 
-```bash
-python3 -m pip install -r requirements.txt
-cp .env.example .env
-bash scripts/bootstrap_db.sh
-pytest -q
-python3 -m automation studio --host 0.0.0.0 --port 8080
-```
-
-Docker: `docker compose up --build`.
-
-## n8n
-
-Import `n8n/workflows/*.json`. Set `KANALLAR_BASE_URL`. Wire Telegram in n8n UI. See [`n8n/README.md`](n8n/README.md).
+- Cheap research / FFmpeg path / Postgres state / dual approval tokens  
+- Live reference workflow: Kanallar Hybrid Shorts  
 
 ## Safety
 
-Never commit `token.json`, `client_secret.json`, `.env`, or n8n bot tokens. No automatic YouTube publish without Approval #2.
+Defaults: `DRY_RUN=true`, `AUTO_PUBLISH=false`. Never commit secrets.
