@@ -12,3 +12,6 @@
 | 2026-09-22 | `AUTO_PUBLISH=false`, `DRY_RUN=true` defaults | Absolute safety |
 | 2026-09-22 | **Hybrid money path** | Topic gate before media; local cards default; ≤1 Kie wow scene |
 | 2026-09-22 | Research = catalog + Wikipedia most-read signals | Cheap, auditable scores — not “LLM viral” |
+| 2026-09-22 | **PRIMARY = Cursor `youtube-otomasyon` + `youtube-paylasim`** | Operator chose their templates as main theme |
+| 2026-09-22 | Kanallar Hybrid becomes upgrade kit | Add DRY_RUN (done), dual-gate tokens, cheap FFmpeg fallback, analytics later |
+| 2026-09-22 | GitHub: borrow SaarD00/Autotube/n8n-shorts patterns; skip OpenMontage/MoneyPrinter | Stars ≠ production fit; AGPL/spam risk |

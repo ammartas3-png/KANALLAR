@@ -1,41 +1,28 @@
-# n8n — Kanallar Hybrid orchestration
+# Kanallar / n8n
 
-## Live workflow
+## Primary (Cursor theme) — use these first
 
-**Name:** `Kanallar Hybrid Shorts (Gate1→Media→Gate2)`  
-**Nodes:** 32 · **Active:** false until worker is up
+Import / live:
 
-### Money-first order
+- `n8n/workflows/primary/youtube-otomasyon.json` — research + Gemini + Apify + Sheets + Telegram
+- `n8n/workflows/primary/youtube-paylasim.json` — Prototipal render + Telegram + YouTube (with `DRY_RUN` guard)
 
-1. Schedule  
-2. Config (`KANALLAR_BASE_URL`)  
-3. Health  
-4. **`POST /api/research`** — shortlist, **no Kie/render**  
-5. Telegram **Topic Gate #1** (APPROVE / REJECT / NEW IDEAS)  
-6. On APPROVE → worker produce (hybrid media)  
-7. Wait render  
-8. Telegram **Video Gate #2** (PUBLISH / REVISE / REJECT)  
-9. Worker decide (+ upload only if not DRY_RUN)
+See `docs/PRIMARY_STACK.md`.
 
-## Variables
+### n8n Variables
 
 ```
-KANALLAR_BASE_URL=https://<worker>
+DRY_RUN=true
+AUTO_PUBLISH=false
 ```
 
-## Repo files
+## Secondary (Kanallar Hybrid) — performance upgrades
 
-| File | Role |
-|------|------|
-| `kanallar-shorts-factory.json` | Full hybrid canvas (synced to live) |
-| `01-research.json` | Subworkflow: research API |
-| `02-topic-selection.json` | Shortlist trim |
-| `03-topic-approval-telegram.json` | Topic token stub |
-| `07-video-approval-telegram.json` | Video token stub |
-| `00-control-plane.json` / `11-error-handler.json` | Control / errors |
+- `n8n/workflows/kanallar-shorts-factory.json` — Gate1→media→Gate2 worker path
+- Worker APIs under `/api/research`, `/api/approvals/*`
 
 ## Absolute rules
 
-- Never start produce before topic APPROVE in this hybrid plan  
-- Never use n8n YouTube node  
-- Keep inactive until `/health` is green  
+- Keep workflows **inactive** until credentials linked and dry-run verified
+- Do not commit API tokens; scrub Apify tokens from URLs into n8n credentials
+- Prefer human Telegram approval before YouTube upload (already in paylasim)
