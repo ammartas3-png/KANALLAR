@@ -3,28 +3,14 @@
 **Karar (2026-09-22):** Ana tema = Cursor’ın verdiği `youtube-otomasyon` + `youtube-paylasim`.  
 Kanallar Hybrid parçaları **sonra** performans için eklenir.
 
-## Canlı n8n (inactive)
+## Canlı n8n — hangisini açacaksın
 
-| Workflow | ID | Nodes | Kullan |
-|----------|-----|------:|--------|
-| **PRIMARY: YouTube Full Pipeline (otomasyon+paylasim)** | `Xu72EtzVvMUHnBvO` | 71 | **EVET — tek workflow** |
-| PRIMARY: youtube-otomasyon (Cursor) | `ceTtnEGNt5srPnQm` | 47 | Yedek (ayrı) |
-| PRIMARY: youtube-paylasim (Cursor+safety) | `WGeALMqtdsab3kkw` | 21 | Yedek (ayrı) |
-| Kanallar Hybrid Shorts | `pOUFteeJt9G8chOL` | 32 | Upgrade kit |
+**Tek kullan:** `PRIMARY: YouTube Full (sade)` (`Xu72EtzVvMUHnBvO`)
 
-## Tek canvas akış
+İçerik = Cursor’ın iki şablonunun toplamı (görünüş sade, node sayısı onlarınki kadar).
+Bizden ekstra sadece: `DRY_RUN?` kapısı + A→B köprüsü.
 
-```
-[A — otomasyon]
-Form → Gemini → Apify → Sheets → Telegram onay
-        ↓ (onaylandi)
-[B — paylasim]
-tarih → Sheets → Prototipal VIDEO → Telegram → DRY_RUN guard → YouTube
-
-(+ B ayrıca Schedule ile de tetiklenebilir — bekleyen satırlar)
-```
-
-Dosya: `n8n/workflows/primary/youtube-full-pipeline.json`
+Ayrı `otomasyon` / `paylasim` / Hybrid = yedek.
 
 ## Bizden eklenecek / eklendi performans noktaları
 
