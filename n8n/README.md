@@ -1,36 +1,55 @@
 # n8n — Kanallar orchestration
 
-n8n is the **orchestrator**. The Kanallar worker is the **production brain** (media, render, YouTube OAuth).
+n8n is the **orchestrator**. The Kanallar worker is the **production brain**.
 
-## Import
+## Live instance
 
-1. Deploy worker; set `KANALLAR_BASE_URL` in n8n Variables (no trailing `/`).
-2. Import JSON from `n8n/workflows/` (and optional legacy `n8n/kanallar-cloud-orchestration.json`).
-3. Attach **Telegram** credentials in the n8n UI (never commit bot tokens).
-4. Activate `00-control-plane` + error handler after health is green.
+- URL: `https://ammartd20.app.n8n.cloud`
+- Main plan workflow: **Kanallar Shorts Factory (n8n plan)** (was empty `Youtube Kanlları`)
+- Status: **inactive** until `KANALLAR_BASE_URL` + worker are ready
 
-## Workflow map (M1+)
+### Work plan (nodes 1→18)
+
+1. Daily Schedule 08:00 UTC  
+2. Factory Config (`KANALLAR_BASE_URL`)  
+3. Worker Health  
+4. Worker OK?  
+5. Start `workflow_run` / Telegram if down  
+6. Dispatch `/api/produce`  
+7. Wait ~4 min (render)  
+8. List pending videos  
+9–10. Pick pending  
+11. Issue video approval token  
+12–14. Telegram Approval #2 (PUBLISH / REVISE / REJECT links)  
+15. Wait human webhook  
+16–17. Decide on worker (+ optional upload)  
+18. Telegram result  
+
+Topic Approval #1 arrives in Milestone 2 (`03-topic-approval-telegram.json`).
+
+## Import / sync
+
+Files under `n8n/workflows/`:
 
 | File | Purpose |
 |------|---------|
-| `00-control-plane.json` | Cron → health → workflow_run → produce |
-| `03-topic-approval-telegram.json` | Issue topic token + Telegram text |
-| `07-video-approval-telegram.json` | Issue video token + preview links |
-| `11-error-handler.json` | Sanitize errors for Telegram |
+| `kanallar-shorts-factory.json` | **Full live plan** (source of truth for main canvas) |
+| `00-control-plane.json` | Slim cron skeleton |
+| `03-topic-approval-telegram.json` | Topic gate stub → expand M2 |
+| `07-video-approval-telegram.json` | Video gate stub |
+| `11-error-handler.json` | Error notify stub |
 
-Planned: `01-research`, `02-topic-selection`, `04-script-and-scenes`, `05-media-generation`, `06-render`, `08-youtube-publish`, `09-analytics`, `10-learning`.
+## n8n Variables (required)
 
-## Env / credentials
+```
+KANALLAR_BASE_URL=https://<your-worker>   # no trailing slash
+```
 
-| Name | Where |
-|------|--------|
-| `KANALLAR_BASE_URL` | n8n Variable |
-| Telegram bot | n8n Credential |
-| `N8N_URL` / `N8N_API_KEY` | Cursor Cloud secrets (agent access) |
-| `YOUTUBE_*_JSON` | Worker host secrets only |
+Telegram credential already on instance: **Telegram account** (chat `1240141730`).
 
 ## Absolute rules
 
-- Do **not** use n8n YouTube Upload node.
-- Do **not** put API keys inside workflow JSON.
-- Publish only after worker approval APIs succeed (`DRY_RUN` / `AUTO_PUBLISH` respected).
+- Do **not** use n8n YouTube Upload node (OAuth stays on worker).
+- Do **not** put API keys in workflow JSON.
+- Keep workflow **inactive** until worker `/health` is green.
+- `DRY_RUN=true` / `AUTO_PUBLISH=false` on worker until you explicitly go live.
