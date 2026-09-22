@@ -12,6 +12,8 @@
 
 Live cloud name: **`PRIMARY: YouTube Full (sade)`**.
 
+Canvas: **üst** araştırma/prompt (Cursor kutuları), **alt** video/YouTube (Y+2200 boşluk). Tek workflow; kopyalar silindi.
+
 ## One-picture flow
 
 ```mermaid

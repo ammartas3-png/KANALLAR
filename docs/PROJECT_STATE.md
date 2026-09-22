@@ -1,21 +1,18 @@
 # PROJECT_STATE.md
 
-**Milestone:** n8n-first primary + AgentTube pattern (SEO)  
+**Milestone:** Clean single n8n canvas  
 **Updated:** 2026-09-22
 
 ## What works
-- **One workflow:** `PRIMARY: YouTube Full (sade)` on live n8n (`Xu72EtzVvMUHnBvO`)
-- Repo always documents n8n: `docs/N8N_HOW_IT_WORKS.md` + root `README.md`
-- Gates: Telegram konu + video; `DRY_RUN?` before YouTube
-- **SEO preflight** before Prototipal (AgentTube idea, n8n Code node)
-- Hybrid / worker = upgrade kit only
+- Live: only **PRIMARY: YouTube Full (sade)** for Shorts (plus user’s unrelated Telegram/CRM workflows)
+- Layout: üst araştırma / alt video — Cursor sticky frames, Y gap 2200
+- SEO + DRY_RUN kept; noOp bridge removed (onaylandi → tarih)
+- Repo: `n8n/workflows/primary/` only; old stubs in `n8n/archive/`
 
-## Current milestone
-Keep git + live n8n in sync; credentials + dry-run smoke test.
+## Deleted from live n8n
+- PRIMARY youtube-otomasyon (duplicate)
+- PRIMARY youtube-paylasim (duplicate)
+- Kanallar Hybrid Shorts (clutter)
 
-## Active issues
-- Credentials still need linking in n8n UI
-- Analytics learning loop not wired yet
-
-## Next task
-Operator: open Full (sade), link credentials, `DRY_RUN=true`, run form once.
+## Next
+Link credentials, `DRY_RUN=true`, form smoke test.
