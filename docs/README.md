@@ -8,6 +8,7 @@ Start here: **[CLOUD_DEPLOY.md](CLOUD_DEPLOY.md)** · **[OPERATOR_CHECKLIST.md](
 | --- | --- |
 | CLOUD_DEPLOY.md | Mac’siz deploy (Docker / worker) |
 | OPERATOR_CHECKLIST.md | Operatör aksiyon listesi (TR, cloud-first) |
+| [../n8n/README.md](../n8n/README.md) | n8n = cron/bildirim only (YouTube OAuth worker’da) |
 | CURRENT_ARCHITECTURE.md | What exists now |
 | INSTALLED_TOOLS_AUDIT.md | KEEP/REMOVE/OPTIONAL/NOT CONFIGURED/BROKEN |
 | GITHUB_REPOSITORIES_AUDIT.md | Required vs do-not-install repos |
