@@ -1,0 +1,110 @@
+{
+  "name": "00-control-plane",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Daily control plane: health check → produce slots → log. Heavy work stays on Kanallar worker."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 8 * * *" }]
+        }
+      },
+      "id": "sched-daily",
+      "name": "Daily 08:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.KANALLAR_BASE_URL}}/health",
+        "options": { "timeout": 30000 }
+      },
+      "id": "http-health",
+      "name": "Worker health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [{ "value1": "={{$json.ok}}", "value2": true }]
+        }
+      },
+      "id": "if-healthy",
+      "name": "Healthy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/workflow-runs",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "workflow", "value": "00-control-plane" },
+            { "name": "n8n_execution_id", "value": "={{$execution.id}}" }
+          ]
+        },
+        "options": { "timeout": 15000 }
+      },
+      "id": "http-run",
+      "name": "Start workflow_run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, -80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/produce",
+        "options": { "timeout": 15000 }
+      },
+      "id": "http-produce",
+      "name": "Dispatch produce (MVP)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, -80]
+    },
+    {
+      "parameters": {
+        "content": "## Milestone 1 control plane\n\nMVP: health → workflow_run → produce.\nLater: Execute Workflow 01-research per channel slot.\n\nEnv: `KANALLAR_BASE_URL` (no trailing slash).\nTelegram approvals land in workflows 03 + 07.\nYouTube OAuth stays on worker — never n8n YouTube node.",
+        "height": 280,
+        "width": 360
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [720, 120]
+    }
+  ],
+  "connections": {
+    "Daily 08:00 UTC": {
+      "main": [[{ "node": "Worker health", "type": "main", "index": 0 }]]
+    },
+    "Worker health": {
+      "main": [[{ "node": "Healthy?", "type": "main", "index": 0 }]]
+    },
+    "Healthy?": {
+      "main": [
+        [{ "node": "Start workflow_run", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Start workflow_run": {
+      "main": [[{ "node": "Dispatch produce (MVP)", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [{ "name": "kanallar" }, { "name": "control-plane" }],
+  "pinData": {},
+  "versionId": "m1"
+}
