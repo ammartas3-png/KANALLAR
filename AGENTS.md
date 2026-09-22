@@ -3,32 +3,36 @@
 Compact map for Cursor / Claude / ChatGPT working on **KANALLAR**.
 
 ## Goal
-Cloud-first AI YouTube Shorts factory: **n8n orchestrates**, Python worker renders/uploads. Two human gates (Telegram): topic before media, video before publish.
+Cloud-first AI YouTube Shorts factory. **Primary OS = n8n** (Cursor full pipeline). Python worker is an upgrade kit. Two human gates (Telegram): topic before media, video before publish.
 
 ## Read order
-1. `AGENTS.md` (this file)
-2. `docs/PROJECT_STATE.md`
-3. Only files for the current task
+1. `docs/N8N_HOW_IT_WORKS.md` — how production runs
+2. `n8n/README.md` — import / credentials
+3. `AGENTS.md` (this file)
+4. `docs/PROJECT_STATE.md`
+5. Only files for the current task
 
 ## Layout
 | Path | Role |
 |------|------|
-| `n8n/workflows/` | Importable orchestration JSON (no secrets) |
-| `automation/` | Pipeline, worker, approvals, jobs |
-| `apps/studio/` | FastAPI health + Studio + n8n HTTP API |
+| `n8n/workflows/primary/` | **Source of truth** for daily production JSON |
+| `n8n/workflows/` | Hybrid + modular stubs |
+| `docs/N8N_HOW_IT_WORKS.md` | Always keep accurate with live n8n behavior |
+| `automation/` | Pipeline, worker, approvals, jobs (upgrade) |
+| `apps/studio/` | FastAPI health + Studio + Hybrid HTTP API |
 | `media/` | Kie.ai / Higgsfield / local MediaProvider |
 | `video/` | FFmpeg (default) + optional Remotion |
-| `youtube/` | Official Data + Analytics API (OAuth on worker) |
-| `database/` | Postgres models + state machine |
+| `youtube/` | Official Data + Analytics API (worker path) |
+| `database/` | Postgres models + state machine (upgrade) |
 | `channels/` | Per-channel YAML |
 | `docs/` | Architecture / decisions / roadmap |
 
 ## Non-negotiables
+- GitHub must always show how n8n works (`docs/N8N_HOW_IT_WORKS.md` + `n8n/workflows/primary/`)
 - `AUTO_PUBLISH=false`, `DRY_RUN=true` until operator flips
-- No publish without `video_approvals` + approved status
-- No n8n YouTube OAuth node (second credential)
+- Primary path may use **n8n YouTube Upload node**; worker YouTube OAuth is optional fallback
 - No secrets in git / workflow JSON
-- Do not clone OpenMontage (AGPL) into the repo
+- Do not clone OpenMontage (AGPL) or AgentTube wholesale into the repo
 - Paid Kie/HF calls only when keys set and not dry-run media path
 
 ## Dev memory ≠ content memory

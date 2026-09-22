@@ -22,6 +22,7 @@ Survey date: 2026-09-22. Used to decide what to **borrow as patterns**, not to v
 | ~71 | aruntemme/n8n-faceless-youtube | MIT | REFERENCE | Sheets → assemble → YouTube (similar to Cursor) |
 | ~60k | remotion-dev/remotion | Source+company | OPTIONAL | Polish renderer |
 | ~60k | calesthio/OpenMontage | **AGPL-3.0** | **DO NOT USE** | License + duplicate |
+| ~3.6k | darkzOGx/youtube-automation-agent | MIT | **PATTERNS** | Approval-first, SEO preflight, analytics learn, resume — see `IDEAS_FROM_AGENTTUBE.md` |
 
 ## Alignment with chosen primary (Cursor)
 

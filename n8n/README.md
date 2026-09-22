@@ -1,31 +1,46 @@
-# Kanallar / n8n
+# n8n — how this factory runs
 
-## Primary (Cursor theme) — use these first
+Kanallar’ın **birincil işletim sistemi n8n**. Repo’yu her açtığında buradan başla.
 
-**Use this one:**
+## Primary workflow (tek canvas)
 
-- `n8n/workflows/primary/youtube-full-pipeline.json` — **tek workflow** (otomasyon + paylasim)
+| Repo file | Live name |
+|-----------|-----------|
+| `workflows/primary/youtube-full-pipeline.json` | **PRIMARY: YouTube Full (sade)** |
 
-Backups (optional):
+```
+Form / Schedule
+  → Gemini + Apify research
+  → Sheets queue + scene prompts
+  → Telegram (konu)
+  → SEO preflight
+  → Prototipal video + poll
+  → Telegram (video)
+  → DRY_RUN? → YouTube Upload
+```
 
-- `youtube-otomasyon.json` / `youtube-paylasim.json` — ayrı halleri
+Full explanation: [`docs/N8N_HOW_IT_WORKS.md`](../docs/N8N_HOW_IT_WORKS.md).
 
-See `docs/PRIMARY_STACK.md`.
+## Backups (optional)
 
-### n8n Variables
+- `workflows/primary/youtube-otomasyon.json` — sadece araştırma
+- `workflows/primary/youtube-paylasim.json` — sadece üretim/yayın
+- `workflows/kanallar-shorts-factory.json` — Hybrid / worker upgrade
+
+## n8n Variables
 
 ```
 DRY_RUN=true
 AUTO_PUBLISH=false
 ```
 
-## Secondary (Kanallar Hybrid) — performance upgrades
+## Credentials
 
-- `n8n/workflows/kanallar-shorts-factory.json` — Gate1→media→Gate2 worker path
-- Worker APIs under `/api/research`, `/api/approvals/*`
+Google Gemini · Google Sheets · Telegram · YouTube · Apify · Prototipal.
 
 ## Absolute rules
 
-- Keep workflows **inactive** until credentials linked and dry-run verified
-- Do not commit API tokens; scrub Apify tokens from URLs into n8n credentials
-- Prefer human Telegram approval before YouTube upload (already in paylasim)
+1. Workflow’ları credential + dry-run doğrulanmadan **aktif etme**.
+2. Secret’leri JSON’a yazma (Apify token → credential).
+3. YouTube upload sadece Gate2 + `DRY_RUN=false` iken.
+4. Davranış değişince **önce** `n8n/workflows/` güncelle — GitHub her zaman n8n’in nasıl çalıştığını göstersin.

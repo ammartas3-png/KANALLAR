@@ -2160,6 +2160,78 @@
         -100
       ],
       "parameters": {}
+    },
+    {
+      "id": "17e86e93-14c1-4e41-9006-b45a76f022c8",
+      "name": "SEO preflight",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        932,
+        1060
+      ],
+      "parameters": {
+        "jsCode": "// AgentTube-inspired packaging check before paid Prototipal call\nconst row = $input.first().json;\nconst title = String(row.baslik || row.title || '').trim();\nconst desc = String(row.aciklama || row.description || '').trim();\nconst format = String(row.format || 'short').toLowerCase();\nconst maxTitle = format.includes('long') ? 60 : 40;\nconst issues = [];\nif (!title) issues.push('baslik bos');\nelse if (title.length > maxTitle) issues.push(`baslik ${title.length}>${maxTitle}`);\nif (!desc) issues.push('aciklama bos');\nelse if (desc.length < 20) issues.push('aciklama cok kisa');\nconst ok = issues.length === 0;\nreturn [{ json: { ...row, seo_ok: ok, seo_issues: issues.join('; ') || 'ok', seo_title_len: title.length } }];"
+      }
+    },
+    {
+      "id": "f4398a04-d116-4251-9679-13004690889d",
+      "name": "SEO OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1112,
+        1060
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f0baf988-3f63-4f59-980c-99290577f304",
+              "leftValue": "={{ $json.seo_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "de7776a6-348e-4e19-9f63-e900441c421d",
+      "name": "SEO fail Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1312,
+        1220
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "=SEO preflight FAIL — Prototipal atlandi\\nBaslik: {{$json.baslik}}\\nSorun: {{$json.seo_issues}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "ebf93e44-c950-47ec-8c62-e89d7e97c7c2",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "connections": {
@@ -2761,7 +2833,7 @@
       "main": [
         [
           {
-            "node": "olustur",
+            "node": "SEO preflight",
             "type": "main",
             "index": 0
           }
@@ -2846,6 +2918,35 @@
         [
           {
             "node": "tarih",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO preflight": {
+      "main": [
+        [
+          {
+            "node": "SEO OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO OK?": {
+      "main": [
+        [
+          {
+            "node": "olustur",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SEO fail Telegram",
             "type": "main",
             "index": 0
           }

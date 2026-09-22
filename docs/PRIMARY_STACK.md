@@ -7,8 +7,9 @@ Kanallar Hybrid parçaları **sonra** performans için eklenir.
 
 **Tek kullan:** `PRIMARY: YouTube Full (sade)` (`Xu72EtzVvMUHnBvO`)
 
-İçerik = Cursor’ın iki şablonunun toplamı (görünüş sade, node sayısı onlarınki kadar).
-Bizden ekstra sadece: `DRY_RUN?` kapısı + A→B köprüsü.
+Nasıl çalışır (repo’da her zaman güncel): [`N8N_HOW_IT_WORKS.md`](N8N_HOW_IT_WORKS.md).
+
+İçerik = Cursor iki şablon + ince ekler: `DRY_RUN?`, A→B köprü, **SEO preflight**.
 
 Ayrı `otomasyon` / `paylasim` / Hybrid = yedek.
 
@@ -16,9 +17,11 @@ Ayrı `otomasyon` / `paylasim` / Hybrid = yedek.
 
 | Özellik | Durum | Neden |
 |---------|--------|--------|
-| `DRY_RUN` / upload IF | **Eklendi** paylaşıma | Yanlışlıkla canlı publish engeli |
+| `DRY_RUN` / upload IF | **Eklendi** | Yanlışlıkla canlı publish engeli |
+| SEO preflight (AgentTube pattern) | **Eklendi** | Başlık/açıklama bozukken Prototipal parası yakma |
 | `AUTO_PUBLISH=false` env | Dokümante | Mutlak güvenlik |
-| Çift kapı (konu + video) | Kısmen Cursor’da var; token’lı harden **sonra** | Güvenlik |
+| Çift kapı (konu + video) | Cursor’da var; token’lı harden **sonra** | Güvenlik |
+| Analytics 24h/7d learn | **Sonra** (AgentTube pattern) | Kazanç döngüsü |
 | Postgres state machine | **Sonra** (Sheets yanında mirror) | Retry / analytics |
 | Catalog+trend ucuz research | **Sonra** Apify maliyeti yüksekse fallback | Birim ekonomisi |
 | FFmpeg hybrid / Kie wow | **Sonra** Prototipal pahalı/kalitesizse | Maliyet |
