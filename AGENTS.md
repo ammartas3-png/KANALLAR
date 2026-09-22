@@ -6,11 +6,12 @@ Compact map for Cursor / Claude / ChatGPT working on **KANALLAR**.
 Cloud-first AI YouTube Shorts factory. **Primary OS = n8n** (Cursor full pipeline). Python worker is an upgrade kit. Two human gates (Telegram): topic before media, video before publish.
 
 ## Read order
-1. `docs/N8N_HOW_IT_WORKS.md` — how production runs
-2. `n8n/README.md` — import / credentials
-3. `AGENTS.md` (this file)
-4. `docs/PROJECT_STATE.md`
-5. Only files for the current task
+1. `docs/AKIS.md` — **step-by-step production flow** (required for ChatGPT/Claude/Cursor)
+2. `docs/N8N_HOW_IT_WORKS.md` — short n8n map
+3. `n8n/README.md` — import / credentials
+4. `AGENTS.md` (this file)
+5. `docs/PROJECT_STATE.md`
+6. Only files for the current task
 
 ## Layout
 | Path | Role |

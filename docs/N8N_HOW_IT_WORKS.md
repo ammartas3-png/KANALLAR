@@ -6,9 +6,10 @@
 
 | File | What it is |
 |------|------------|
-| [`n8n/workflows/primary/youtube-full-pipeline.json`](../n8n/workflows/primary/youtube-full-pipeline.json) | **Primary** — research + prompt + video + YouTube (one canvas) |
-| [`n8n/README.md`](../n8n/README.md) | Import, credentials, variables |
-| This doc | End-to-end behavior |
+| [`AKIS.md`](AKIS.md) | **Adım adım akış** — ChatGPT/Claude/insan için ana anlatım |
+| [`../n8n/workflows/primary/youtube-full-pipeline.json`](../n8n/workflows/primary/youtube-full-pipeline.json) | Primary workflow JSON |
+| [`../n8n/README.md`](../n8n/README.md) | Import, credentials, variables |
+| This doc | Short map |
 
 Live cloud name: **`PRIMARY: YouTube Full (sade)`**.
 
@@ -50,7 +51,7 @@ flowchart LR
 |---------|------|
 | **On form submission** | Manual research run (niche / counts / language) |
 | **Schedule Trigger** | Daily: pick Sheet rows whose `tarih` = today and produce |
-| Bridge `→ videoya gec` | After Telegram topic approval, continue into produce path |
+| `onaylandi` → `tarih` | After Telegram topic approval, continue into produce path |
 
 ## Google Sheets = queue (checkpoint)
 
@@ -78,9 +79,8 @@ Gemini · Google Sheets · Telegram · YouTube OAuth · Apify · Prototipal HTTP
 
 ## What is *not* primary
 
-- `n8n/workflows/kanallar-shorts-factory.json` — Hybrid worker path (Postgres / FFmpeg / Kie wow)
-- Modular stubs `00-`…`11-` — building blocks for later
-- Python `apps/studio` — API for Hybrid, not needed to run Cursor primary
+- `n8n/archive/*` — old Hybrid / stubs (do not run)
+- Python `apps/studio` — upgrade kit API
 
 ## Import / update rule
 

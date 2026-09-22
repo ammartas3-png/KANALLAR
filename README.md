@@ -1,46 +1,50 @@
 # Kanallar
 
-Cloud-first YouTube Shorts factory. **n8n is how it runs** — not a side script.
+Cloud-first YouTube Shorts factory. **Primary OS = n8n.**
 
-## How n8n works (start here)
+## Read this first (humans + ChatGPT + Claude)
 
-Full write-up: **[`docs/N8N_HOW_IT_WORKS.md`](docs/N8N_HOW_IT_WORKS.md)** · Import notes: **[`n8n/README.md`](n8n/README.md)**
+**Adım adım akış:** [`docs/AKIS.md`](docs/AKIS.md) ← projeyi buradan anla.
+
+Kısa özet: [`docs/N8N_HOW_IT_WORKS.md`](docs/N8N_HOW_IT_WORKS.md) · Import: [`n8n/README.md`](n8n/README.md)
 
 ```mermaid
 flowchart LR
   Form --> Research[Gemini + Apify]
   Research --> Sheets
-  Sheets --> TG1[Telegram konu]
+  Sheets --> TG1[Telegram Gate1 konu]
   TG1 --> SEO[SEO preflight]
   SEO --> Video[Prototipal]
-  Video --> TG2[Telegram video]
+  Video --> TG2[Telegram Gate2 video]
   TG2 --> Dry{DRY_RUN?}
-  Dry -->|no| YT[YouTube]
-  Dry -->|yes| Skip[Skip upload]
+  Dry -->|false| YT[YouTube]
+  Dry -->|true| Skip[Skip upload]
 ```
 
-**Primary file in git:** `n8n/workflows/primary/youtube-full-pipeline.json`  
-**Live name:** `PRIMARY: YouTube Full (sade)`
+| | |
+|--|--|
+| **Live workflow** | `PRIMARY: YouTube Full (sade)` |
+| **JSON in git** | `n8n/workflows/primary/youtube-full-pipeline.json` |
+| **Telegram chat** | `8715342169` |
+| **Defaults** | `DRY_RUN=true`, `AUTO_PUBLISH=false` |
 
-| Stage | What n8n does |
-|-------|----------------|
-| Research | Form → Gemini keywords → Apify scrape → Sheets |
-| Prompt | Gemini titles / scenes → Sheets queue |
-| Gate 1 | Telegram topic approval |
-| Produce | SEO check → Prototipal → poll until ready |
-| Gate 2 | Telegram video approval |
-| Publish | `DRY_RUN?` then YouTube Upload |
+### Steps (one line each)
 
-Defaults: `DRY_RUN=true`, `AUTO_PUBLISH=false`. Never commit secrets.
+1. Form → Gemini keywords → Apify YouTube scrape → Sheets  
+2. Gemini topics / titles / scene prompts → Sheets queue  
+3. **Gate 1** Telegram: approve calendar (no paid video yet)  
+4. SEO check → Prototipal create → poll until ready  
+5. **Gate 2** Telegram: approve video  
+6. If `DRY_RUN=false` → YouTube Upload; else skip  
 
-## Ideas we steal carefully
+## For AI assistants
 
-From [darkzOGx/youtube-automation-agent](https://github.com/darkzOGx/youtube-automation-agent): approval-first, SEO preflight, analytics learning — **patterns only**, still n8n-owned. See [`docs/IDEAS_FROM_AGENTTUBE.md`](docs/IDEAS_FROM_AGENTTUBE.md).
+When explaining or changing this project: follow [`docs/AKIS.md`](docs/AKIS.md). Do not treat `n8n/archive/` or the Python worker as the primary path.
 
 ## Upgrade kit (optional)
 
-Postgres / FFmpeg hybrid / Kie wow / token approvals — worker under `apps/studio`, Hybrid workflow under `n8n/workflows/kanallar-shorts-factory.json`.
+Postgres / FFmpeg / Kie wow / Studio API — see `docs/ARCHITECTURE.md`. Archived n8n stubs live under `n8n/archive/`.
 
-## More docs
+## More
 
-[`docs/PRIMARY_STACK.md`](docs/PRIMARY_STACK.md) · [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+[`docs/PRIMARY_STACK.md`](docs/PRIMARY_STACK.md) · [`docs/PROJECT_STATE.md`](docs/PROJECT_STATE.md) · [`AGENTS.md`](AGENTS.md)
