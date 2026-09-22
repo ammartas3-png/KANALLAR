@@ -10,3 +10,5 @@
 | 2026-09-22 | Do not vendor OpenMontage | AGPL + duplicates stack |
 | 2026-09-22 | No n8n YouTube node | Avoid second OAuth; keep Mac token on worker |
 | 2026-09-22 | `AUTO_PUBLISH=false`, `DRY_RUN=true` defaults | Absolute safety |
+| 2026-09-22 | **Hybrid money path** | Topic gate before media; local cards default; ≤1 Kie wow scene |
+| 2026-09-22 | Research = catalog + Wikipedia most-read signals | Cheap, auditable scores — not “LLM viral” |

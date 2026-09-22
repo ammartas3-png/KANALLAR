@@ -1,55 +1,41 @@
-# n8n — Kanallar orchestration
+# n8n — Kanallar Hybrid orchestration
 
-n8n is the **orchestrator**. The Kanallar worker is the **production brain**.
+## Live workflow
 
-## Live instance
+**Name:** `Kanallar Hybrid Shorts (Gate1→Media→Gate2)`  
+**Nodes:** 32 · **Active:** false until worker is up
 
-- URL: `https://ammartd20.app.n8n.cloud`
-- Main plan workflow: **Kanallar Shorts Factory (n8n plan)** (was empty `Youtube Kanlları`)
-- Status: **inactive** until `KANALLAR_BASE_URL` + worker are ready
+### Money-first order
 
-### Work plan (nodes 1→18)
+1. Schedule  
+2. Config (`KANALLAR_BASE_URL`)  
+3. Health  
+4. **`POST /api/research`** — shortlist, **no Kie/render**  
+5. Telegram **Topic Gate #1** (APPROVE / REJECT / NEW IDEAS)  
+6. On APPROVE → worker produce (hybrid media)  
+7. Wait render  
+8. Telegram **Video Gate #2** (PUBLISH / REVISE / REJECT)  
+9. Worker decide (+ upload only if not DRY_RUN)
 
-1. Daily Schedule 08:00 UTC  
-2. Factory Config (`KANALLAR_BASE_URL`)  
-3. Worker Health  
-4. Worker OK?  
-5. Start `workflow_run` / Telegram if down  
-6. Dispatch `/api/produce`  
-7. Wait ~4 min (render)  
-8. List pending videos  
-9–10. Pick pending  
-11. Issue video approval token  
-12–14. Telegram Approval #2 (PUBLISH / REVISE / REJECT links)  
-15. Wait human webhook  
-16–17. Decide on worker (+ optional upload)  
-18. Telegram result  
-
-Topic Approval #1 arrives in Milestone 2 (`03-topic-approval-telegram.json`).
-
-## Import / sync
-
-Files under `n8n/workflows/`:
-
-| File | Purpose |
-|------|---------|
-| `kanallar-shorts-factory.json` | **Full live plan** (source of truth for main canvas) |
-| `00-control-plane.json` | Slim cron skeleton |
-| `03-topic-approval-telegram.json` | Topic gate stub → expand M2 |
-| `07-video-approval-telegram.json` | Video gate stub |
-| `11-error-handler.json` | Error notify stub |
-
-## n8n Variables (required)
+## Variables
 
 ```
-KANALLAR_BASE_URL=https://<your-worker>   # no trailing slash
+KANALLAR_BASE_URL=https://<worker>
 ```
 
-Telegram credential already on instance: **Telegram account** (chat `1240141730`).
+## Repo files
+
+| File | Role |
+|------|------|
+| `kanallar-shorts-factory.json` | Full hybrid canvas (synced to live) |
+| `01-research.json` | Subworkflow: research API |
+| `02-topic-selection.json` | Shortlist trim |
+| `03-topic-approval-telegram.json` | Topic token stub |
+| `07-video-approval-telegram.json` | Video token stub |
+| `00-control-plane.json` / `11-error-handler.json` | Control / errors |
 
 ## Absolute rules
 
-- Do **not** use n8n YouTube Upload node (OAuth stays on worker).
-- Do **not** put API keys in workflow JSON.
-- Keep workflow **inactive** until worker `/health` is green.
-- `DRY_RUN=true` / `AUTO_PUBLISH=false` on worker until you explicitly go live.
+- Never start produce before topic APPROVE in this hybrid plan  
+- Never use n8n YouTube node  
+- Keep inactive until `/health` is green  

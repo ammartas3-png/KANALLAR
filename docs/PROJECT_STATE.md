@@ -1,27 +1,24 @@
 # PROJECT_STATE.md
 
-**Milestone:** 1 — Foundation (in progress → landing on `main` via PR)  
+**Milestone:** 2 — Hybrid research + topic gate (in progress)  
 **Updated:** 2026-09-22
 
 ## What works
-- Consolidated codebase from prior draft PRs (`cloud-first` + approval + MediaProvider + Docker)
-- Explicit state machine (`database/states.py`)
-- Expanded schema: approvals, scenes, media_assets, workflow_runs, content_patterns, render_jobs
-- Secure approval tokens (`automation/approvals.py`) + HTTP API for Telegram/n8n
-- Publish guards: `AUTO_PUBLISH`, `DRY_RUN`, approval row, idempotent `youtube_video_id`
-- n8n workflow stubs: `00`, `03`, `07`, `11` under `n8n/workflows/`
-- Media default `MEDIA_QUALITY=auto` (Kie → Higgsfield → local)
-- Renderer default FFmpeg (cost/perf); Remotion optional
+- Milestone 1 foundation (state machine, approvals, publish guards)
+- **Hybrid strategy applied:** topic research → Telegram Gate #1 → produce → Gate #2
+- `POST /api/research` builds scored shortlist **without media spend**
+- Topic APPROVE can auto-start produce (`start_produce=true`)
+- Media plan: `MEDIA_QUALITY=hybrid`, Kie only wow roles, `MAX_KIE_SCENES_PER_VIDEO=1`
+- Live n8n: **Kanallar Hybrid Shorts (Gate1→Media→Gate2)** — 32 nodes, inactive until worker URL
 
 ## Current milestone
-Milestone 1 foundation complete enough to merge; next is M2 research + topic Telegram loop end-to-end.
+M2 hybrid path coded + live n8n updated. Needs worker deploy + `KANALLAR_BASE_URL` to run E2E.
 
 ## Active issues
-- `main` historically empty — this PR consolidates everything
-- Live n8n `Youtube Kanlları` workflow is empty — import new JSON
-- Worker not yet deployed (no public `KANALLAR_BASE_URL`)
-- Kie/HF keys may be unset → local cards fallback
-- Legacy `kanallar/` package still present (compat); prefer `automation/`
+- Worker not deployed publicly
+- Catalog-only research (YouTube competitor signals light); OK for MVP cost
+- Kie async fetch into assembler still “planned” for wow scenes (cards until keyed+wired)
+- Modular 01/02 JSON exist; main live canvas is the full hybrid plan
 
 ## Next task
-Milestone 2: research shortlist → Telegram topic approval → persist `TOPIC_APPROVED` before any paid media.
+Milestone 3–4: wire wow-scene Kie job poll into render; harden `/render` job API; QC before Gate #2.

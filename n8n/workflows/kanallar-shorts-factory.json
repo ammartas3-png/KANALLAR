@@ -1,9 +1,9 @@
 {
-  "name": "Kanallar Shorts Factory (n8n plan)",
+  "name": "Kanallar Hybrid Shorts (Gate1→Media→Gate2)",
   "nodes": [
     {
-      "id": "9fe0f9fe",
-      "name": "1. Daily Schedule 08:00 UTC",
+      "id": "9a14081c",
+      "name": "1. Schedule 08:00 UTC",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -22,42 +22,25 @@
       }
     },
     {
-      "id": "882f132d",
-      "name": "2. Factory Config",
+      "id": "edefaf20",
+      "name": "2. Config",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        260,
+        240,
         0
       ],
       "parameters": {
-        "jsCode": "const base = ($env.KANALLAR_BASE_URL || '').replace(/\\/$/, '');\nif (!base) {\n  return [{ json: { ok: false, error: 'KANALLAR_BASE_URL missing in n8n Variables', channel_id: 'channel_01' } }];\n}\nreturn [{ json: {\n  ok: true,\n  base_url: base,\n  channel_id: 'channel_01',\n  dry_run: true,\n  auto_publish: false,\n  plan: 'research→topic_approval→produce→video_approval→publish'\n}}];"
+        "jsCode": "const base=($env.KANALLAR_BASE_URL||'').replace(/\\/$/,'');\nreturn [{json:{\n  base_url: base,\n  channel_id: 'channel_01',\n  ok: !!base,\n  strategy: 'hybrid',\n  error: base ? '' : 'Set n8n Variable KANALLAR_BASE_URL'\n}}];"
       }
     },
     {
-      "id": "b277d129",
-      "name": "3. Worker Health",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        520,
-        0
-      ],
-      "parameters": {
-        "method": "GET",
-        "url": "={{$json.base_url}}/health",
-        "options": {
-          "timeout": 30000
-        }
-      }
-    },
-    {
-      "id": "84bdcf22",
-      "name": "4. Worker OK?",
+      "id": "aa49bb0c",
+      "name": "3. Has Base URL?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        780,
+        480,
         0
       ],
       "parameters": {
@@ -72,18 +55,18 @@
       }
     },
     {
-      "id": "3454a690",
-      "name": "5a. Telegram: Worker Down",
+      "id": "c3c321ec",
+      "name": "3a. Telegram: Missing URL",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1040,
+        720,
         220
       ],
       "parameters": {
         "operation": "sendMessage",
         "chatId": "1240141730",
-        "text": "⛔ Kanallar worker DOWN veya KANALLAR_BASE_URL yanlış.\\nHealth failed. Deploy worker first.",
+        "text": "⛔ KANALLAR_BASE_URL yok. Worker deploy + n8n Variables.",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -94,34 +77,180 @@
           "name": "Telegram account"
         }
       },
-      "webhookId": "1a632a6f-a2ea-4db5-88ca-e06ecb5e4727"
+      "webhookId": "acb5158a-2d9e-4cf6-b009-cd2ad4c32ee9"
     },
     {
-      "id": "35d548d3",
-      "name": "5. Start workflow_run",
+      "id": "0ccd222a",
+      "name": "4. Worker Health",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1040,
-        -80
+        720,
+        -40
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{$json.base_url}}/health",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "4ff7c97c",
+      "name": "5. Healthy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        -40
+      ],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.ok}}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d9727e0a",
+      "name": "5a. Telegram: Worker Down",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        200
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "⛔ Worker health failed.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "76556577-f502-4e19-94f1-f687deb71433"
+    },
+    {
+      "id": "5c9d363e",
+      "name": "6. Research Shortlist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        -120
       ],
       "parameters": {
         "method": "POST",
-        "url": "={{$('2. Factory Config').item.json.base_url}}/api/workflow-runs",
+        "url": "={{$('2. Config').item.json.base_url}}/api/research",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
             {
-              "name": "workflow",
-              "value": "kanallar-shorts-factory"
+              "name": "channel_id",
+              "value": "={{$('2. Config').item.json.channel_id}}"
+            },
+            {
+              "name": "limit",
+              "value": "15"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "id": "64bde0c9",
+      "name": "7. Format Topics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        -120
+      ],
+      "parameters": {
+        "jsCode": "const data=$input.first().json;\nconst base=$('2. Config').item.json.base_url;\nconst list=(data.shortlist||[]).slice(0,3);\nif(!list.length){\n  return [{json:{has_topics:false, message:'Shortlist boş — katalog/cooldown.', base_url:base}}];\n}\nconst lines=list.map((c,i)=>`#${i+1} ${c.topic}\\nHook: ${c.hook_candidate}\\nAçı: ${c.angle}\\nSkor: ${c.score} trend=${c.trend_signal}\\nidea_id=${c.idea_id}`);\nreturn [{json:{\n  has_topics:true,\n  base_url:base,\n  channel_id:data.channel_id,\n  shortlist:list,\n  telegram_text: '🎯 KONU ONAYI (Gate #1)\\nKanal: '+data.channel_id+'\\nMedya/Kie YOK — önce konu seç.\\n\\n'+lines.join('\\n\\n')\n}}];"
+      }
+    },
+    {
+      "id": "705f9ed7",
+      "name": "8. Has Topics?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        -120
+      ],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.has_topics}}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "951c0f16",
+      "name": "8a. Telegram: No Topics",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1920,
+        160
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "={{$json.message}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "1bfce6f1-662e-4db5-aa8d-18701c08ffe7"
+    },
+    {
+      "id": "b8f59674",
+      "name": "9. Issue Topic Token #1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        -200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.base_url}}/api/approvals/topic",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "idea_id",
+              "value": "={{$json.shortlist[0].idea_id}}"
             },
             {
               "name": "channel_id",
-              "value": "={{$('2. Factory Config').item.json.channel_id}}"
-            },
-            {
-              "name": "n8n_execution_id",
-              "value": "={{$execution.id}}"
+              "value": "={{$json.channel_id}}"
             }
           ]
         },
@@ -131,75 +260,208 @@
       }
     },
     {
-      "id": "0f53814f",
-      "name": "6. Dispatch Produce Job",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "id": "9e6bc236",
+      "name": "10. Topic Approval Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        1300,
-        -80
+        2160,
+        -200
       ],
       "parameters": {
-        "method": "POST",
-        "url": "={{$('2. Factory Config').item.json.base_url}}/api/produce",
-        "options": {
-          "timeout": 20000
-        }
+        "jsCode": "const token=$input.first().json.token;\nconst prev=$('7. Format Topics').item.json;\nconst resume=$execution.resumeUrl;\nconst idea=prev.shortlist[0];\nconst q=(d)=>`${resume}?decision=${d}&token=${encodeURIComponent(token)}&idea_id=${encodeURIComponent(idea.idea_id)}`;\nreturn [{json:{\n  ...prev,\n  idea_id: idea.idea_id,\n  topic: idea.topic,\n  token,\n  text: prev.telegram_text + '\\n\\nSeçilen aday #1: '+idea.topic+\n    '\\n\\n✅ APPROVE:\\n'+q('APPROVE')+\n    '\\n\\n❌ REJECT:\\n'+q('REJECT')+\n    '\\n\\n🔄 NEW IDEAS:\\n'+q('NEW_IDEAS')\n}}];"
       }
     },
     {
-      "id": "c3b9cf38",
-      "name": "7. Wait ~4 min (render)",
+      "id": "81ba1b9a",
+      "name": "11. Telegram: Topic Gate",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2400,
+        -200
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "={{$json.text}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "121bc986-4c7c-4f6e-aad6-c3158b4e0643"
+    },
+    {
+      "id": "f85c42bc",
+      "name": "12. Wait Topic Decision",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1560,
-        -80
+        2640,
+        -200
       ],
       "parameters": {
-        "amount": 4,
-        "unit": "minutes"
+        "resume": "webhook",
+        "options": {}
       },
-      "webhookId": "98374f06-8fab-4592-bfac-f98b9b0ba306"
+      "webhookId": "745e8664-3ce6-40ff-b97b-7fcbcf83fd8d"
     },
     {
-      "id": "0cd34d55",
-      "name": "8. List Pending Videos",
+      "id": "788fe5f4",
+      "name": "13. Parse Topic Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        -200
+      ],
+      "parameters": {
+        "jsCode": "const item=$input.first().json;\nconst prev=$('10. Topic Approval Links').item.json;\nconst q=item.query||item;\nreturn [{json:{\n  ...prev,\n  decision:(q.decision||'REJECT').toString().toUpperCase(),\n  token: q.token||prev.token,\n  feedback: q.feedback||''\n}}];"
+      }
+    },
+    {
+      "id": "dc6e75ec",
+      "name": "14. Decide Topic → Produce if APPROVE",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1820,
-        -80
+        3120,
+        -200
       ],
       "parameters": {
-        "method": "GET",
-        "url": "={{$('2. Factory Config').item.json.base_url}}/api/pending",
+        "method": "POST",
+        "url": "={{$('2. Config').item.json.base_url}}/api/approvals/topic/decide",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$json.token}}"
+            },
+            {
+              "name": "decision",
+              "value": "={{$json.decision}}"
+            },
+            {
+              "name": "feedback",
+              "value": "={{$json.feedback}}"
+            },
+            {
+              "name": "start_produce",
+              "value": "={{$json.decision==='APPROVE'}}"
+            }
+          ]
+        },
         "options": {
           "timeout": 30000
         }
       }
     },
     {
-      "id": "c349479d",
-      "name": "9. Pick First Pending",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2080,
-        -80
-      ],
-      "parameters": {
-        "jsCode": "const base = $('2. Factory Config').item.json.base_url;\nconst channel = $('2. Factory Config').item.json.channel_id;\nconst raw = $input.first().json;\nconst list = Array.isArray(raw) ? raw : (Array.isArray(raw.data) ? raw.data : []);\nif (!list.length) {\n  return [{ json: { has_pending: false, message: 'Onay bekleyen video yok (henüz render bitmemiş olabilir).', base_url: base, channel_id: channel } }];\n}\nconst v = list[0];\nreturn [{ json: {\n  has_pending: true,\n  video_id: v.id,\n  channel_id: v.channel_id || channel,\n  duration: v.duration,\n  preview_url: `${base}/media/${v.id}`,\n  studio_url: `${base}/`,\n  base_url: base,\n  message: `Video hazır (#1/${list.length})\\nid=${v.id}\\nSüre≈${Math.round(v.duration||0)}s`\n}}];"
-      }
-    },
-    {
-      "id": "fe7a142e",
-      "name": "10. Has Pending?",
+      "id": "5b5e602e",
+      "name": "15. Topic Approved?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2340,
-        -80
+        3360,
+        -200
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.decision}}",
+              "operation": "equals",
+              "value2": "APPROVE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b40bad32",
+      "name": "15a. Telegram: Topic Rejected/Other",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        80
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "1240141730",
+        "text": "Konu onaylanmadı: {{$json.decision}}. NEW_IDEAS ise yarın/tekrar research çalıştır.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      },
+      "webhookId": "40762a84-1121-4cfe-bb1d-14f73f543a1c"
+    },
+    {
+      "id": "c4d69d3c",
+      "name": "16. Wait Render ~5 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3600,
+        -280
+      ],
+      "parameters": {
+        "amount": 5,
+        "unit": "minutes"
+      },
+      "webhookId": "aeb45056-b0a8-45a1-91ea-cd7a4c047bba"
+    },
+    {
+      "id": "ca3f35bb",
+      "name": "17. List Pending Videos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3840,
+        -280
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{$('2. Config').item.json.base_url}}/api/pending",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "198e083e",
+      "name": "18. Pick Video",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4080,
+        -280
+      ],
+      "parameters": {
+        "jsCode": "const base=$('2. Config').item.json.base_url;\nconst raw=$input.first().json;\nconst list=Array.isArray(raw)?raw:(raw.data||[]);\nif(!list.length) return [{json:{has_pending:false, message:'Pending video yok (render sürüyor olabilir).', base_url:base}}];\nconst v=list[0];\nreturn [{json:{has_pending:true, video_id:v.id, channel_id:v.channel_id, duration:v.duration,\n preview_url:`${base}/media/${v.id}`, studio_url:`${base}/`, base_url:base}}];"
+      }
+    },
+    {
+      "id": "8266f772",
+      "name": "19. Has Video?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        4320,
+        -280
       ],
       "parameters": {
         "conditions": {
@@ -213,18 +475,18 @@
       }
     },
     {
-      "id": "f26b339e",
-      "name": "10a. Telegram: No Pending",
+      "id": "eb6a2ef8",
+      "name": "19a. Telegram: No Video Yet",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2600,
-        160
+        4560,
+        40
       ],
       "parameters": {
         "operation": "sendMessage",
         "chatId": "1240141730",
-        "text": "={{$json.message}}\\n\\nStudio: {{$json.base_url}}/",
+        "text": "={{$json.message}}",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -235,16 +497,16 @@
           "name": "Telegram account"
         }
       },
-      "webhookId": "10ec6deb-f492-4fa4-beb7-d1519f5b6ed5"
+      "webhookId": "b6e36ae8-c3a3-466a-9d06-7d1f9b51f7d0"
     },
     {
-      "id": "20bf55b1",
-      "name": "11. Issue Video Approval Token",
+      "id": "aa243bae",
+      "name": "20. Issue Video Token",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2600,
-        -160
+        4560,
+        -360
       ],
       "parameters": {
         "method": "POST",
@@ -268,44 +530,31 @@
       }
     },
     {
-      "id": "c1e80b8d",
-      "name": "12. Build Approval Message",
+      "id": "640feafc",
+      "name": "21. Video Approval Links",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2860,
-        -160
+        4800,
+        -360
       ],
       "parameters": {
-        "jsCode": "const tokenResp = $input.first().json;\nconst prev = $('9. Pick First Pending').item.json;\nconst resume = $execution.resumeUrl; // filled when Wait runs; here we prepare text without wait yet\nreturn [{ json: {\n  ...prev,\n  approval_id: tokenResp.approval_id,\n  token: tokenResp.token,\n  telegram_text: [\n    '🎬 VIDEO ONAY (#2 gate)',\n    `Kanal: ${prev.channel_id}`,\n    `Video: ${prev.video_id}`,\n    `Preview: ${prev.preview_url}`,\n    `Studio: ${prev.studio_url}`,\n    '',\n    'DRY_RUN aktif — PUBLISH gerçek yükleme yapmaz (worker DRY_RUN=true).',\n    '',\n    'Aşağıdaki butonlara bas (Wait webhook).'\n  ].join('\\n')\n}}];"
+        "jsCode": "const token=$input.first().json.token;\nconst prev=$('18. Pick Video').item.json;\nconst resume=$execution.resumeUrl;\nconst q=(d)=>`${resume}?decision=${d}&token=${encodeURIComponent(token)}&video_id=${encodeURIComponent(prev.video_id)}`;\nreturn [{json:{...prev, token, text:\n  '🎬 VIDEO ONAY (Gate #2)\\n'+\n  `Video: ${prev.video_id}\\nPreview: ${prev.preview_url}\\nStudio: ${prev.studio_url}\\n`+\n  'DRY_RUN aktif olabilir — PUBLISH gerçek yüklemeyi worker ayarına göre yapar.\\n\\n'+\n  '✅ PUBLISH:\\n'+q('PUBLISH')+'\\n\\n✏️ REVISE:\\n'+q('REVISE')+'\\n\\n❌ REJECT:\\n'+q('REJECT')\n}}];"
       }
     },
     {
-      "id": "fc09b9d3",
-      "name": "13. Attach Resume Buttons",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3120,
-        -160
-      ],
-      "parameters": {
-        "jsCode": "const j = $input.first().json;\nconst resume = $execution.resumeUrl;\nconst q = (d) => `${resume}?decision=${d}&token=${encodeURIComponent(j.token)}&video_id=${encodeURIComponent(j.video_id)}`;\nreturn [{ json: {\n  ...j,\n  resume_url: resume,\n  reply_markup: {\n    inline_keyboard: [[\n      { text: '✅ PUBLISH', url: q('PUBLISH') },\n      { text: '✏️ REVISE', url: q('REVISE') },\n      { text: '❌ REJECT', url: q('REJECT') }\n    ]]\n  }\n}}];"
-      }
-    },
-    {
-      "id": "9c31f981",
-      "name": "14. Telegram: Ask Video Approval",
+      "id": "e35b96a9",
+      "name": "22. Telegram: Video Gate",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        3380,
-        -160
+        5040,
+        -360
       ],
       "parameters": {
         "operation": "sendMessage",
         "chatId": "1240141730",
-        "text": "={{$json.telegram_text}}\\n\\n✅ PUBLISH:\\n{{$json.reply_markup.inline_keyboard[0][0].url}}\\n\\n✏️ REVISE:\\n{{$json.reply_markup.inline_keyboard[0][1].url}}\\n\\n❌ REJECT:\\n{{$json.reply_markup.inline_keyboard[0][2].url}}",
+        "text": "={{$json.text}}",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -316,48 +565,48 @@
           "name": "Telegram account"
         }
       },
-      "webhookId": "9efde132-9888-4486-9c0b-6202994f6e0e"
+      "webhookId": "977585aa-469e-4892-a09e-62a70670a6ef"
     },
     {
-      "id": "c21c6b6e",
-      "name": "15. Wait Human Decision (Webhook)",
+      "id": "0e77fadd",
+      "name": "23. Wait Video Decision",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3640,
-        -160
+        5280,
+        -360
       ],
       "parameters": {
         "resume": "webhook",
         "options": {}
       },
-      "webhookId": "1b0c4aa9-b4b1-4bc8-a64d-5b5a5698e667"
+      "webhookId": "1ad7603d-2284-410f-9c2f-7ce4ba033f1e"
     },
     {
-      "id": "2c068395",
-      "name": "16. Parse Decision",
+      "id": "1ec8fbad",
+      "name": "24. Parse Video Decision",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3900,
-        -160
+        5520,
+        -360
       ],
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst prev = $('12. Build Approval Message').item.json;\nconst q = item.query || item;\nconst decision = (q.decision || item.decision || 'REJECT').toString().toUpperCase();\nconst token = q.token || prev.token;\nreturn [{ json: {\n  ...prev,\n  decision,\n  token,\n  feedback: q.feedback || item.feedback || '',\n  revision_scope: q.revision_scope || ''\n}}];"
+        "jsCode": "const item=$input.first().json; const prev=$('21. Video Approval Links').item.json;\nconst q=item.query||item;\nreturn [{json:{...prev, decision:(q.decision||'REJECT').toString().toUpperCase(), token:q.token||prev.token, feedback:q.feedback||'', revision_scope:q.revision_scope||''}}];"
       }
     },
     {
-      "id": "d7c94ae4",
-      "name": "17. Decide on Worker",
+      "id": "ae3b214f",
+      "name": "25. Decide Video on Worker",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4160,
-        -160
+        5760,
+        -360
       ],
       "parameters": {
         "method": "POST",
-        "url": "={{$('2. Factory Config').item.json.base_url}}/api/approvals/video/decide",
+        "url": "={{$('2. Config').item.json.base_url}}/api/approvals/video/decide",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -379,28 +628,28 @@
             },
             {
               "name": "upload",
-              "value": "={{$json.decision === 'PUBLISH' || $json.decision === 'APPROVE'}}"
+              "value": "={{$json.decision==='PUBLISH'||$json.decision==='APPROVE'}}"
             }
           ]
         },
         "options": {
-          "timeout": 60000
+          "timeout": 90000
         }
       }
     },
     {
-      "id": "28a44be1",
-      "name": "18. Telegram: Result",
+      "id": "962cf70e",
+      "name": "26. Telegram: Done",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        4420,
-        -160
+        6000,
+        -360
       ],
       "parameters": {
         "operation": "sendMessage",
         "chatId": "1240141730",
-        "text": "✅ Karar işlendi.\\nDecision stored on worker.\\nResponse: {{JSON.stringify($json).slice(0,500)}}\\n\\nNot: DRY_RUN=true ise YouTube upload skip edilir.",
+        "text": "✅ Hybrid pipeline karar işlendi.\\n{{JSON.stringify($json).slice(0,450)}}",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -411,64 +660,82 @@
           "name": "Telegram account"
         }
       },
-      "webhookId": "bfcd3f03-2c54-49bd-ab5c-39e2ab0fd906"
+      "webhookId": "98bf899f-f5aa-4e65-b36d-48555f52309a"
     },
     {
-      "id": "e3b3b29b",
+      "id": "637e1bfa",
       "name": "PLAN",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -420,
-        -200
+        -500,
+        -280
       ],
       "parameters": {
-        "content": "## Kanallar Shorts — İş Planı\\n\\n1 Schedule\\n2 Config (`KANALLAR_BASE_URL`)\\n3 Health\\n4 Branch\\n5 workflow_run\\n6 `/api/produce`\\n7 Wait render\\n8 Pending list\\n9–10 Video seç\\n11 Approval token\\n12–14 Telegram (#2 gate)\\n15 Wait human\\n16–17 Decide + optional upload\\n18 Notify\\n\\n#1 Topic gate → Milestone 2 (ayrı subworkflow)\\nMedya: Kie → Higgsfield → local\\nYouTube OAuth: worker only",
-        "height": 520,
-        "width": 360,
-        "color": 5
+        "content": "## HYBRID $ plan\\n\\n1 Schedule\\n2 Config\\n4 Health\\n6 Research (no media)\\n11 Telegram Topic Gate #1\\n14 APPROVE → produce (Kie wow only)\\n16 Wait render\\n22 Telegram Video Gate #2\\n25 Publish guarded\\n\\nDEFAULT: local cards\\nKie: max 1 wow scene\\nAUTO_PUBLISH=false",
+        "height": 420,
+        "width": 340,
+        "color": 4
       }
     }
   ],
   "connections": {
-    "1. Daily Schedule 08:00 UTC": {
+    "1. Schedule 08:00 UTC": {
       "main": [
         [
           {
-            "node": "2. Factory Config",
+            "node": "2. Config",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "2. Factory Config": {
+    "2. Config": {
       "main": [
         [
           {
-            "node": "3. Worker Health",
+            "node": "3. Has Base URL?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "3. Worker Health": {
+    "3. Has Base URL?": {
       "main": [
         [
           {
-            "node": "4. Worker OK?",
+            "node": "4. Worker Health",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "3a. Telegram: Missing URL",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "4. Worker OK?": {
+    "4. Worker Health": {
       "main": [
         [
           {
-            "node": "5. Start workflow_run",
+            "node": "5. Healthy?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Healthy?": {
+      "main": [
+        [
+          {
+            "node": "6. Research Shortlist",
             "type": "main",
             "index": 0
           }
@@ -482,150 +749,241 @@
         ]
       ]
     },
-    "5. Start workflow_run": {
+    "6. Research Shortlist": {
       "main": [
         [
           {
-            "node": "6. Dispatch Produce Job",
+            "node": "7. Format Topics",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "6. Dispatch Produce Job": {
+    "7. Format Topics": {
       "main": [
         [
           {
-            "node": "7. Wait ~4 min (render)",
+            "node": "8. Has Topics?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "7. Wait ~4 min (render)": {
+    "8. Has Topics?": {
       "main": [
         [
           {
-            "node": "8. List Pending Videos",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "8. List Pending Videos": {
-      "main": [
-        [
-          {
-            "node": "9. Pick First Pending",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "9. Pick First Pending": {
-      "main": [
-        [
-          {
-            "node": "10. Has Pending?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "10. Has Pending?": {
-      "main": [
-        [
-          {
-            "node": "11. Issue Video Approval Token",
+            "node": "9. Issue Topic Token #1",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "10a. Telegram: No Pending",
+            "node": "8a. Telegram: No Topics",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "11. Issue Video Approval Token": {
+    "9. Issue Topic Token #1": {
       "main": [
         [
           {
-            "node": "12. Build Approval Message",
+            "node": "10. Topic Approval Links",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "12. Build Approval Message": {
+    "10. Topic Approval Links": {
       "main": [
         [
           {
-            "node": "13. Attach Resume Buttons",
+            "node": "11. Telegram: Topic Gate",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "13. Attach Resume Buttons": {
+    "11. Telegram: Topic Gate": {
       "main": [
         [
           {
-            "node": "14. Telegram: Ask Video Approval",
+            "node": "12. Wait Topic Decision",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "14. Telegram: Ask Video Approval": {
+    "12. Wait Topic Decision": {
       "main": [
         [
           {
-            "node": "15. Wait Human Decision (Webhook)",
+            "node": "13. Parse Topic Decision",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "15. Wait Human Decision (Webhook)": {
+    "13. Parse Topic Decision": {
       "main": [
         [
           {
-            "node": "16. Parse Decision",
+            "node": "14. Decide Topic → Produce if APPROVE",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "16. Parse Decision": {
+    "14. Decide Topic → Produce if APPROVE": {
       "main": [
         [
           {
-            "node": "17. Decide on Worker",
+            "node": "15. Topic Approved?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "17. Decide on Worker": {
+    "15. Topic Approved?": {
       "main": [
         [
           {
-            "node": "18. Telegram: Result",
+            "node": "16. Wait Render ~5 min",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "15a. Telegram: Topic Rejected/Other",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16. Wait Render ~5 min": {
+      "main": [
+        [
+          {
+            "node": "17. List Pending Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17. List Pending Videos": {
+      "main": [
+        [
+          {
+            "node": "18. Pick Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18. Pick Video": {
+      "main": [
+        [
+          {
+            "node": "19. Has Video?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "19. Has Video?": {
+      "main": [
+        [
+          {
+            "node": "20. Issue Video Token",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "19a. Telegram: No Video Yet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "20. Issue Video Token": {
+      "main": [
+        [
+          {
+            "node": "21. Video Approval Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "21. Video Approval Links": {
+      "main": [
+        [
+          {
+            "node": "22. Telegram: Video Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "22. Telegram: Video Gate": {
+      "main": [
+        [
+          {
+            "node": "23. Wait Video Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "23. Wait Video Decision": {
+      "main": [
+        [
+          {
+            "node": "24. Parse Video Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "24. Parse Video Decision": {
+      "main": [
+        [
+          {
+            "node": "25. Decide Video on Worker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "25. Decide Video on Worker": {
+      "main": [
+        [
+          {
+            "node": "26. Telegram: Done",
             "type": "main",
             "index": 0
           }
@@ -635,6 +993,5 @@
   },
   "settings": {
     "executionOrder": "v1"
-  },
-  "staticData": null
+  }
 }

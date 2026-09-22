@@ -1,0 +1,41 @@
+{
+  "name": "01-research",
+  "meta": {
+    "description": "Hybrid research: catalog+trends signals → shortlist. No media spend."
+  },
+  "nodes": [
+    {
+      "id": "t1",
+      "name": "When called by another workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "t2",
+      "name": "POST /api/research",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/research",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "channel_id", "value": "={{$json.channel_id || 'channel_01'}}" },
+            { "name": "limit", "value": "15" }
+          ]
+        },
+        "options": { "timeout": 60000 }
+      }
+    }
+  ],
+  "connections": {
+    "When called by another workflow": {
+      "main": [[{ "node": "POST /api/research", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}
