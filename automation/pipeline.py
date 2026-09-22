@@ -28,6 +28,7 @@ from config.paths import CONTENT_DIR, ensure_runtime_dirs
 from config.settings import get_settings
 from database.models import Channel, Experiment, Idea, Script, Upload, Video
 from database.session import get_session, init_db
+from database.states import VideoStatus
 from media.router import status_report
 from memory.store import mark_used
 from storage import sync_video_artifacts
@@ -158,7 +159,13 @@ def produce(
                 "Bu video terminal durumda; --resume durumu değiştirmez. "
                 "Onay için: python -m automation approve --id "
                 f"{video_id} --upload"
-                if checkpoint["status"] in {"awaiting_approval", "approved"}
+                if checkpoint["status"]
+                in {
+                    "awaiting_approval",
+                    "approved",
+                    VideoStatus.VIDEO_PENDING_APPROVAL,
+                    VideoStatus.VIDEO_APPROVED,
+                }
                 else "Yeni üretim için resume kullanmayın."
             ),
             "qa": checkpoint.get("qa") or {},
@@ -321,12 +328,17 @@ def produce(
             upload_result = {"status": "blocked_qa"}
             final_status = "qa_failed"
         elif settings.require_human_approval and not force_upload:
-            save_checkpoint(video_id, "awaiting_approval", qa_result=qa, filepath=str(rendered["video"]))
+            save_checkpoint(
+                video_id,
+                VideoStatus.VIDEO_PENDING_APPROVAL,
+                qa_result=qa,
+                filepath=str(rendered["video"]),
+            )
             upload_result = {
                 "status": "awaiting_approval",
                 "hint": "Onay için: python -m automation approve --id " + video_id + " --upload",
             }
-            final_status = "awaiting_approval"
+            final_status = VideoStatus.VIDEO_PENDING_APPROVAL
             if upload:
                 upload_result["note"] = (
                     "REQUIRE_HUMAN_APPROVAL=true; --upload yok sayıldı. "
@@ -403,27 +415,104 @@ def produce(
     }
 
 
-def approve_and_maybe_upload(video_id: str, upload: bool = True) -> dict:
-    """Mark video approved; optionally publish to YouTube."""
+def approve_and_maybe_upload(
+    video_id: str,
+    upload: bool = True,
+    *,
+    approval_token: str | None = None,
+    force_legacy: bool = False,
+) -> dict:
+    """Mark video approved; optionally publish to YouTube.
+
+    Absolute publish rule:
+    - AUTO_PUBLISH must be true OR caller explicitly requests upload
+    - DRY_RUN blocks real YouTube calls
+    - Prefer a consumed video_approvals row (Telegram token); Studio may use force_legacy
+    - Idempotent: existing youtube_video_id skips re-upload
+    """
+    from automation.approvals import consume_video_approval, has_valid_video_publish_approval
+    from database.models import Video as VideoRow
+    from database.states import ApprovalDecision, VideoStatus, can_publish
+
     init_db()
+    settings = get_settings()
+
+    if approval_token:
+        consumed = consume_video_approval(
+            approval_token,
+            decision=ApprovalDecision.PUBLISH,
+        )
+        if not consumed.get("ok"):
+            return consumed
+
     result = approve_video(video_id)
     if not result.get("ok"):
         return result
+
     if not upload:
         return result
 
+    # Human approval record required unless Studio legacy path creates one now.
+    if force_legacy and not has_valid_video_publish_approval(video_id):
+        from automation.approvals import issue_video_approval
+
+        issued = issue_video_approval(
+            video_id,
+            channel_id=load_checkpoint(video_id).get("channel_id") or "",
+            actor="studio",
+        )
+        consume_video_approval(issued["token"], decision=ApprovalDecision.PUBLISH)
+
+    if not has_valid_video_publish_approval(video_id):
+        return {
+            **result,
+            "upload": {
+                "status": "blocked_no_approval_record",
+                "hint": "Telegram token or Studio approve required",
+            },
+        }
+
+    # AUTO_PUBLISH=false still allows explicit human-triggered upload after approval.
+    if settings.dry_run:
+        save_checkpoint(video_id, VideoStatus.VIDEO_APPROVED, dry_run_upload_skipped=True)
+        return {
+            **result,
+            "upload": {"status": "dry_run_skipped", "dry_run": True, "auto_publish": settings.auto_publish},
+        }
+
+    with get_session() as session:
+        row = session.get(VideoRow, video_id)
+        if row and row.youtube_video_id:
+            return {
+                **result,
+                "upload": {
+                    "status": "already_uploaded",
+                    "youtube_id": row.youtube_video_id,
+                    "idempotent": True,
+                },
+            }
+
     checkpoint = load_checkpoint(video_id)
+    if not can_publish(checkpoint.get("status") or ""):
+        return {**result, "upload": {"status": "blocked_status", "status": checkpoint.get("status")}}
+
     channel = load_channel(checkpoint.get("channel_id"))
     work = CONTENT_DIR / "videos" / video_id
     script = json.loads((work / "script.json").read_text(encoding="utf-8"))
     render_meta = json.loads((work / "render.json").read_text(encoding="utf-8"))
     video = Path(render_meta["video"])
     thumb = Path(render_meta["thumb"]) if render_meta.get("thumb") else None
-    save_checkpoint(video_id, "uploading")
+    save_checkpoint(video_id, VideoStatus.PUBLISHING)
     upload_result = publish(channel, script, video, thumb, video_id=video_id, log_input={"approved": True})
     _record_upload(video_id, script, upload_result)
     if upload_result.get("status") == "uploaded":
-        save_checkpoint(video_id, "uploaded", youtube_id=upload_result.get("youtube_id"))
+        yt_id = upload_result.get("youtube_id") or ""
+        save_checkpoint(video_id, VideoStatus.PUBLISHED, youtube_id=yt_id)
+        with get_session() as session:
+            row = session.get(VideoRow, video_id)
+            if row is not None:
+                row.youtube_video_id = yt_id
+                row.status = VideoStatus.PUBLISHED
     return {**result, "upload": upload_result}
 
 

@@ -5,6 +5,7 @@ from typing import Any
 
 from database.models import Video
 from database.session import get_session
+from database.states import RESUME_LOCKED, VideoStatus
 
 
 STAGES = [
@@ -21,18 +22,15 @@ STAGES = [
     "uploading",
     "uploaded",
     "failed",
+    VideoStatus.VIDEO_PENDING_APPROVAL,
+    VideoStatus.VIDEO_APPROVED,
+    VideoStatus.VIDEO_REJECTED,
+    VideoStatus.PUBLISHING,
+    VideoStatus.PUBLISHED,
 ]
 
 # Resume must not re-enter post-QA / upload for these statuses (duplicate publish risk).
-RESUME_LOCKED_STATUSES = frozenset(
-    {
-        "awaiting_approval",
-        "approved",
-        "rejected",
-        "uploading",
-        "uploaded",
-    }
-)
+RESUME_LOCKED_STATUSES = RESUME_LOCKED
 
 
 def load_checkpoint(video_id: str) -> dict[str, Any]:
@@ -88,7 +86,11 @@ def list_awaiting_approval(limit: int = 50) -> list[dict[str, Any]]:
     with get_session() as session:
         rows = (
             session.query(Video)
-            .filter(Video.status == "awaiting_approval")
+            .filter(
+                Video.status.in_(
+                    ["awaiting_approval", VideoStatus.VIDEO_PENDING_APPROVAL]
+                )
+            )
             .order_by(Video.created_at.desc())
             .limit(limit)
             .all()
@@ -109,20 +111,27 @@ def approve_video(video_id: str) -> dict[str, Any]:
     checkpoint = load_checkpoint(video_id)
     if not checkpoint:
         return {"ok": False, "error": "video_not_found", "id": video_id}
-    if checkpoint["status"] not in {"awaiting_approval", "qa", "qa_passed"}:
+    allowed = {
+        "awaiting_approval",
+        "qa",
+        "qa_passed",
+        VideoStatus.VIDEO_PENDING_APPROVAL,
+        VideoStatus.VIDEO_READY,
+    }
+    if checkpoint["status"] not in allowed:
         return {
             "ok": False,
             "error": "not_awaiting_approval",
             "id": video_id,
             "status": checkpoint["status"],
         }
-    save_checkpoint(video_id, "approved", approved=True)
-    return {"ok": True, "id": video_id, "status": "approved"}
+    save_checkpoint(video_id, VideoStatus.VIDEO_APPROVED, approved=True)
+    return {"ok": True, "id": video_id, "status": VideoStatus.VIDEO_APPROVED}
 
 
 def reject_video(video_id: str, reason: str = "") -> dict[str, Any]:
     checkpoint = load_checkpoint(video_id)
     if not checkpoint:
         return {"ok": False, "error": "video_not_found", "id": video_id}
-    save_checkpoint(video_id, "rejected", approved=False, reject_reason=reason)
-    return {"ok": True, "id": video_id, "status": "rejected", "reason": reason}
+    save_checkpoint(video_id, VideoStatus.VIDEO_REJECTED, approved=False, reject_reason=reason)
+    return {"ok": True, "id": video_id, "status": VideoStatus.VIDEO_REJECTED, "reason": reason}

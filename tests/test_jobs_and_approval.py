@@ -47,7 +47,7 @@ def test_approval_flow(tmp_path, monkeypatch):
     save_checkpoint("vid1", "awaiting_approval", qa_result={"ok": True})
     ok = approve_video("vid1")
     assert ok["ok"] is True
-    assert load_checkpoint("vid1")["status"] == "approved"
+    assert load_checkpoint("vid1")["status"] == "VIDEO_APPROVED"
 
 
 def test_reject_flow(tmp_path, monkeypatch):
@@ -56,7 +56,7 @@ def test_reject_flow(tmp_path, monkeypatch):
     result = reject_video("vid1", reason="hook zayıf")
     assert result["ok"] is True
     cp = load_checkpoint("vid1")
-    assert cp["status"] == "rejected"
+    assert cp["status"] == "VIDEO_REJECTED"
     assert cp["qa"]["reject_reason"] == "hook zayıf"
 
 

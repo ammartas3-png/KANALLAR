@@ -45,7 +45,19 @@ class Settings(BaseSettings):
     hf_default_video_endpoint: str = ""
     hf_default_voice_endpoint: str = ""
     require_human_approval: bool = True
-    media_quality: str = "local"  # local | auto | cheap | premium
+    # HARD publish gate — even after video approval, default blocks auto upload
+    auto_publish: bool = False
+    dry_run: bool = True
+    max_daily_videos: int = 4
+    max_generation_retries: int = 2
+    max_media_regenerations: int = 2
+    topic_similarity_cooldown_days: int = 45
+    # Media: kie (primary) → higgsfield → local cards. Keys missing ⇒ local.
+    media_quality: str = "auto"  # local | auto | cheap | premium
+    # Telegram approval (n8n holds bot token; worker may verify shared secret)
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+    approval_webhook_secret: str = ""
     # Object storage
     storage_backend: str = "local"  # local | s3
     storage_bucket: str = ""
@@ -58,6 +70,8 @@ class Settings(BaseSettings):
     worker_produce_cron: str = "0 8 * * *"  # daily 08:00 UTC
     worker_analytics_hourly: bool = True
     worker_enable_studio: bool = True
+    # Public base URL of this worker (for n8n + Telegram preview links)
+    public_base_url: str = ""
 
 
 @lru_cache
