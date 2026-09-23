@@ -1702,7 +1702,7 @@
           },
           "conditions": [
             {
-              "id": "fb529c0c-b71e-4650-b50d-6e5d52973e4d",
+              "id": "86490ee0-c859-4ce1-a6d8-c897786f5f03",
               "leftValue": "={{ $json.data?.successFlag === 1 }}",
               "rightValue": "",
               "operator": {
@@ -1893,7 +1893,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'veo3_fast', aspect_ratio: '9:16', enable_translation: true, prompt: (() => { const s = $json['sahne-prompt']; let p = s; try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {} const safe = String(p).replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)('s)?/gi, (m, n, s) => 'the young Ottoman sultan' + (s || '')); const lang = /[çğıöşüÇĞİÖŞÜ]/.test(String($json.baslik)) ? 'Turkish' : 'English'; return (safe + '\\n\\nVertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000); })() }) }}",
+        "jsonBody": "={{ JSON.stringify({ model: 'veo3_fast', aspect_ratio: '9:16', enable_translation: true, prompt: (() => { const s = $json['sahne-prompt']; let p = s; try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {} const safe = String(p) .replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)/gi, 'an Ottoman commander') .replace(/\\b(sultans?|padishah|emperor|kings?)\\b/gi, 'commander') .replace(/Constantinople|Istanbul|Byzantium/gi, 'the ancient walled city').replace(/Byzantine/gi, 'defending').replace(/\\b1453\\b/g, ''); const lang = /[çğıöşüÇĞİÖŞÜ]/.test(String($json.baslik)) ? 'Turkish' : 'English'; return (safe + '\\n\\nAll characters are anonymous fictional people; the commander is shown from behind or in silhouette, never a close-up of the face. Focus on the army, cannons, ships and city walls. Vertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000); })() }) }}",
         "options": {}
       }
     },
@@ -2471,7 +2471,7 @@
           },
           "conditions": [
             {
-              "id": "0412edd8-066e-42af-bb78-e11ce7edddb1",
+              "id": "8642de7e-d379-44de-a64a-790cb849cd54",
               "leftValue": "={{ $json.data?.successFlag === 0 && $runIndex < 60 }}",
               "rightValue": "",
               "operator": {
@@ -2960,9 +2960,9 @@
       }
     },
     {
-      "id": "757fdff5-676f-47e4-8edf-472e24929d24",
+      "id": "9cc7521c-5387-4ccc-aa4b-2de030a48cad",
       "name": "video-gonder",
-      "webhookId": "a1a46c2d-15f1-418a-9fa0-e574c7163069",
+      "webhookId": "60d6e3be-2bad-4e4d-823c-7bf70b3f9f47",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "onError": "continueRegularOutput",
@@ -2986,9 +2986,9 @@
       }
     },
     {
-      "id": "d87cd1aa-7aaa-44e9-b430-ef86d305bd23",
+      "id": "8b7c77f8-167d-4b97-8f3d-92a13387dfe3",
       "name": "uretim-tetik",
-      "webhookId": "150be0f4-49a3-40d6-9e55-903105fc0e12",
+      "webhookId": "85a752f1-face-4814-bd0c-739bef834188",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [

@@ -35,9 +35,12 @@ CREATE_BODY = (
     " const s = $json['sahne-prompt'];"
     " let p = s;"
     " try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {}"
-    " const safe = String(p).replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)('s)?/gi, (m, n, s) => 'the young Ottoman sultan' + (s || ''));"
+    " const safe = String(p)"
+    " .replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)/gi, 'an Ottoman commander')"
+    " .replace(/\\b(sultans?|padishah|emperor|kings?)\\b/gi, 'commander')"
+    " .replace(/Constantinople|Istanbul|Byzantium/gi, 'the ancient walled city').replace(/Byzantine/gi, 'defending').replace(/\\b1453\\b/g, '');"
     " const lang = /[çğıöşüÇĞİÖŞÜ]/.test(String($json.baslik)) ? 'Turkish' : 'English';"
-    " return (safe + '\\n\\nVertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000);"
+    " return (safe + '\\n\\nAll characters are anonymous fictional people; the commander is shown from behind or in silhouette, never a close-up of the face. Focus on the army, cannons, ships and city walls. Vertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000);"
     " })() }) }}"
 )
 
