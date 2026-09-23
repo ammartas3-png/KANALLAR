@@ -71,3 +71,9 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 - İlk başarılı render: `veo3_fast` 60 kredi. Kalan bakiye 20 → bir sonraki video / REVISE için Kie kredisi yükle.
 - Üretimi araştırmasız yeniden tetiklemek için gizli yollu `uretim-tetik` webhook’u var (yol repo’da `<secret>`).
 - Durum: execution 1438 Gate 2’de; video Telegram’a gönderildi.
+
+### Gate 2 → YouTube (2026-09-23 13:23 UTC)
+- Operatör **PUBLISH** seçti; `Upload a video` YouTube’dan `429 Video Uploads per day` aldı (Google Cloud projesi `498586711441`, YouTube account 3).
+- Kota 07:00 UTC’de sıfırlanır; yeniden deneme planlandı (önce execution 1438 retry, olmazsa yedek MP4 ile yükleme).
+- MP4 yedeği agent deposunda (720×1280, 8 sn, sesli) — Kie geçici linki silinse bile kaybolmaz.
+- Not: 2020 sonrası oluşturulan ve YouTube denetiminden geçmemiş API projelerinden yüklenen videolar YouTube tarafından *private* kilitlenebilir. Tekrar olursa Cloud Console → YouTube Data API v3 → Quotas / audit kontrol edilmeli.
