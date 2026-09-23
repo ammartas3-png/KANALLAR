@@ -571,17 +571,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo",
-          "mode": "list",
-          "cachedResultName": "analizler",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo/edit?usp=drivesdk"
+          "value": "17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE",
+          "mode": "id",
+          "cachedResultName": "KANALLAR analizler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -594,7 +594,7 @@
             "kanal-url": "={{ $json.channelUrl }}",
             "abone": "={{ $json.numberOfSubscribers }}",
             "aciklama": "={{ $json.text }}",
-            "altyazi": "={{ $json.subtitles[0].srt.substring(0, 45000) }}"
+            "altyazi": "={{ String($json.subtitles?.[0]?.srt ?? '').substring(0, 45000) }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -742,17 +742,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo",
-          "mode": "list",
-          "cachedResultName": "analizler",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo/edit?usp=drivesdk"
+          "value": "17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE",
+          "mode": "id",
+          "cachedResultName": "KANALLAR analizler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lNMw345ryZL08F147EOtmmj43NB9vjzg__tSxciCwvo/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17rpNXHyeppjWzAPkpIkWeiP2sNVltY6kmxbddA-CySE/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -940,17 +940,17 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1084,17 +1084,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1212,17 +1212,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1486,17 +1486,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1755,17 +1755,17 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "options": {}
       },
@@ -2534,17 +2534,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -2647,17 +2647,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -2760,17 +2760,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
