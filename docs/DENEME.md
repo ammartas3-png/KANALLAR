@@ -62,6 +62,6 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 | Apify (run ID, sınırlı bekleme) | ✅ ~0,20 $ / tur |
 | Sheets | ✅ operatöre ait `KANALLAR analizler` / `KANALLAR icerik-takvim` |
 | 3 aday konu | ✅ üretildi |
-| Gate 1 Telegram | ⛔ bot bu chat’i tanımıyor (`8715342169` botu hiç başlatmamış, `1240141730` deaktif hesap). Geçici `TEMP telegram chat-id capture` workflow’u açık: n8n’deki bota herhangi bir mesaj at → chat id otomatik yakalanır |
+| Gate 1 Telegram | ✅ yeni bot `@Yt_ammar_bot` (n8n credential `Telegram Yt_ammar_bot`), chat `8715342169` |
 | Video | ✅ Kie.ai Veo 3.1 (`veo3_fast`, 9:16, 8 sn, sesli) — anahtar canlı n8n’de, git’te yok. Bakiye 80 kredi ≈ 1 video; REVISE için kredi yüklemek gerekir |
 | YouTube | ✅ bağlı tek hesap: `YouTube account 3` → kanal **TAŞDEMiR MA (@tasdemirma3215)** |

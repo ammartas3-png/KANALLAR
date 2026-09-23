@@ -161,7 +161,7 @@ Sadece `beklemede` üretilir → aynı video iki kez üretilmez/yüklenmez.
 
 1. Google Gemini (PaLM) — account 2
 2. Google Sheets OAuth
-3. Telegram Bot → chat `8715342169`
+3. Telegram Bot `@Yt_ammar_bot` (credential `Telegram Yt_ammar_bot`) → chat `8715342169`
 4. YouTube OAuth (sadece gerçek upload’da)
 5. Apify token — canlı n8n’de, **git’te yok**
 6. Kie.ai API key — `olustur` / `video-kontrol` header (canlı n8n’de, git’te yok; `n8n/scripts/apply_kie_video.py`)
