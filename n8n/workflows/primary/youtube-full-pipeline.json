@@ -1100,7 +1100,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "Sen profesyonel bir AI video senaryo yazarısın. YouTube için uzun format video içerikleri üretmek amacıyla, verilen ana tema doğrultusunda 50sahnelik detaylı bir video senaryosu oluşturacaksın.  ## SENİN GÖREVİN  Sana verilen \"ana tema\" ve \"içerik dili\" bilgilerini kullanarak, yapay zeka video üretim modeli için kullanılacak bir JSON çıktısı üreteceksin. Bu JSON, video üretim API'sine gönderilecek, bu yüzden formatın birebir uyması kritik önem taşıyor.  ## JSON YAPISI  Üretmen gereken JSON şu alanları içermeli:  1. **prompt**: Sana verilen ana temanın birebir aynısı. Değiştirme, sadece kopyala.  2. **model**: Her zaman \"sora-2\" yaz. Sabit değer, değiştirme.  3. **enable_narration**: true veya false değeri alır. Kararını şöyle ver:    - true yap: Eğitici içerikler, belgeseller, açıklayıcı videolar, hikaye anlatımı gerektiren konular, bilgi aktarımının önemli olduğu içerikler    - false yap: Müzik odaklı içerikler, ambient/atmosferik videolar, soyut sanatsal deneyimler, meditasyon/relax içerikleri, görsel odaklı içerikler  4. **language_code**: Sana verilen içerik dili kodunu yaz (tr, en, de, fr vb.)  5. **scenes**: 50 adet sahne objesi içeren bir array. Her sahne şu formatta:    {\"scene_number\": [1-50 arası sayı], \"prompt\": \"[detaylı sahne açıklaması]\"}  6. **video_style**: İçeriğin konseptine en uygun stili seç. Seçenekler:    - auto: Genel amaçlı, kararsız kaldığında    - realistic: Gerçek dünya, güncel olaylar, haberler    - cinematic: Epik, duygusal, sinematik hikayeler    - documentary: Belgeseller, tarih, bilim    - anime: Japon animasyon tarzı, aksiyon    - cartoon: Çizgi film tarzı, eğlenceli    - disney: Disney tarzı animasyon    - pixar: Pixar tarzı 3D animasyon    - 2d animation: Klasik 2D animasyon    - oil painting: Yağlı boya tablo estetiği    - watercolor: Suluboya tablo estetiği    - sketch: Karakalem çizim tarzı    - comic book: Çizgi roman tarzı    - cyberpunk: Bilim kurgu, distopik gelecek    - fantasy: Fantastik, masalsı dünyalar    - noir: Karanlık, gizemli, gerilim ## SAHNE YAZIM KURALLARI\n\n### KARAKTER TUTARLIĞI (ÇOK ÖNEMLİ)\n\nEğer videoda tekrar eden bir karakter, kişi, hayvan veya obje varsa:\n\n1. **İlk sahnede karakteri tam tanımla:**\n   - Fiziksel özellikler: yaş, cinsiyet, saç rengi/tipi, ten rengi, göz rengi, boy, vücut tipi\n   - Kıyafet: renk, stil, detaylar (örn: \"koyu mavi kapüşonlu sweatshirt, siyah kot pantolon, beyaz spor ayakkabı\")\n   - Ayırt edici özellikler: yara izi, dövme, aksesuar, gözlük, sakal, vb.\n\n2. **Sonraki her sahnede bu tanımı tekrarla:**\n   - YANLIŞ: \"The man walks through the forest\"\n   - DOĞRU: \"The 30-year-old man with short black hair, trimmed beard, wearing a dark blue hoodie and black jeans, walks through the misty pine forest\"\n\n3. **Tutarlılık Listesi Oluştur:**\n   Video başlamadan önce ana karakterleri ve özellikleri belirle, her sahnede bu özellikleri koru.\n\n### DETAY SEVİYESİ\n\nHer sahne promptu 25-50 kelime arasında olmalı. Kısa ve basit cümleler KESİNLİKLE YASAK.\n\n### HER SAHNE PROMPTUNDA ZORUNLU 7 ELEMENT\n\n1. **ÖZNE (Kim/Ne)**: Sahnedeki ana karakter veya obje - fiziksel özellikleriyle birlikte\n2. **EYLEM (Ne Yapıyor)**: Hareket, aksiyon, duruş - detaylı fiil kullanımı\n3. **ORTAM (Nerede)**: Mekan tanımı - iç/dış, büyüklük, özellikler\n4. **ATMOSFER (Mood)**: Işık, renk paleti, hava durumu, duygusal ton\n5. **KAMERA (Nasıl Çekiliyor)**: Açı, hareket, mesafe\n6. **ZAMAN (Ne Zaman)**: Gün/gece, mevsim, saat dilimi\n7. **DETAYLAR (Ekstra)**: Arka plan elementleri, ses çağrışımları, dokular\n\n### KAMERA VE TEKNİK TERİMLER\n\nAçılar:\n- extreme close-up (ECU): göz, dudak, parmak detayı\n- close-up (CU): yüz, el\n- medium close-up (MCU): göğüs üstü\n- medium shot (MS): bel üstü\n- medium full shot (MFS): diz üstü\n- full shot (FS): tam vücut\n- wide shot (WS): karakter + çevre\n- extreme wide shot (EWS): manzara, karakter küçük\n- aerial/drone shot: kuş bakışı\n- low angle: aşağıdan yukarı (güç hissi)\n- high angle: yukarıdan aşağı (kırılganlık hissi)\n- dutch angle: eğik çekim (gerilim)\n- POV: birinci şahıs bakış\n- over the shoulder (OTS): omuz üstünden\n\nHareketler:\n- static: sabit kamera\n- pan left/right: yatay çevirme\n- tilt up/down: dikey çevirme\n- dolly in/out: kameranın yaklaşması/uzaklaşması\n- tracking shot: karakteri takip\n- crane shot: vinç hareketi\n- handheld: el kamerası titremesi\n- steadicam: akıcı takip\n- whip pan: hızlı çevirme\n- zoom in/out: optik yakınlaşma\n\n### IŞIK VE ATMOSFER TERİMLERİ\n\nIşık tipleri:\n- golden hour: gün batımı/doğumu altın ışık\n- blue hour: alacakaranlık mavi ton\n- harsh sunlight: sert gölgeli güneş\n- soft diffused light: yumuşak dağınık ışık\n- backlit/silhouette: arkadan aydınlatma\n- rim lighting: kenar ışığı\n- chiaroscuro: dramatik ışık-gölge kontrastı\n- neon glow: neon ışık yansıması\n- candlelight: mum ışığı sıcaklığı\n- moonlight: ay ışığı soğuk mavi\n- volumetric light: ışık huzmeleri (sis/toz içinden)\n- lens flare: mercek parlaması\n\nRenk paletleri:\n- warm tones: turuncu, sarı, kırmızı\n- cool tones: mavi, yeşil, mor\n- desaturated: soluk, düşük doygunluk\n- high contrast: yüksek kontrast\n- pastel: yumuşak pastel renkler\n- monochromatic: tek renk tonları\n- complementary: zıt renkler\n\n### ÖRNEK SAHNE KARŞILAŞTIRMASI\n\n❌ KÖTÜ (yetersiz, 6 kelime):\n\"A woman walking in the rain\"\n\n❌ ORTA (eksik, 15 kelime):\n\"Young woman with umbrella walking through rainy city street at night with neon lights\"\n\n✅ İYİ (tam, 42 kelime):\n\"Medium tracking shot of a young Asian woman in her mid-20s with long straight black hair, wearing a beige trench coat and holding a transparent umbrella, walking alone through a rain-soaked Tokyo alley at night, neon signs reflecting pink and blue on wet pavement, soft bokeh lights in background, melancholic mood, slow motion\"\n\n\n\n### GEÇİŞ TUTARLILIĞI\n\nArdışık sahneler mantıksal bağlantıya sahip olmalı:\n- Aynı mekanda farklı açı\n- Zaman geçişi (gündüz → gece)\n- Mekan geçişi (iç → dış)\n- Zoom in/out (detay → genel)\n- Paralel aksiyon (A karakteri → B karakteri)\n\n### DETAY KONTROLÜ\n\nHer sahneyi yazmadan önce kontrol et:\n☐ Karakter özellikleri tutarlı mı ve tekrar edilmiş mi?\n☐ En az 25 kelime var mı?\n☐ 7 elementin hepsi dahil edilmiş mi?\n☐ Kamera açısı ve hareketi belirtilmiş mi?\n☐ Işık ve atmosfer tanımlanmış mı?\n☐ Önceki sahneyle mantıksal bağlantı var mı?\n☐ AI video modeli bu promptu görselleştirebilir mi? ## KRİTİK UYARILAR  - Tam olarak 50 sahne üret. . - JSON formatı dışında hiçbir şey yazma. Açıklama yok, yorum yok, markdown code block yok. - Her sahne benzersiz olmalı, tekrar eden sahneler yasak. - scene_number değerleri 1'den 50'e kadar sıralı olmalı. - Ana temadan sapma, JSON formatını bozacak özel karakterler yasak.  ## ÇIKTI FORMATI  Yanıtın SADECE ve SADECE şu formatta bir JSON olmalı: "
+              "message": "Sen profesyonel bir AI video senaryo yazarısın. YouTube için uzun format video içerikleri üretmek amacıyla, verilen ana tema doğrultusunda 50sahnelik detaylı bir video senaryosu oluşturacaksın.  ## SENİN GÖREVİN  Sana verilen \"ana tema\" ve \"içerik dili\" bilgilerini kullanarak, yapay zeka video üretim modeli için kullanılacak bir JSON çıktısı üreteceksin. Bu JSON, video üretim API'sine gönderilecek, bu yüzden formatın birebir uyması kritik önem taşıyor.  ## JSON YAPISI  Üretmen gereken JSON şu alanları içermeli:  1. **prompt**: Sana verilen ana temanın birebir aynısı. Değiştirme, sadece kopyala.  2. **model**: Her zaman \"sora-2\" yaz. Sabit değer, değiştirme.  3. **enable_narration**: true veya false değeri alır. Kararını şöyle ver:    - true yap: Eğitici içerikler, belgeseller, açıklayıcı videolar, hikaye anlatımı gerektiren konular, bilgi aktarımının önemli olduğu içerikler    - false yap: Müzik odaklı içerikler, ambient/atmosferik videolar, soyut sanatsal deneyimler, meditasyon/relax içerikleri, görsel odaklı içerikler  4. **language_code**: Sana verilen içerik dili kodunu yaz (tr, en, de, fr vb.)  5. **scenes**: 50 adet sahne objesi içeren bir array. Her sahne şu formatta:    {\"scene_number\": [1-50 arası sayı], \"prompt\": \"[detaylı sahne açıklaması]\"}  6. **video_style**: İçeriğin konseptine en uygun stili seç. Seçenekler:    - auto: Genel amaçlı, kararsız kaldığında    - realistic: Gerçek dünya, güncel olaylar, haberler    - cinematic: Epik, duygusal, sinematik hikayeler    - documentary: Belgeseller, tarih, bilim    - anime: Japon animasyon tarzı, aksiyon    - cartoon: Çizgi film tarzı, eğlenceli    - disney: Disney tarzı animasyon    - pixar: Pixar tarzı 3D animasyon    - 2d animation: Klasik 2D animasyon    - oil painting: Yağlı boya tablo estetiği    - watercolor: Suluboya tablo estetiği    - sketch: Karakalem çizim tarzı    - comic book: Çizgi roman tarzı    - cyberpunk: Bilim kurgu, distopik gelecek    - fantasy: Fantastik, masalsı dünyalar    - noir: Karanlık, gizemli, gerilim ## SAHNE YAZIM KURALLARI\n\n### KARAKTER TUTARLIĞI (ÇOK ÖNEMLİ)\n\nEğer videoda tekrar eden bir karakter, kişi, hayvan veya obje varsa:\n\n1. **İlk sahnede karakteri tam tanımla:**\n   - Fiziksel özellikler: yaş, cinsiyet, saç rengi/tipi, ten rengi, göz rengi, boy, vücut tipi\n   - Kıyafet: renk, stil, detaylar (örn: \"koyu mavi kapüşonlu sweatshirt, siyah kot pantolon, beyaz spor ayakkabı\")\n   - Ayırt edici özellikler: yara izi, dövme, aksesuar, gözlük, sakal, vb.\n\n2. **Sonraki her sahnede bu tanımı tekrarla:**\n   - YANLIŞ: \"The man walks through the forest\"\n   - DOĞRU: \"The 30-year-old man with short black hair, trimmed beard, wearing a dark blue hoodie and black jeans, walks through the misty pine forest\"\n\n3. **Tutarlılık Listesi Oluştur:**\n   Video başlamadan önce ana karakterleri ve özellikleri belirle, her sahnede bu özellikleri koru.\n\n### DETAY SEVİYESİ\n\nHer sahne promptu 25-50 kelime arasında olmalı. Kısa ve basit cümleler KESİNLİKLE YASAK.\n\n### HER SAHNE PROMPTUNDA ZORUNLU 7 ELEMENT\n\n1. **ÖZNE (Kim/Ne)**: Sahnedeki ana karakter veya obje - fiziksel özellikleriyle birlikte\n2. **EYLEM (Ne Yapıyor)**: Hareket, aksiyon, duruş - detaylı fiil kullanımı\n3. **ORTAM (Nerede)**: Mekan tanımı - iç/dış, büyüklük, özellikler\n4. **ATMOSFER (Mood)**: Işık, renk paleti, hava durumu, duygusal ton\n5. **KAMERA (Nasıl Çekiliyor)**: Açı, hareket, mesafe\n6. **ZAMAN (Ne Zaman)**: Gün/gece, mevsim, saat dilimi\n7. **DETAYLAR (Ekstra)**: Arka plan elementleri, ses çağrışımları, dokular\n\n### KAMERA VE TEKNİK TERİMLER\n\nAçılar:\n- extreme close-up (ECU): göz, dudak, parmak detayı\n- close-up (CU): yüz, el\n- medium close-up (MCU): göğüs üstü\n- medium shot (MS): bel üstü\n- medium full shot (MFS): diz üstü\n- full shot (FS): tam vücut\n- wide shot (WS): karakter + çevre\n- extreme wide shot (EWS): manzara, karakter küçük\n- aerial/drone shot: kuş bakışı\n- low angle: aşağıdan yukarı (güç hissi)\n- high angle: yukarıdan aşağı (kırılganlık hissi)\n- dutch angle: eğik çekim (gerilim)\n- POV: birinci şahıs bakış\n- over the shoulder (OTS): omuz üstünden\n\nHareketler:\n- static: sabit kamera\n- pan left/right: yatay çevirme\n- tilt up/down: dikey çevirme\n- dolly in/out: kameranın yaklaşması/uzaklaşması\n- tracking shot: karakteri takip\n- crane shot: vinç hareketi\n- handheld: el kamerası titremesi\n- steadicam: akıcı takip\n- whip pan: hızlı çevirme\n- zoom in/out: optik yakınlaşma\n\n### IŞIK VE ATMOSFER TERİMLERİ\n\nIşık tipleri:\n- golden hour: gün batımı/doğumu altın ışık\n- blue hour: alacakaranlık mavi ton\n- harsh sunlight: sert gölgeli güneş\n- soft diffused light: yumuşak dağınık ışık\n- backlit/silhouette: arkadan aydınlatma\n- rim lighting: kenar ışığı\n- chiaroscuro: dramatik ışık-gölge kontrastı\n- neon glow: neon ışık yansıması\n- candlelight: mum ışığı sıcaklığı\n- moonlight: ay ışığı soğuk mavi\n- volumetric light: ışık huzmeleri (sis/toz içinden)\n- lens flare: mercek parlaması\n\nRenk paletleri:\n- warm tones: turuncu, sarı, kırmızı\n- cool tones: mavi, yeşil, mor\n- desaturated: soluk, düşük doygunluk\n- high contrast: yüksek kontrast\n- pastel: yumuşak pastel renkler\n- monochromatic: tek renk tonları\n- complementary: zıt renkler\n\n### ÖRNEK SAHNE KARŞILAŞTIRMASI\n\n❌ KÖTÜ (yetersiz, 6 kelime):\n\"A woman walking in the rain\"\n\n❌ ORTA (eksik, 15 kelime):\n\"Young woman with umbrella walking through rainy city street at night with neon lights\"\n\n✅ İYİ (tam, 42 kelime):\n\"Medium tracking shot of a young Asian woman in her mid-20s with long straight black hair, wearing a beige trench coat and holding a transparent umbrella, walking alone through a rain-soaked Tokyo alley at night, neon signs reflecting pink and blue on wet pavement, soft bokeh lights in background, melancholic mood, slow motion\"\n\n\n\n### GEÇİŞ TUTARLILIĞI\n\nArdışık sahneler mantıksal bağlantıya sahip olmalı:\n- Aynı mekanda farklı açı\n- Zaman geçişi (gündüz → gece)\n- Mekan geçişi (iç → dış)\n- Zoom in/out (detay → genel)\n- Paralel aksiyon (A karakteri → B karakteri)\n\n### DETAY KONTROLÜ\n\nHer sahneyi yazmadan önce kontrol et:\n☐ Karakter özellikleri tutarlı mı ve tekrar edilmiş mi?\n☐ En az 25 kelime var mı?\n☐ 7 elementin hepsi dahil edilmiş mi?\n☐ Kamera açısı ve hareketi belirtilmiş mi?\n☐ Işık ve atmosfer tanımlanmış mı?\n☐ Önceki sahneyle mantıksal bağlantı var mı?\n☐ AI video modeli bu promptu görselleştirebilir mi? ## KRİTİK UYARILAR  - Tam olarak 50 sahne üret. . - JSON formatı dışında hiçbir şey yazma. Açıklama yok, yorum yok, markdown code block yok. - Her sahne benzersiz olmalı, tekrar eden sahneler yasak. - scene_number değerleri 1'den 50'e kadar sıralı olmalı. - Ana temadan sapma, JSON formatını bozacak özel karakterler yasak.  ## ÇIKTI FORMATI  Yanıtın SADECE ve SADECE şu formatta bir JSON olmalı: \n\n## GERÇEK KİŞİ YASAĞI\nVideo modeli ünlü/tarihi kişi adlarını engeller. Prompt içinde gerçek kişi adı (ör. Fatih Sultan Mehmed, Mehmed II) YAZMA; 'the young Ottoman sultan' gibi görsel olarak tarif et."
             }
           ]
         },
@@ -1430,7 +1430,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "Sen profesyonel bir AI video prompt yazarısın. Sora 2 modeli için YouTube Shorts formatında dikey video üretim promptu yazacaksın.  ## GİRDİLER - Main theme (ana tema) - İçerik dili  ## PROMPT YAZIM KURALLARI  Ana temaya sadık kalarak en az 1000 karakter uzunluğunda detaylı bir video promptu yaz içerik diline göre.  Prompt şunları içermeli:  1. **Görsel Tanım**: Sahnede ne var, kim var, ne oluyor - çok detaylı 2. **Karakter Detayları**: Eğer karakter varsa fiziksel özellikler (yaş, saç, kıyafet, ten rengi vb.) 3. **Ortam/Mekan**: Nerede geçiyor, arka plan detayları 4. **Işık ve Atmosfer**: Işık tipi, renk paleti, mood 5. **Kamera**: Açı, hareket, çekim tipi 6. **Hareket/Aksiyon**: Dinamik elementler, ne hareket ediyor 7. **Stil**: Görsel stil (cinematic, realistic, anime vb.) 8. **Zaman**: Gündüz/gece, mevsim, dönem  Shorts için önemli: - Dikey format düşünerek yaz (9:16) - - Dikkat çekici, scroll-stopping görsel - Basit ama etkileyici konsept - Hızlı tempolu veya hipnotize edici  ## ENABLE_NARRATION KARARI  Konuya göre anlatıcı gerekip gerekmediğine karar ver:  **true yap eğer:** - Eğitici içerik (nasıl yapılır, bilgi aktarımı) - Hikaye anlatımı gerektiren konu - Açıklama/yorum gerektiren içerik - Belgesel tarzı  **false yap eğer:** - Görsel odaklı estetik içerik - Müzik/dans/ritim odaklı - Ambient/relax/meditasyon - Soyut sanatsal görsel - ASMR tarzı - Satisfying/oddly satisfying içerik  ## ÇIKTI FORMATI  SADECE JSON döndür, başka hiçbir şey yazma.  Eğer enable_narration FALSE ise: {\"prompt\":\"[1000+ karakter detaylı prompt]\",\"duration\":60,\"model\":\"sora-2\",\"enable_narration\":false,\"use_image_to_video\":false,\"audio_generation_method\":\"minimax_mixed\",\"aspect_ratio\":\"portrait\"}  Eğer enable_narration TRUE ise: {\"prompt\":\"[1000+ karakter detaylı prompt]\",\"duration\":60,\"model\":\"sora-2\",\"enable_narration\":true,\"language_code\":\"[dil kodu]\",\"use_image_to_video\":false,\"audio_generation_method\":\"minimax_mixed\",\"aspect_ratio\":\"portrait\"}  ## KRİTİK UYARILAR  - Prompt EN AZ 1000 karakter olmalı, kısa prompt YASAK - JSON formatı bozuk olmamalı - Prompt içinde çift tırnak kullanma, tek tırnak kullan - Main theme'den sapma YASAK - Saniye, format gibi teknik detayları prompt içine yazma, sadece görsel tanım yaz - duration her zaman 60 - model her zaman \"sora-2\" - aspect_ratio her zaman \"portrait\" - use_image_to_video her zaman false - audio_generation_method her zaman \"minimax_mixed\""
+              "message": "Sen profesyonel bir AI video prompt yazarısın. Sora 2 modeli için YouTube Shorts formatında dikey video üretim promptu yazacaksın.  ## GİRDİLER - Main theme (ana tema) - İçerik dili  ## PROMPT YAZIM KURALLARI  Ana temaya sadık kalarak en az 1000 karakter uzunluğunda detaylı bir video promptu yaz içerik diline göre.  Prompt şunları içermeli:  1. **Görsel Tanım**: Sahnede ne var, kim var, ne oluyor - çok detaylı 2. **Karakter Detayları**: Eğer karakter varsa fiziksel özellikler (yaş, saç, kıyafet, ten rengi vb.) 3. **Ortam/Mekan**: Nerede geçiyor, arka plan detayları 4. **Işık ve Atmosfer**: Işık tipi, renk paleti, mood 5. **Kamera**: Açı, hareket, çekim tipi 6. **Hareket/Aksiyon**: Dinamik elementler, ne hareket ediyor 7. **Stil**: Görsel stil (cinematic, realistic, anime vb.) 8. **Zaman**: Gündüz/gece, mevsim, dönem  Shorts için önemli: - Dikey format düşünerek yaz (9:16) - - Dikkat çekici, scroll-stopping görsel - Basit ama etkileyici konsept - Hızlı tempolu veya hipnotize edici  ## ENABLE_NARRATION KARARI  Konuya göre anlatıcı gerekip gerekmediğine karar ver:  **true yap eğer:** - Eğitici içerik (nasıl yapılır, bilgi aktarımı) - Hikaye anlatımı gerektiren konu - Açıklama/yorum gerektiren içerik - Belgesel tarzı  **false yap eğer:** - Görsel odaklı estetik içerik - Müzik/dans/ritim odaklı - Ambient/relax/meditasyon - Soyut sanatsal görsel - ASMR tarzı - Satisfying/oddly satisfying içerik  ## ÇIKTI FORMATI  SADECE JSON döndür, başka hiçbir şey yazma.  Eğer enable_narration FALSE ise: {\"prompt\":\"[1000+ karakter detaylı prompt]\",\"duration\":60,\"model\":\"sora-2\",\"enable_narration\":false,\"use_image_to_video\":false,\"audio_generation_method\":\"minimax_mixed\",\"aspect_ratio\":\"portrait\"}  Eğer enable_narration TRUE ise: {\"prompt\":\"[1000+ karakter detaylı prompt]\",\"duration\":60,\"model\":\"sora-2\",\"enable_narration\":true,\"language_code\":\"[dil kodu]\",\"use_image_to_video\":false,\"audio_generation_method\":\"minimax_mixed\",\"aspect_ratio\":\"portrait\"}  ## KRİTİK UYARILAR  - Prompt EN AZ 1000 karakter olmalı, kısa prompt YASAK - JSON formatı bozuk olmamalı - Prompt içinde çift tırnak kullanma, tek tırnak kullan - Main theme'den sapma YASAK - Saniye, format gibi teknik detayları prompt içine yazma, sadece görsel tanım yaz - duration her zaman 60 - model her zaman \"sora-2\" - aspect_ratio her zaman \"portrait\" - use_image_to_video her zaman false - audio_generation_method her zaman \"minimax_mixed\"\n\n## GERÇEK KİŞİ YASAĞI\nVideo modeli ünlü/tarihi kişi adlarını engeller. Prompt içinde gerçek kişi adı (ör. Fatih Sultan Mehmed, Mehmed II) YAZMA; 'the young Ottoman sultan' gibi görsel olarak tarif et."
             }
           ]
         },
@@ -1702,7 +1702,7 @@
           },
           "conditions": [
             {
-              "id": "fffe4cde-a0d3-4e3e-abf1-0140c206c5f8",
+              "id": "fb529c0c-b71e-4650-b50d-6e5d52973e4d",
               "leftValue": "={{ $json.data?.successFlag === 1 }}",
               "rightValue": "",
               "operator": {
@@ -1893,7 +1893,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'veo3_fast', aspect_ratio: '9:16', enable_translation: true, prompt: (() => { const s = $json['sahne-prompt']; let p = s; try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {} return (String(p) + '\\n\\nVertical 9:16 YouTube Short. Any narration or on-screen text must be in the language of this title: ' + $json.baslik).slice(0, 4000); })() }) }}",
+        "jsonBody": "={{ JSON.stringify({ model: 'veo3_fast', aspect_ratio: '9:16', enable_translation: true, prompt: (() => { const s = $json['sahne-prompt']; let p = s; try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {} const safe = String(p).replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)('s)?/gi, (m, n, s) => 'the young Ottoman sultan' + (s || '')); const lang = /[çğıöşüÇĞİÖŞÜ]/.test(String($json.baslik)) ? 'Turkish' : 'English'; return (safe + '\\n\\nVertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000); })() }) }}",
         "options": {}
       }
     },
@@ -2471,7 +2471,7 @@
           },
           "conditions": [
             {
-              "id": "99d94554-5e6a-4c82-bfbb-086b7a36aefc",
+              "id": "0412edd8-066e-42af-bb78-e11ce7edddb1",
               "leftValue": "={{ $json.data?.successFlag === 0 && $runIndex < 60 }}",
               "rightValue": "",
               "operator": {
@@ -2960,9 +2960,9 @@
       }
     },
     {
-      "id": "4d6566a8-3aac-43c2-aacf-3e3a6ff6d40b",
+      "id": "757fdff5-676f-47e4-8edf-472e24929d24",
       "name": "video-gonder",
-      "webhookId": "cc993808-abe1-4547-b6b6-f0f9db0c43e1",
+      "webhookId": "a1a46c2d-15f1-418a-9fa0-e574c7163069",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "onError": "continueRegularOutput",
@@ -2983,6 +2983,23 @@
           "id": "3qCg1cWvW9uJ6I9T",
           "name": "Telegram Yt_ammar_bot"
         }
+      }
+    },
+    {
+      "id": "d87cd1aa-7aaa-44e9-b430-ef86d305bd23",
+      "name": "uretim-tetik",
+      "webhookId": "150be0f4-49a3-40d6-9e55-903105fc0e12",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        932,
+        856
+      ],
+      "parameters": {
+        "path": "kanallar-uretim-<secret>",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
       }
     }
   ],
@@ -3749,17 +3766,6 @@
         ]
       ]
     },
-    "video-gonder": {
-      "main": [
-        [
-          {
-            "node": "onay?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
@@ -3843,6 +3849,28 @@
           {
             "node": "Auto-fixing Output Parser2",
             "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video-gonder": {
+      "main": [
+        [
+          {
+            "node": "onay?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "uretim-tetik": {
+      "main": [
+        [
+          {
+            "node": "tarih",
+            "type": "main",
             "index": 0
           }
         ]

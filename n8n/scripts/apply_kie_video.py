@@ -27,6 +27,7 @@ REPO_JSON = Path(__file__).resolve().parents[1] / "workflows/primary/youtube-ful
 H = {"X-N8N-API-KEY": os.environ["N8N_API_KEY"], "Content-Type": "application/json"}
 KIE_KEY = os.environ["KIE_API_KEY"]
 KIE_VIDEO_MODEL = os.environ.get("KIE_VIDEO_MODEL", "veo3_fast")
+PRODUCE_PATH = os.environ.get("KANALLAR_PRODUCE_PATH") or f"kanallar-uretim-{uuid.uuid4().hex}"
 
 RESULT_URL = "$('video-kontrol').item.json.data.response.resultUrls[0]"
 CREATE_BODY = (
@@ -34,7 +35,9 @@ CREATE_BODY = (
     " const s = $json['sahne-prompt'];"
     " let p = s;"
     " try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {}"
-    " return (String(p) + '\\n\\nVertical 9:16 YouTube Short. Any narration or on-screen text must be in the language of this title: ' + $json.baslik).slice(0, 4000);"
+    " const safe = String(p).replace(/(Fatih Sultan Mehmed|Sultan Mehmed II|Mehmed II|Mehmed the Conqueror|Fatih Sultan|Sultan Mehmed|Fatih|Mehmed)('s)?/gi, (m, n, s) => 'the young Ottoman sultan' + (s || ''));"
+    " const lang = /[çğıöşüÇĞİÖŞÜ]/.test(String($json.baslik)) ? 'Turkish' : 'English';"
+    " return (safe + '\\n\\nVertical 9:16 YouTube Short. Any narration must be in ' + lang + '. No on-screen names or text.').slice(0, 4000);"
     " })() }) }}"
 )
 
@@ -52,7 +55,7 @@ def kie_headers() -> dict:
 
 def scrub(text: str) -> str:
     text = re.sub(r"apify_api_[A-Za-z0-9]+", "", text)
-    return text.replace(KIE_KEY, "")
+    return text.replace(KIE_KEY, "").replace(PRODUCE_PATH, "kanallar-uretim-<secret>")
 
 
 def main() -> None:
@@ -117,9 +120,26 @@ def main() -> None:
     }
     N["indir"].pop("credentials", None)
 
+    rule = ("\n\n## GERÇEK KİŞİ YASAĞI\nVideo modeli ünlü/tarihi kişi adlarını engeller. Prompt içinde gerçek kişi adı "
+            "(ör. Fatih Sultan Mehmed, Mehmed II) YAZMA; 'the young Ottoman sultan' gibi görsel olarak tarif et.")
+    for scene_node in ("Basic LLM Chain", "sahne-promptlari"):
+        msg = N[scene_node]["parameters"]["messages"]["messageValues"][0]
+        if "GERÇEK KİŞİ YASAĞI" not in msg["message"]:
+            msg["message"] += rule
+
+    nodes[:] = [n for n in nodes if n["name"] != "uretim-tetik"]
+    conns.pop("uretim-tetik", None)
+    tx, ty = N["tarih"]["position"]
+    nodes.append({
+        "id": str(uuid.uuid4()), "name": "uretim-tetik", "type": "n8n-nodes-base.webhook", "typeVersion": 2,
+        "position": [tx - 220, ty - 200], "webhookId": str(uuid.uuid4()),
+        "parameters": {"path": PRODUCE_PATH, "httpMethod": "POST", "responseMode": "onReceived", "options": {}},
+    })
+    conns["uretim-tetik"] = {"main": [[{"node": "tarih", "type": "main", "index": 0}]]}
+
     api(f"/api/v1/workflows/{WF_ID}", "PUT", {"name": w["name"], "nodes": nodes, "connections": conns, "settings": w["settings"]})
     live = api(f"/api/v1/workflows/{WF_ID}/activate", "POST", {})
-    print("active:", live.get("active"), "nodes:", len(live["nodes"]), "model:", KIE_VIDEO_MODEL)
+    print("active:", live.get("active"), "nodes:", len(live["nodes"]), "model:", KIE_VIDEO_MODEL, "produce path:", PRODUCE_PATH)
     out = json.dumps({"name": live["name"], "nodes": live["nodes"], "connections": live["connections"], "settings": live.get("settings")},
                      indent=2, ensure_ascii=False)
     REPO_JSON.write_text(scrub(out))
