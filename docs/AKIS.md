@@ -53,7 +53,7 @@ flowchart TB
   subgraph ALT["ALT CANVAS — Video + yayın"]
     SCH[Schedule VEYA Gate1 sonrası] --> ROW[Bugünkü + beklemede satır]
     ROW --> SEO[SEO preflight]
-    SEO --> V[Prototipal + poll, max 60 deneme]
+    SEO --> V[Kie Veo 3.1 + poll, max 60 deneme]
     V --> G2{GATE 2 karar}
     G2 -->|PUBLISH| DRY{DRY_RUN=false VE AUTO_PUBLISH=true?}
     G2 -->|REVISE| R[Prompt + geri bildirim → yeniden üret, max 3]
@@ -123,9 +123,10 @@ Girişler: `Schedule Trigger` (günlük) veya A9 köprüsü.
 `SEO preflight` → `SEO OK?` — başlık ≤ 40 (long ≤ 60), açıklama ≥ 20 karakter, sahne-prompt dolu.
 Hata → `SEO fail` (Telegram), video üretilmez.
 
-### B3 — Video (sınırlı bekleme)
-`olustur` (Prototipal) → `Wait` 30 sn → `video-kontrol` → `video-bitti?` (`completed`)
-→ değilse `video-tekrar?`: failed/error/cancelled değil ve 60 denemeden az ise bekle; değilse `video-hata`.
+### B3 — Video (Kie.ai Veo 3.1, sınırlı bekleme)
+`olustur` → `POST api.kie.ai/api/v1/veo/generate` (`veo3_fast`, 9:16) → `Wait` 30 sn → `video-kontrol` (`veo/record-info`) → `video-bitti?` (`successFlag=1`)
+→ değilse `video-tekrar?`: `successFlag=0` ve 60 denemeden az ise bekle; değilse `video-hata` (Kie mesajıyla).
+`video-gonder` videoyu Gate 2’den önce Telegram’a yollar.
 
 ### B4 — GATE 2
 `onay?` — Telegram formu: **PUBLISH / REVISE / REJECT** + Geri bildirim → `karar` (Code)
@@ -163,7 +164,7 @@ Sadece `beklemede` üretilir → aynı video iki kez üretilmez/yüklenmez.
 3. Telegram Bot → chat `8715342169`
 4. YouTube OAuth (sadece gerçek upload’da)
 5. Apify token — canlı n8n’de, **git’te yok**
-6. Prototipal Bearer — `olustur` / `video-kontrol` header (henüz boş)
+6. Kie.ai API key — `olustur` / `video-kontrol` header (canlı n8n’de, git’te yok; `n8n/scripts/apply_kie_video.py`)
 
 ---
 

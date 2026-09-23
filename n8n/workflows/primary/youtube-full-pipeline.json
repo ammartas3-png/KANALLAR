@@ -1649,18 +1649,18 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
+            "typeValidation": "loose",
+            "version": 2
           },
           "conditions": [
             {
-              "id": "5d820fc5-0e8c-4966-b029-8672294183c0",
-              "leftValue": "={{$json.status}}",
-              "rightValue": "completed",
+              "id": "fffe4cde-a0d3-4e3e-abf1-0140c206c5f8",
+              "leftValue": "={{ $json.data?.successFlag === 1 }}",
+              "rightValue": "",
               "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -1829,7 +1829,7 @@
       ],
       "parameters": {
         "method": "POST",
-        "url": "https://gateway-api.prototipal.com/api/long-story/videos",
+        "url": "https://api.kie.ai/api/v1/veo/generate",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1845,7 +1845,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ $json[\"sahne-prompt\"] }}",
+        "jsonBody": "={{ JSON.stringify({ model: 'veo3_fast', aspect_ratio: '9:16', enable_translation: true, prompt: (() => { const s = $json['sahne-prompt']; let p = s; try { const o = typeof s === 'string' ? JSON.parse(s) : s; p = o.prompt || s; } catch (e) {} return (String(p) + '\\n\\nVertical 9:16 YouTube Short. Any narration or on-screen text must be in the language of this title: ' + $json.baslik).slice(0, 4000); })() }) }}",
         "options": {}
       }
     },
@@ -1859,7 +1859,7 @@
         1024
       ],
       "parameters": {
-        "url": "=https://gateway-api.prototipal.com/api/long-story/videos/{{ $('olustur').item.json.video_id }}",
+        "url": "=https://api.kie.ai/api/v1/veo/record-info?taskId={{ $('olustur').item.json.data?.taskId }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1871,12 +1871,6 @@
               "name": "accept",
               "value": "application/json"
             }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {}
           ]
         },
         "options": {}
@@ -1895,7 +1889,7 @@
       "parameters": {
         "operation": "sendAndWait",
         "chatId": "8715342169",
-        "message": "=GATE 2 — Video hazır\nKanal: TAŞDEMiR MA (@tasdemirma3215)\n{{ $('tarih-kontrol').item.json.baslik }}\n{{ $json.final_video_url }}",
+        "message": "=GATE 2 — Video hazır\nKanal: TAŞDEMiR MA (@tasdemirma3215)\n{{ $('tarih-kontrol').item.json.baslik }}\n{{ $('video-kontrol').item.json.data.response.resultUrls[0] }}",
         "responseType": "customForm",
         "formFields": {
           "values": [
@@ -1942,8 +1936,15 @@
         848
       ],
       "parameters": {
-        "url": "={{ $('video-kontrol').item.json.final_video_url }}",
-        "options": {}
+        "url": "={{ $('video-kontrol').item.json.data.response.resultUrls[0] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
       }
     },
     {
@@ -2422,8 +2423,8 @@
           },
           "conditions": [
             {
-              "id": "b7277ee2-4c26-468b-bfa5-e350b129543d",
-              "leftValue": "={{ !['failed','error','cancelled','canceled'].includes(String($json.status).toLowerCase()) && $runIndex < 60 }}",
+              "id": "99d94554-5e6a-4c82-bfbb-086b7a36aefc",
+              "leftValue": "={{ $json.data?.successFlag === 0 && $runIndex < 60 }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -2449,7 +2450,7 @@
       ],
       "parameters": {
         "chatId": "8715342169",
-        "text": "=Video uretimi durdu: {{ $json.status }}",
+        "text": "=Video uretimi durdu (Kie): flag={{ $json.data?.successFlag }} {{ $json.data?.errorMessage || $json.msg || '' }} | create: {{ $('olustur').item.json.msg }}",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -2908,6 +2909,32 @@
       ],
       "parameters": {
         "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: \"public\" }, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "4d6566a8-3aac-43c2-aacf-3e3a6ff6d40b",
+      "name": "video-gonder",
+      "webhookId": "cc993808-abe1-4547-b6b6-f0f9db0c43e1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "onError": "continueRegularOutput",
+      "position": [
+        2840,
+        844
+      ],
+      "parameters": {
+        "operation": "sendVideo",
+        "chatId": "8715342169",
+        "file": "={{ $('video-kontrol').item.json.data.response.resultUrls[0] }}",
+        "additionalFields": {
+          "caption": "={{ $('tarih-kontrol').item.json.baslik }}"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
       }
     }
   ],
@@ -3406,7 +3433,7 @@
       "main": [
         [
           {
-            "node": "onay?",
+            "node": "video-gonder",
             "type": "main",
             "index": 0
           }
@@ -3756,6 +3783,17 @@
         [
           {
             "node": "icerikler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video-gonder": {
+      "main": [
+        [
+          {
+            "node": "onay?",
             "type": "main",
             "index": 0
           }
