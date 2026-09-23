@@ -1725,8 +1725,8 @@
       },
       "credentials": {
         "youTubeOAuth2Api": {
-          "id": "VE4bJp6Jb8KaVmII",
-          "name": "YouTube account"
+          "id": "Fhs1nwYca2mB8qu5",
+          "name": "YouTube account 3"
         }
       }
     },
@@ -1895,7 +1895,7 @@
       "parameters": {
         "operation": "sendAndWait",
         "chatId": "8715342169",
-        "message": "=GATE 2 — Video hazır\n{{ $('tarih-kontrol').item.json.baslik }}\n{{ $json.final_video_url }}",
+        "message": "=GATE 2 — Video hazır\nKanal: TAŞDEMiR MA (@tasdemirma3215)\n{{ $('tarih-kontrol').item.json.baslik }}\n{{ $json.final_video_url }}",
         "responseType": "customForm",
         "formFields": {
           "values": [

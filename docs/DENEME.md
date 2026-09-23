@@ -51,3 +51,17 @@ YouTube’a gerçek deneme için sonra `DRY_RUN=false` + YouTube credential (ba�
 
 Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki  
 `Uzun format sayısı: 0` / `Shorts sayısı: 1` satırlarını tekrar `hafta` / `hafta*2` yap.
+
+
+## İlk tur (Fatih Sultan Mehmed, en) — 2026-09-23 durumu
+
+| Aşama | Durum |
+|-------|-------|
+| Form / haftalık tetik | ✅ |
+| Gemini (3.5-flash) | ✅ |
+| Apify (run ID, sınırlı bekleme) | ✅ ~0,20 $ / tur |
+| Sheets | ✅ operatöre ait `KANALLAR analizler` / `KANALLAR icerik-takvim` |
+| 3 aday konu | ✅ üretildi |
+| Gate 1 Telegram | ⛔ bot bu chat’i tanımıyor (`8715342169` botu hiç başlatmamış, `1240141730` deaktif hesap). Geçici `TEMP telegram chat-id capture` workflow’u açık: n8n’deki bota herhangi bir mesaj at → chat id otomatik yakalanır |
+| Video | ⛔ Prototipal Bearer boş. Sora 2 API 24 Eylül 2026’da kapanıyor, alternatif değil. Gerekli: Prototipal token veya Kie.ai anahtarı |
+| YouTube | ✅ bağlı tek hesap: `YouTube account 3` → kanal **TAŞDEMiR MA (@tasdemirma3215)** |
