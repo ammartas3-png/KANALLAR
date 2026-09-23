@@ -149,6 +149,7 @@ Hata → `SEO fail` (Telegram), video üretilmez.
 |-------|--------|
 | `onaylanmadı` | Satır yazıldı, sahne hazırlanıyor |
 | `beklemede` | Gate 1 geçti, üretime hazır |
+| `video-hazir` | Video üretildi; Gate 2 / YouTube bekliyor (zamanlayıcı tekrar üretmez) |
 | `dry-run` | Video üretildi, yükleme bilerek atlandı |
 | `yayinlandi` | YouTube’a yüklendi |
 | `reddedildi` | Gate 2’de reddedildi |

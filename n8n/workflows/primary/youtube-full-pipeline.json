@@ -3001,6 +3001,119 @@
         "responseMode": "onReceived",
         "options": {}
       }
+    },
+    {
+      "id": "e14af991-75fa-4558-9c5b-2320c9cfcb1d",
+      "name": "video-hazir-kayit",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2740,
+        704
+      ],
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA",
+          "mode": "id",
+          "cachedResultName": "KANALLAR icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iSgfutWOYExF93So4S7YIJhw5VFg8wzC682qFGtlZzA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tarih": "={{ $('tarih-kontrol').item.json.tarih }}",
+            "durum": "video-hazir"
+          },
+          "matchingColumns": [
+            "tarih"
+          ],
+          "schema": [
+            {
+              "id": "tarih",
+              "displayName": "tarih",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "baslik",
+              "displayName": "baslik",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aciklama",
+              "displayName": "aciklama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fomat",
+              "displayName": "fomat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ana-tema",
+              "displayName": "ana-tema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sahne-prompt",
+              "displayName": "sahne-prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "durum",
+              "displayName": "durum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VzXluO0biK8ubPky",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "connections": {
@@ -3410,7 +3523,7 @@
       "main": [
         [
           {
-            "node": "video-gonder",
+            "node": "video-hazir-kayit",
             "type": "main",
             "index": 0
           }
@@ -3870,6 +3983,17 @@
         [
           {
             "node": "tarih",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video-hazir-kayit": {
+      "main": [
+        [
+          {
+            "node": "video-gonder",
             "type": "main",
             "index": 0
           }
