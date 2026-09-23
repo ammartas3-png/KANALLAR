@@ -10,7 +10,7 @@ Amaç: projeyi açınca **nasıl çalıştığını** tek başına anlayabilmek.
 | **Repo JSON** | [`n8n/workflows/primary/youtube-full-pipeline.json`](../n8n/workflows/primary/youtube-full-pipeline.json) |
 | **Güncelleme script’i** | [`n8n/scripts/apply_review_updates.py`](../n8n/scripts/apply_review_updates.py) |
 | **Telegram onay chati** | chat id `8715342169` |
-| **LLM** | Gemini `models/gemini-3.5-flash` (ücretsiz katman; 2.5/2.0 kapalı, 3.6+ sık 503), 5x retry |
+| **LLM** | OpenAI `gpt-4.1-mini` (Gemini ücretsiz katman model başına günde 20 istek — bir tura yetmiyor) |
 | **Seri** | Haftada 1 Short — `Fatih Sultan Mehmed`, İngilizce |
 | **Yayın anahtarı** | `yayin-ayari` node’u (şu an açık, public); Gate 2 PUBLISH yine zorunlu |
 
@@ -159,7 +159,7 @@ Sadece `beklemede` üretilir → aynı video iki kez üretilmez/yüklenmez.
 
 ## Credential / token checklist
 
-1. Google Gemini (PaLM) — account 2
+1. OpenAI account (chat modelleri)
 2. Google Sheets OAuth
 3. Telegram Bot `@Yt_ammar_bot` (credential `Telegram Yt_ammar_bot`) → chat `8715342169`
 4. YouTube OAuth (sadece gerçek upload’da)

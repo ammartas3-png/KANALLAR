@@ -95,24 +95,30 @@
     },
     {
       "id": "5f7615a5-1dbe-490e-a892-9ee95595d452",
-      "name": "Google Gemini Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         176,
         -416
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -228,47 +234,59 @@
     },
     {
       "id": "99300714-8357-4d30-9204-cb0683fa7989",
-      "name": "Google Gemini Chat Model1",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         272,
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
     {
       "id": "d45f8f05-e9fe-46ea-a9f2-6ff71e68b3f9",
-      "name": "Google Gemini Chat Model2",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         1024,
         0
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -365,24 +383,30 @@
     },
     {
       "id": "2381748a-0166-4067-a5ee-6735b85c4263",
-      "name": "Google Gemini Chat Model3",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model3",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         48,
         800
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -414,24 +438,30 @@
     },
     {
       "id": "9a5d97aa-d55a-4d0e-b1ff-d6e89087727c",
-      "name": "Google Gemini Chat Model4",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model4",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         144,
         1008
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -463,24 +493,30 @@
     },
     {
       "id": "931327f2-893c-450b-bc9b-fde946017214",
-      "name": "Google Gemini Chat Model5",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model5",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         1232,
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -1403,24 +1439,30 @@
     },
     {
       "id": "5922c41d-ffa1-4c33-acb4-894a2499178f",
-      "name": "Google Gemini Chat Model6",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         -1168,
         992
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -1439,24 +1481,30 @@
     },
     {
       "id": "4eadc80a-fe98-42c3-9642-15ac74cc441c",
-      "name": "Google Gemini Chat Model7",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
+      "name": "OpenAI Chat Model7",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
       "retryOnFail": true,
-      "maxTries": 5,
+      "maxTries": 3,
       "waitBetweenTries": 5000,
       "position": [
         -1152,
         1248
       ],
       "parameters": {
-        "modelName": "models/gemini-3.5-flash",
-        "options": {}
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
       },
       "credentials": {
-        "googlePalmApi": {
-          "id": "7WzbsTFBmUhMSU5N",
-          "name": "Google Gemini(PaLM) Api account 2"
+        "openAiApi": {
+          "id": "jxy59ikFPZJ2RYDf",
+          "name": "OpenAI account"
         }
       }
     },
@@ -2158,7 +2206,7 @@
     },
     {
       "id": "gemini-model-fix-note",
-      "name": "GEMINI MODEL",
+      "name": "LLM MODEL",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
@@ -2166,7 +2214,7 @@
         -1100
       ],
       "parameters": {
-        "content": "## Gemini model\n`models/gemini-3.5-flash` (ücretsiz katman)\n2.5/2.0 kapalı; 3.6/3.7/3.8 sık 503, pro modeller kota (429).\nSave ederken modelName silinmesin.",
+        "content": "## LLM\nTum chat model node'lari: OpenAI `gpt-4.1-mini`\nGemini ucretsiz katman: model basina gunde 20 istek (bir tur icin yetmiyor).",
         "height": 160,
         "width": 380,
         "color": 3
@@ -2961,17 +3009,6 @@
         ]
       ]
     },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "anahtar-kelimeler",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "If1": {
       "main": [
         [
@@ -3052,28 +3089,6 @@
         ]
       ]
     },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "konu-yazarı",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "icerik-fikir-baslik-aciklama",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "konu-yazarı": {
       "main": [
         [
@@ -3132,17 +3147,6 @@
         ]
       ]
     },
-    "Google Gemini Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "sahne-promptlari",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Auto-fixing Output Parser": {
       "ai_outputParser": [
         [
@@ -3165,17 +3169,6 @@
         ]
       ]
     },
-    "Google Gemini Chat Model4": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Auto-fixing Output Parser",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Auto-fixing Output Parser1": {
       "ai_outputParser": [
         [
@@ -3193,17 +3186,6 @@
           {
             "node": "Auto-fixing Output Parser1",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model5": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Auto-fixing Output Parser1",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -3330,34 +3312,12 @@
         ]
       ]
     },
-    "Google Gemini Chat Model6": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Basic LLM Chain",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Auto-fixing Output Parser2": {
       "ai_outputParser": [
         [
           {
             "node": "Basic LLM Chain",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model7": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Auto-fixing Output Parser2",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -3795,6 +3755,94 @@
           {
             "node": "onay?",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "anahtar-kelimeler",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "konu-yazarı",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "icerik-fikir-baslik-aciklama",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "sahne-promptlari",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser2",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]

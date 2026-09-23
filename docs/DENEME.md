@@ -58,7 +58,7 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 | Aşama | Durum |
 |-------|-------|
 | Form / haftalık tetik | ✅ |
-| Gemini (3.5-flash) | ✅ |
+| LLM | ✅ OpenAI `gpt-4.1-mini` (Gemini ücretsiz kota günde 20 istek/model, yetmedi) |
 | Apify (run ID, sınırlı bekleme) | ✅ ~0,20 $ / tur |
 | Sheets | ✅ operatöre ait `KANALLAR analizler` / `KANALLAR icerik-takvim` |
 | 3 aday konu | ✅ üretildi |
