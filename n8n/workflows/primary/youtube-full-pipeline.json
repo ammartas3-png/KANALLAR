@@ -106,7 +106,7 @@
         -416
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -239,7 +239,7 @@
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -262,7 +262,7 @@
         0
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -376,7 +376,7 @@
         800
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -425,7 +425,7 @@
         1008
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -474,7 +474,7 @@
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -1414,7 +1414,7 @@
         992
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -1450,7 +1450,7 @@
         1248
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "credentials": {
@@ -2165,7 +2165,7 @@
         -1100
       ],
       "parameters": {
-        "content": "## Gemini model\nTum Chat Model: `models/gemini-3.6-flash` (2.5 ve 2.0 kapatildi)\n503 yogunlukta 5x retry var.\nSave ederken modelName silinmesin.",
+        "content": "## Gemini model\n`models/gemini-3.5-flash` (ücretsiz katman)\n2.5/2.0 kapalı; 3.6/3.7/3.8 sık 503, pro modeller kota (429).\nSave ederken modelName silinmesin.",
         "height": 160,
         "width": 380,
         "color": 3

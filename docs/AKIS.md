@@ -10,7 +10,7 @@ Amaç: projeyi açınca **nasıl çalıştığını** tek başına anlayabilmek.
 | **Repo JSON** | [`n8n/workflows/primary/youtube-full-pipeline.json`](../n8n/workflows/primary/youtube-full-pipeline.json) |
 | **Güncelleme script’i** | [`n8n/scripts/apply_review_updates.py`](../n8n/scripts/apply_review_updates.py) |
 | **Telegram onay chati** | chat id `8715342169` |
-| **LLM** | Gemini `models/gemini-3.6-flash` (2.5 ve 2.0 Google tarafından kapatıldı), 5x retry |
+| **LLM** | Gemini `models/gemini-3.5-flash` (ücretsiz katman; 2.5/2.0 kapalı, 3.6+ sık 503), 5x retry |
 | **Seri** | Haftada 1 Short — `Fatih Sultan Mehmed`, İngilizce |
 | **Yayın anahtarı** | `yayin-ayari` node’u (şu an açık, public); Gate 2 PUBLISH yine zorunlu |
 
