@@ -65,3 +65,9 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 | Gate 1 Telegram | ✅ yeni bot `@Yt_ammar_bot` (n8n credential `Telegram Yt_ammar_bot`), chat `8715342169` |
 | Video | ✅ Kie.ai Veo 3.1 (`veo3_fast`, 9:16, 8 sn, sesli) — anahtar canlı n8n’de, git’te yok. Bakiye 80 kredi ≈ 1 video; REVISE için kredi yüklemek gerekir |
 | YouTube | ✅ bağlı tek hesap: `YouTube account 3` → kanal **TAŞDEMiR MA (@tasdemirma3215)** |
+
+### Kie / Veo notları (ilk video)
+- Veo, gerçek/tarihi ünlü kişileri engeller (`prominent public figure`). İsim çıkarmak yetmedi; `olustur` prompt’u artık hükümdar adlarını/unvanlarını ve şehir/yılı nötrler, lideri anonim ve arkadan gösterir. Başarısız denemeler kredi yakmaz.
+- İlk başarılı render: `veo3_fast` 60 kredi. Kalan bakiye 20 → bir sonraki video / REVISE için Kie kredisi yükle.
+- Üretimi araştırmasız yeniden tetiklemek için gizli yollu `uretim-tetik` webhook’u var (yol repo’da `<secret>`).
+- Durum: execution 1438 Gate 2’de; video Telegram’a gönderildi.
