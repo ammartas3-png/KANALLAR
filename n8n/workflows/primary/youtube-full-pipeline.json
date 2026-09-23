@@ -98,12 +98,15 @@
       "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         176,
         -416
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -225,12 +228,15 @@
       "name": "Google Gemini Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         272,
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -245,12 +251,15 @@
       "name": "Google Gemini Chat Model2",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         1024,
         0
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -265,6 +274,9 @@
       "name": "konu-yazarı",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         272,
         16
@@ -386,12 +398,15 @@
       "name": "Google Gemini Chat Model3",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         48,
         800
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -432,12 +447,15 @@
       "name": "Google Gemini Chat Model4",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         144,
         1008
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -478,12 +496,15 @@
       "name": "Google Gemini Chat Model5",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         1232,
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -566,6 +587,9 @@
       "name": "anahtar-kelimeler",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         192,
         -592
@@ -933,6 +957,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         1024,
         -224
@@ -1088,6 +1114,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         96,
         608
@@ -1444,6 +1472,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         -1168,
         832
@@ -1467,12 +1497,15 @@
       "name": "Google Gemini Chat Model6",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         -1168,
         992
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -1500,12 +1533,15 @@
       "name": "Google Gemini Chat Model7",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "position": [
         -1152,
         1248
       ],
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "credentials": {
@@ -2243,7 +2279,7 @@
         -1100
       ],
       "parameters": {
-        "content": "## Gemini model\nTum Chat Model node'lari: `models/gemini-3.6-flash`\n\nUI'da degistirip Save etmezsen tekrar 2.5-flash (404) olur.\nTest oncesi: **Save** + sayfa yenile.",
+        "content": "## Gemini model\nTum Chat Model: `models/gemini-2.0-flash`\n3.6-flash 503 (yogun) verdi — 2.0-flash + 5x retry.\nSave ederken modelName silinmesin.",
         "height": 160,
         "width": 380,
         "color": 3
