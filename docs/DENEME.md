@@ -77,3 +77,4 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 - Kota 07:00 UTC’de sıfırlanır; yeniden deneme planlandı (önce execution 1438 retry, olmazsa yedek MP4 ile yükleme).
 - MP4 yedeği agent deposunda (720×1280, 8 sn, sesli) — Kie geçici linki silinse bile kaybolmaz.
 - Not: 2020 sonrası oluşturulan ve YouTube denetiminden geçmemiş API projelerinden yüklenen videolar YouTube tarafından *private* kilitlenebilir. Tekrar olursa Cloud Console → YouTube Data API v3 → Quotas / audit kontrol edilmeli.
+- Kanal kontrolü (YouTube node, 13:45 UTC): TAŞDEMiR MA public, `longUploadsStatus=eligible`, 0 public video. Kotayı dolduran yükleme: 2026-09-22 19:43 UTC `KANALLAR pipeline test - flash test` (private, eski test). Proje limiti muhtemelen ~1 upload / 24 saat → ek deneme 19:50 UTC.
