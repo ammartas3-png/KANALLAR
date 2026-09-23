@@ -41,7 +41,13 @@ Bunları n8n UI’dan bir kez yapıştır → Save.
 
 YouTube’a gerçek deneme için sonra `DRY_RUN=false` + YouTube credential (bağlandı).
 
-## Bitince
+## Bilinen hatalar
+
+| Hata | Çözüm |
+|------|--------|
+| `anahtar-kelimeler` → resource not found | Gemini model eskiydi; tüm node’lar `models/gemini-3.6-flash` yapıldı. Formu tekrar çalıştır. |
+| Apify 401 | `basla`/`kontrol`/`sonuc` URL’de `token=` doldur |
+| Prototipal 401 | `olustur`/`video-kontrol` Bearer doldur |
 
 Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki  
 `Uzun format sayısı: 0` / `Shorts sayısı: 1` satırlarını tekrar `hafta` / `hafta*2` yap.

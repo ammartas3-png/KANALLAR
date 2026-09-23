@@ -95,7 +95,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -221,7 +222,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -240,7 +242,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -380,7 +383,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -425,7 +429,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -470,7 +475,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -1446,7 +1452,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
@@ -1478,7 +1485,8 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {},
+        "modelName": "models/gemini-3.6-flash"
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
