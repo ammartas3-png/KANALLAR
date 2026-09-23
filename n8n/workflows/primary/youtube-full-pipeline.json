@@ -1716,10 +1716,11 @@
         "resource": "video",
         "operation": "upload",
         "title": "={{ $('tarih-kontrol').item.json.baslik }}",
-        "regionCode": "TR",
-        "categoryId": "22",
+        "regionCode": "US",
+        "categoryId": "27",
         "options": {
-          "description": "={{ $('tarih-kontrol').item.json.aciklama }}"
+          "description": "={{ $('tarih-kontrol').item.json.aciklama }}",
+          "privacyStatus": "={{ $('yayin-ayari').first().json.GIZLILIK }}"
         }
       },
       "credentials": {
@@ -2094,26 +2095,18 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict",
+            "typeValidation": "loose",
             "version": 2
           },
           "conditions": [
             {
-              "id": "a26a608b-ac8b-4257-aacf-7afc6b766f88",
-              "leftValue": "={{ (() => { try { return String($env.DRY_RUN ?? 'true').toLowerCase() } catch (e) { return 'true' } })() }}",
-              "rightValue": "false",
+              "id": "5048bdb4-8ea4-4bb6-8084-68b211572eb2",
+              "leftValue": "={{ $('yayin-ayari').first().json.YAYIN_ACIK === true }}",
+              "rightValue": "",
               "operator": {
-                "type": "string",
-                "operation": "equals"
-              }
-            },
-            {
-              "id": "fb36299b-19dd-4113-92d3-ea9fa0a363df",
-              "leftValue": "={{ (() => { try { return String($env.AUTO_PUBLISH ?? 'false').toLowerCase() } catch (e) { return 'false' } })() }}",
-              "rightValue": "true",
-              "operator": {
-                "type": "string",
-                "operation": "equals"
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -2134,7 +2127,7 @@
       ],
       "parameters": {
         "chatId": "8715342169",
-        "text": "Upload atlandi (DRY_RUN=true veya AUTO_PUBLISH=false).",
+        "text": "Upload atlandi (yayin-ayari: YAYIN_ACIK=false).",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -2866,6 +2859,56 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "id": "c77972a0-f8eb-4018-b7a2-7a0fdd9f5e91",
+      "name": "haftalik-tetik",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        -792
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "61a60cd5-bcfd-4dd9-b7b0-9c6f3400936a",
+      "name": "haftalik-girdi",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -84,
+        -792
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { 'Konu ': \"Fatih Sultan Mehmed\", 'Hafta Sayısı': '1', 'İçerik Dili': \"en\" } }];"
+      }
+    },
+    {
+      "id": "bcc14c69-fc39-4526-83a1-0179e0c6fed3",
+      "name": "yayin-ayari",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1272,
+        876
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: \"public\" }, pairedItem: { item: 0 } }];"
+      }
     }
   ],
   "connections": {
@@ -3399,7 +3442,7 @@
       "main": [
         [
           {
-            "node": "icerikler",
+            "node": "yayin-ayari",
             "type": "main",
             "index": 0
           }
@@ -3685,10 +3728,44 @@
           }
         ]
       ]
+    },
+    "haftalik-tetik": {
+      "main": [
+        [
+          {
+            "node": "haftalik-girdi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "haftalik-girdi": {
+      "main": [
+        [
+          {
+            "node": "girdiler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "yayin-ayari": {
+      "main": [
+        [
+          {
+            "node": "icerikler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "timezone": "Europe/Istanbul"
   }
 }

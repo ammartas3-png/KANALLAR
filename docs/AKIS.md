@@ -11,7 +11,8 @@ Amaç: projeyi açınca **nasıl çalıştığını** tek başına anlayabilmek.
 | **Güncelleme script’i** | [`n8n/scripts/apply_review_updates.py`](../n8n/scripts/apply_review_updates.py) |
 | **Telegram onay chati** | chat id `8715342169` |
 | **LLM** | Gemini `models/gemini-3.6-flash` (2.5 ve 2.0 Google tarafından kapatıldı), 5x retry |
-| **Güvenlik default** | `DRY_RUN=true`, `AUTO_PUBLISH=false` (env okunamazsa da bu kabul edilir) |
+| **Seri** | Haftada 1 Short — `Fatih Sultan Mehmed`, İngilizce |
+| **Yayın anahtarı** | `yayin-ayari` node’u (şu an açık, public); Gate 2 PUBLISH yine zorunlu |
 
 Python worker / Studio / archive Hybrid = **opsiyonel upgrade**. Günlük Shorts üretimi = bu n8n akışı.
 
@@ -69,7 +70,8 @@ flowchart TB
 ## BÖLÜM A — Araştırma ve konu seçimi (üst canvas)
 
 ### A0 — Tetikleyici
-**Node:** `On form submission` — Konu, Hafta Sayısı (şu an kullanılmıyor), İçerik Dili.
+- `On form submission` — manuel: Konu, Hafta Sayısı (kullanılmıyor), İçerik Dili
+- `haftalik-tetik` — **her pazartesi 10:00 (Europe/Istanbul)** → `haftalik-girdi`: Konu `Fatih Sultan Mehmed`, dil `en`
 
 ### A1 — Girdiler
 **Node:** `girdiler` — form alanlarını `konu`, `hafta`, `dil` yapar.
@@ -132,8 +134,9 @@ Hata → `SEO fail` (Telegram), video üretilmez.
 - REJECT → `reddedildi` (Sheets durum)
 
 ### B5 — Yayın kapısı
-`DRY_RUN?` — upload için **DRY_RUN=false VE AUTO_PUBLISH=true** gerekir.
-n8n Cloud env’i okuyamazsa güvenli varsayılan → upload yok.
+`yayin-ayari` (Code, `tarih` sonrası) tek anahtar: `YAYIN_ACIK`, `GIZLILIK`.
+Şu an operatör isteğiyle `YAYIN_ACIK=true`, `GIZLILIK=public`. Gate 2’de **PUBLISH** seçilmeden yine yüklenmez.
+`DRY_RUN?` bu anahtara bakar. Kapatmak için `n8n/scripts/setup_weekly_series.py` içinde `PUBLISH_ENABLED=False`.
 - evet → `Upload a video` → `yayinlandi` (Sheets)
 - hayır → `DRY_RUN skip` (Telegram) → `dry-run-kayit` (Sheets)
 
