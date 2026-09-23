@@ -5,7 +5,8 @@ Cloud-first YouTube Shorts factory. **Primary OS = n8n.**
 ## Read this first (humans + ChatGPT + Claude)
 
 **Adım adım akış:** [`docs/AKIS.md`](docs/AKIS.md) ← projeyi buradan anla.  
-**Denemelik 1 video:** [`docs/DENEME.md`](docs/DENEME.md)
+**Denemelik 1 video:** [`docs/DENEME.md`](docs/DENEME.md)  
+**Review + değerlendirme:** [`docs/CHATGPT_WORKFLOW_REVIEW.md`](docs/CHATGPT_WORKFLOW_REVIEW.md) · [`docs/REVIEW_EVALUATION.md`](docs/REVIEW_EVALUATION.md)
 
 Kısa özet: [`docs/N8N_HOW_IT_WORKS.md`](docs/N8N_HOW_IT_WORKS.md) · Import: [`n8n/README.md`](n8n/README.md)
 

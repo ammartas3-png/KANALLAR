@@ -106,7 +106,7 @@
         -416
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -160,7 +160,7 @@
         -592
       ],
       "parameters": {
-        "url": "https://api.apify.com/v2/acts/streamers~youtube-scraper/runs/last?token=",
+        "url": "=https://api.apify.com/v2/actor-runs/{{ $('basla').item.json.data.id }}?token=",
         "options": {}
       }
     },
@@ -175,7 +175,7 @@
         -608
       ],
       "parameters": {
-        "url": "https://api.apify.com/v2/acts/streamers~youtube-scraper/runs/last/dataset/items?token=",
+        "url": "=https://api.apify.com/v2/datasets/{{ $('kontrol').item.json.data.defaultDatasetId }}/items?token=",
         "options": {}
       }
     },
@@ -236,7 +236,7 @@
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -259,7 +259,7 @@
         0
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -406,7 +406,7 @@
         800
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -455,7 +455,7 @@
         1008
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -504,7 +504,7 @@
         176
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -1505,7 +1505,7 @@
         992
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -1541,7 +1541,7 @@
         1248
       ],
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "credentials": {
@@ -2215,12 +2215,21 @@
           },
           "conditions": [
             {
-              "id": "67459f7a-6ab8-4ae2-9ca6-4a4f0acce452",
-              "leftValue": "={{String($env.DRY_RUN || 'true').toLowerCase()}}",
+              "id": "a26a608b-ac8b-4257-aacf-7afc6b766f88",
+              "leftValue": "={{ (() => { try { return String($env.DRY_RUN ?? 'true').toLowerCase() } catch (e) { return 'true' } })() }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "fb36299b-19dd-4113-92d3-ea9fa0a363df",
+              "leftValue": "={{ (() => { try { return String($env.AUTO_PUBLISH ?? 'false').toLowerCase() } catch (e) { return 'false' } })() }}",
               "rightValue": "true",
               "operator": {
                 "type": "string",
-                "operation": "notEquals"
+                "operation": "equals"
               }
             }
           ],
@@ -2241,7 +2250,7 @@
       ],
       "parameters": {
         "chatId": "8715342169",
-        "text": "DRY_RUN=true — YouTube upload atlandi.",
+        "text": "Upload atlandi (DRY_RUN=true veya AUTO_PUBLISH=false).",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -2279,7 +2288,7 @@
         -1100
       ],
       "parameters": {
-        "content": "## Gemini model\nTum Chat Model: `models/gemini-2.0-flash`\n3.6-flash 503 (yogun) verdi — 2.0-flash + 5x retry.\nSave ederken modelName silinmesin.",
+        "content": "## Gemini model\nTum Chat Model: `models/gemini-3.6-flash` (2.5 ve 2.0 kapatildi)\n503 yogunlukta 5x retry var.\nSave ederken modelName silinmesin.",
         "height": 160,
         "width": 380,
         "color": 3
