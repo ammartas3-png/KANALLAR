@@ -9,12 +9,12 @@ Genel hüküm: **Review doğru ve yerinde.** Omurgayı koruyor, öncelik sıras�
 
 | # | Öneri | Katılıyor muyuz | Durum |
 |---|-------|-----------------|-------|
-| 2 | Gate 1 = gerçek konu seçimi (3–5 aday, 1/2/3 seç) | **Evet, en değerli madde.** Şu an Gate 1 takvim + prompt yazıldıktan sonra geliyor; Gemini token’ı reddedilen konulara harcanıyor. | Sıradaki iş |
-| 3 | Gate 2 = PUBLISH / REVISE / REJECT + feedback | Evet. Partial regeneration Prototipal tek-prompt API’sinde sınırlı; ilk sürümde REVISE = prompt’a feedback ekleyip yeniden üret. | Sonra |
+| 2 | Gate 1 = gerçek konu seçimi (3–5 aday, 1/2/3 seç) | **Evet, en değerli madde.** Şu an Gate 1 takvim + prompt yazıldıktan sonra geliyor; Gemini token’ı reddedilen konulara harcanıyor. | **Yapıldı** (3 aday → 1/2/3/yeni/iptal) |
+| 3 | Gate 2 = PUBLISH / REVISE / REJECT + feedback | Evet. Partial regeneration Prototipal tek-prompt API’sinde sınırlı; ilk sürümde REVISE = prompt’a feedback ekleyip yeniden üret. | **Yapıldı** (max 3 revizyon) |
 | 4 | AUTO_PUBLISH gerçek enforcement | Evet — dokümanda vardı, node’da yoktu. | **Yapıldı** |
 | 5 | Apify `runs/last` kullanma | Evet, gerçek bug (paralel run’da başka run’ın verisini okur). | **Yapıldı** |
-| 6 | Polling limiti | Evet. `Wait1` / `Wait` döngüleri sınırsız; Apify FAILED/ABORTED olursa sonsuza kadar döner. | Sıradaki iş |
-| 7 | Idempotency (`youtube_video_id` varsa dur) | Evet; upload aktif edilmeden önce şart. | Upload açılmadan önce |
+| 6 | Polling limiti | Evet. `Wait1` / `Wait` döngüleri sınırsız; Apify FAILED/ABORTED olursa sonsuza kadar döner. | **Yapıldı** (Apify 45×20 sn, video 60×30 sn, hata → Telegram) |
+| 7 | Idempotency (`youtube_video_id` varsa dur) | Evet; upload aktif edilmeden önce şart. | **Yapıldı** (Sheets `durum`: sadece `beklemede` üretilir; sonuç yazılır) |
 | 8 | `channel_id` baştan sona | Evet ama 2. kanal gelene kadar ertelenebilir. | Sonra |
 | 9 | Sheets kalsın, kolon ekle | Katılıyoruz. | Sonra |
 | 10 | Kontrollü status | Evet; `database/states.py` zaten bu listeyi tanımlıyor, Sheets `durum` aynı değerleri kullanmalı. | Sonra |

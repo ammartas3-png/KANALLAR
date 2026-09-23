@@ -208,7 +208,10 @@
         800,
         -592
       ],
-      "parameters": {}
+      "parameters": {
+        "amount": 20,
+        "unit": "seconds"
+      }
     },
     {
       "id": "01c10b31-3cbd-40dd-ab01-0efcc616af37",
@@ -318,39 +321,6 @@
               "rightValue": "long",
               "operator": {
                 "type": "string",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      }
-    },
-    {
-      "id": "7bcb75d8-b2b0-4420-a0d8-f7648d2e8d16",
-      "name": "If2",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        1360,
-        512
-      ],
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "8134f8da-8893-4261-8ef5-13e1bac9771b",
-              "leftValue": "={{ $json.data.approved }}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
                 "operation": "equals"
               }
             }
@@ -511,39 +481,6 @@
         "googlePalmApi": {
           "id": "7WzbsTFBmUhMSU5N",
           "name": "Google Gemini(PaLM) Api account 2"
-        }
-      }
-    },
-    {
-      "id": "25c4a931-f1a0-4082-b3ae-bf8bff76d1da",
-      "name": "Get row(s) in sheet2",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        1712,
-        496
-      ],
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
-          "mode": "list",
-          "cachedResultName": "icerik-takvim",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sayfa1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
-        },
-        "options": {}
-      },
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "VzXluO0biK8ubPky",
-          "name": "Google Sheets account"
         }
       }
     },
@@ -965,7 +902,7 @@
       ],
       "parameters": {
         "promptType": "define",
-        "text": "=Konular:{{ $json['ai-onerisi'] }}\nUzun format sayısı: 0\nShorts sayısı: 1\niçerik dili: {{ $('girdiler').first().json.dil }}\nbaşlangıç tarihi : {{ $now.setZone('Europe/Istanbul').toISO() }}\nNOT: DENEME MODU — sadece 1 Short üret (hafta sayısını yok say).",
+        "text": "=Konular:{{ $json['ai-onerisi'] }}\nUzun format sayısı: 0\nShorts sayısı: 3\niçerik dili: {{ $('girdiler').first().json.dil }}\nbaşlangıç tarihi : {{ $now.setZone('Europe/Istanbul').toISO() }}\nNOT: Bunlar 3 farklı ADAY konudur; kullanıcı birini seçecek. Her biri farklı açı ve güçlü hook içersin.",
         "hasOutputParser": true,
         "messages": {
           "messageValues": [
@@ -1263,34 +1200,6 @@
       }
     },
     {
-      "id": "83375ab7-c3b3-41bd-806a-92ce0d07adea",
-      "name": "onay-bekle",
-      "webhookId": "338e2fe9-61db-41a6-8c29-bb47081f2cd6",
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        1056,
-        480
-      ],
-      "parameters": {
-        "operation": "sendAndWait",
-        "chatId": "8715342169",
-        "message": "=İçerik takviminiz hazır !\n\n{{ $('icerik-kayit').all().map(veri => \n   `📅 Tarih: ${veri.json.tarih}\n🎬 Başlık: ${veri.json.baslik}`\n).join('\\n\\n-\\n\\n') }}",
-        "approvalOptions": {
-          "values": {
-            "approvalType": "double"
-          }
-        },
-        "options": {}
-      },
-      "credentials": {
-        "telegramApi": {
-          "id": "q14sD9Geek2ExOku",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
       "id": "d9782633-0925-4d12-b609-be1a45064f50",
       "name": "onaylandi",
       "type": "n8n-nodes-base.googleSheets",
@@ -1318,7 +1227,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "tarih": "={{ $json.tarih }}",
+            "tarih": "={{ $('secilen-konu').first().json.tarih }}",
             "durum": "beklemede"
           },
           "matchingColumns": [
@@ -1721,7 +1630,10 @@
         2240,
         1024
       ],
-      "parameters": {}
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      }
     },
     {
       "id": "2c777494-760d-4b0e-ab0c-822e6e8167e5",
@@ -1763,7 +1675,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        3056,
+        3236,
         1008
       ],
       "parameters": {
@@ -1771,50 +1683,18 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
+            "typeValidation": "loose",
+            "version": 2
           },
           "conditions": [
             {
-              "id": "6da5324a-2461-468a-bf22-4ae777bb1729",
-              "leftValue": "={{ $json.data.approved }}",
-              "rightValue": true,
+              "id": "af005e02-839a-4186-bbdc-ab224d7f6645",
+              "leftValue": "={{ $json.karar === 'PUBLISH' }}",
+              "rightValue": "",
               "operator": {
                 "type": "boolean",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      }
-    },
-    {
-      "id": "9ea535e7-2ed4-45b2-a8cf-9fe8a67a05e5",
-      "name": "If3",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        3744,
-        1152
-      ],
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "ee042dcb-e147-4286-b3b7-e9a83652b146",
-              "leftValue": "={{ $json.data.approved }}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "equals"
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -1921,6 +1801,15 @@
                 "type": "string",
                 "operation": "equals"
               }
+            },
+            {
+              "id": "049e0c95-1a80-4be0-8fc7-91a40a859f18",
+              "leftValue": "={{ $json.durum }}",
+              "rightValue": "beklemede",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             }
           ],
           "combinator": "and"
@@ -2005,11 +1894,33 @@
       "parameters": {
         "operation": "sendAndWait",
         "chatId": "8715342169",
-        "message": "=Videonuz oluşturuldu paylaşım yapılsın mı ?\n{{$json.final_video_url}}",
-        "approvalOptions": {
-          "values": {
-            "approvalType": "double"
-          }
+        "message": "=GATE 2 — Video hazır\n{{ $('tarih-kontrol').item.json.baslik }}\n{{ $json.final_video_url }}",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Karar",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "PUBLISH"
+                  },
+                  {
+                    "option": "REVISE"
+                  },
+                  {
+                    "option": "REJECT"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Geri bildirim",
+              "fieldType": "textarea"
+            }
+          ]
         },
         "options": {}
       },
@@ -2032,34 +1943,6 @@
       "parameters": {
         "url": "={{ $('video-kontrol').item.json.final_video_url }}",
         "options": {}
-      }
-    },
-    {
-      "id": "ee821cdf-bbbb-491b-a718-d72aa9854666",
-      "name": "yeni-video-onay",
-      "webhookId": "4bdc8a61-9775-4fb0-8fb7-76fa3927f1cc",
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        3504,
-        1136
-      ],
-      "parameters": {
-        "operation": "sendAndWait",
-        "chatId": "8715342169",
-        "message": "Yeniden video oluşturulsun mu ?",
-        "approvalOptions": {
-          "values": {
-            "approvalType": "double"
-          }
-        },
-        "options": {}
-      },
-      "credentials": {
-        "telegramApi": {
-          "id": "q14sD9Geek2ExOku",
-          "name": "Telegram account"
-        }
       }
     },
     {
@@ -2135,7 +2018,8 @@
         1280
       ],
       "parameters": {
-        "jsCode": "const row = $input.first().json;\nconst title = String(row.baslik || row.title || '').trim();\nconst desc = String(row.aciklama || row.description || '').trim();\nconst format = String(row.format || 'short').toLowerCase();\nconst maxTitle = format.includes('long') ? 60 : 40;\nconst issues = [];\nif (!title) issues.push('baslik bos');\nelse if (title.length > maxTitle) issues.push(`baslik ${title.length}>${maxTitle}`);\nif (!desc) issues.push('aciklama bos');\nelse if (desc.length < 20) issues.push('aciklama cok kisa');\nreturn [{ json: { ...row, seo_ok: issues.length === 0, seo_issues: issues.join('; ') || 'ok' } }];"
+        "jsCode": "const row = $json;\nconst title = String(row.baslik || '').trim();\nconst desc = String(row.aciklama || '').trim();\nconst maxTitle = String(row.fomat || row.format || 'short').includes('long') ? 60 : 40;\nconst issues = [];\nif (!title) issues.push('baslik bos'); else if (title.length > maxTitle) issues.push(`baslik ${title.length}>${maxTitle}`);\nif (!desc) issues.push('aciklama bos'); else if (desc.length < 20) issues.push('aciklama cok kisa');\nif (!row['sahne-prompt']) issues.push('sahne-prompt bos');\nreturn { json: { ...row, seo_ok: issues.length === 0, seo_issues: issues.join('; ') || 'ok' } };",
+        "mode": "runOnceForEachItem"
       }
     },
     {
@@ -2272,7 +2156,7 @@
         -976
       ],
       "parameters": {
-        "content": "## PRIMARY YouTube Full — DENEME\n\nForm → 1 Short plan → Telegram Gate1 → SEO → Prototipal → Gate2 → DRY_RUN\n\n**Şimdi:** sadece 1 Short.\n**Gerekli:** Apify `token=` + Prototipal `Bearer ` doldur.\n`DRY_RUN=true` → YouTube yok.",
+        "content": "## PRIMARY YouTube Full\n\nForm → araştırma → 3 aday → **Gate 1 seç** → sahne → Sheets `beklemede`\n→ SEO → video (max 30 dk) → **Gate 2 PUBLISH/REVISE/REJECT**\n→ DRY_RUN+AUTO_PUBLISH → YouTube → Sheets `yayinlandi`",
         "height": 200,
         "width": 420,
         "color": 5
@@ -2292,6 +2176,695 @@
         "height": 160,
         "width": 380,
         "color": 3
+      }
+    },
+    {
+      "id": "7b95b27e-8e75-47ce-b4ab-c2f22d9449ad",
+      "name": "adaylar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1672,
+        -320
+      ],
+      "parameters": {
+        "jsCode": "const items = $input.all().map(i => i.json);\nconst metin = items.map((a, i) => `${i + 1}) ${a.baslik}\\n${a.aciklama}\\n${String(a['ana-tema'] || '').slice(0, 160)}…`).join('\\n\\n');\nreturn [{ json: { adaylar: items, metin } }];"
+      }
+    },
+    {
+      "id": "d1358520-5c04-4a1b-80f7-d9ec5ba1ca55",
+      "name": "konu-sec",
+      "webhookId": "adbac3c2-1af8-4e3c-af5a-c6053fa38422",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1892,
+        -320
+      ],
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "8715342169",
+        "message": "=GATE 1 — Konu seç\n\n{{ $json.metin }}",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Secim",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "1"
+                  },
+                  {
+                    "option": "2"
+                  },
+                  {
+                    "option": "3"
+                  },
+                  {
+                    "option": "Yeni fikirler"
+                  },
+                  {
+                    "option": "Iptal"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Not",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "441b22d8-d27a-4fd9-8de0-f0755eccd503",
+      "name": "secilen-konu",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        -320
+      ],
+      "parameters": {
+        "jsCode": "const aylar = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];\nconst t = new Date(Date.now() + 3 * 3600 * 1000);\nconst bugun = `${t.getUTCDate()} ${aylar[t.getUTCMonth()]} ${t.getUTCFullYear()}`;\nconst d = $json.data || $json;\nconst secim = String(d.Secim ?? d.secim ?? '').trim();\nconst adaylar = $('adaylar').first().json.adaylar;\nif (['1', '2', '3'].includes(secim)) {\n  const a = adaylar[Number(secim) - 1];\n  return [{ json: { ...a, format: 'short', tarih: bugun, aksiyon: 'sec' }, pairedItem: { item: 0 } }];\n}\nif (secim === 'Yeni fikirler') {\n  if ($runIndex >= 2) return [{ json: { aksiyon: 'iptal', sebep: 'yeni fikir limiti' }, pairedItem: { item: 0 } }];\n  return [{ json: { ...$('Aggregate').first().json, aksiyon: 'yeni' }, pairedItem: { item: 0 } }];\n}\nreturn [{ json: { aksiyon: 'iptal', sebep: 'kullanici iptal' }, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "e996dddc-39f6-4845-9326-7ebde0708867",
+      "name": "secildi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2332,
+        -320
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9a89637c-f432-4a6e-a6b1-0bf43371f1c9",
+              "leftValue": "={{ $json.aksiyon === 'sec' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e5dd6e0d-21db-4a31-8f9d-07161072f11b",
+      "name": "yeni-fikir?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2532,
+        -160
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4507e612-9555-4d81-a857-e07bde935af7",
+              "leftValue": "={{ $json.aksiyon === 'yeni' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e4f18ddf-0394-4feb-a78f-e7dc15b29407",
+      "name": "konu-iptal",
+      "webhookId": "70c5cc41-9ae7-4098-9634-0e4ba72cc040",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2732,
+        -40
+      ],
+      "parameters": {
+        "chatId": "8715342169",
+        "text": "=Gate 1 iptal: {{ $json.sebep }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "16105768-7911-4655-a2b3-a198019140ad",
+      "name": "apify-tekrar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1236,
+        -392
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "88d6155c-97aa-4bc6-9679-04c555674695",
+              "leftValue": "={{ ['READY','RUNNING'].includes($json.data.status) && $runIndex < 45 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "950e3af4-5afa-4cf1-bba4-406673165ae5",
+      "name": "apify-hata",
+      "webhookId": "8bf2690c-8ff6-4c23-97f4-20e21e4c6cb5",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        -232
+      ],
+      "parameters": {
+        "chatId": "8715342169",
+        "text": "=Apify durdu: {{ $json.data.status }} (deneme {{ $runIndex + 1 }})",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "f465fb85-eae5-48d5-99da-287a5a6b619b",
+      "name": "video-tekrar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2660,
+        1224
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b7277ee2-4c26-468b-bfa5-e350b129543d",
+              "leftValue": "={{ !['failed','error','cancelled','canceled'].includes(String($json.status).toLowerCase()) && $runIndex < 60 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "6fe362cf-7f0e-4916-9399-e96cabba18fc",
+      "name": "video-hata",
+      "webhookId": "0168ee0d-60c2-47d0-b2c5-4d16238aec0d",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2880,
+        1384
+      ],
+      "parameters": {
+        "chatId": "8715342169",
+        "text": "=Video uretimi durdu: {{ $json.status }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "q14sD9Geek2ExOku",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "3197f6f9-835b-44b4-86e3-15186c2d44aa",
+      "name": "karar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3016,
+        1008
+      ],
+      "parameters": {
+        "jsCode": "const d = $json.data || $json;\nreturn [{ json: { karar: String(d.Karar ?? d.karar ?? 'REJECT').toUpperCase(), geri_bildirim: String(d['Geri bildirim'] ?? '') }, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "9a25aa3d-e9a9-47eb-9c7c-079d65a0521f",
+      "name": "revize?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3236,
+        1228
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a22d555-bcec-4cc6-8c56-637a1cc0d6a6",
+              "leftValue": "={{ $json.karar === 'REVISE' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "b55e86db-8c3f-45d9-92e3-911e67944196",
+      "name": "revize-prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3456,
+        1228
+      ],
+      "parameters": {
+        "jsCode": "if ($runIndex >= 3) throw new Error('Revizyon limiti (3) doldu');\nconst row = $('tarih-kontrol').item.json;\nconst fb = $json.geri_bildirim.trim();\nlet body = row['sahne-prompt'];\ntry {\n  const obj = typeof body === 'string' ? JSON.parse(body) : { ...body };\n  if (fb) obj.prompt = `${obj.prompt || ''}\\n\\nREVIZYON: ${fb}`;\n  body = JSON.stringify(obj);\n} catch (e) {}\nreturn [{ json: { ...row, 'sahne-prompt': body }, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "18e63a7c-9957-4962-a842-4c16a4c9e2fd",
+      "name": "reddedildi",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3456,
+        1428
+      ],
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
+          "mode": "list",
+          "cachedResultName": "icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tarih": "={{ $('tarih-kontrol').item.json.tarih }}",
+            "durum": "reddedildi"
+          },
+          "matchingColumns": [
+            "tarih"
+          ],
+          "schema": [
+            {
+              "id": "tarih",
+              "displayName": "tarih",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "baslik",
+              "displayName": "baslik",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aciklama",
+              "displayName": "aciklama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fomat",
+              "displayName": "fomat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ana-tema",
+              "displayName": "ana-tema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sahne-prompt",
+              "displayName": "sahne-prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "durum",
+              "displayName": "durum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VzXluO0biK8ubPky",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "e3171a0f-5fbe-41ba-a969-dccba1d48c4c",
+      "name": "yayinlandi",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4092,
+        848
+      ],
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
+          "mode": "list",
+          "cachedResultName": "icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tarih": "={{ $('tarih-kontrol').item.json.tarih }}",
+            "durum": "yayinlandi"
+          },
+          "matchingColumns": [
+            "tarih"
+          ],
+          "schema": [
+            {
+              "id": "tarih",
+              "displayName": "tarih",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "baslik",
+              "displayName": "baslik",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aciklama",
+              "displayName": "aciklama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fomat",
+              "displayName": "fomat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ana-tema",
+              "displayName": "ana-tema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sahne-prompt",
+              "displayName": "sahne-prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "durum",
+              "displayName": "durum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VzXluO0biK8ubPky",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "71d1e2d0-c023-4610-ab41-d633e9398b75",
+      "name": "dry-run-kayit",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4092,
+        1024
+      ],
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
+          "mode": "list",
+          "cachedResultName": "icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tarih": "={{ $('tarih-kontrol').item.json.tarih }}",
+            "durum": "dry-run"
+          },
+          "matchingColumns": [
+            "tarih"
+          ],
+          "schema": [
+            {
+              "id": "tarih",
+              "displayName": "tarih",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "baslik",
+              "displayName": "baslik",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aciklama",
+              "displayName": "aciklama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fomat",
+              "displayName": "fomat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ana-tema",
+              "displayName": "ana-tema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sahne-prompt",
+              "displayName": "sahne-prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "durum",
+              "displayName": "durum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VzXluO0biK8ubPky",
+          "name": "Google Sheets account"
+        }
       }
     }
   ],
@@ -2340,7 +2913,7 @@
         ],
         [
           {
-            "node": "Wait1",
+            "node": "apify-tekrar?",
             "type": "main",
             "index": 0
           }
@@ -2460,18 +3033,6 @@
         ]
       ]
     },
-    "If2": {
-      "main": [
-        [
-          {
-            "node": "Get row(s) in sheet2",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        []
-      ]
-    },
     "Aggregate": {
       "main": [
         [
@@ -2487,7 +3048,7 @@
       "main": [
         [
           {
-            "node": "onay-bekle",
+            "node": "onaylandi",
             "type": "main",
             "index": 0
           }
@@ -2578,17 +3139,6 @@
         ]
       ]
     },
-    "Get row(s) in sheet2": {
-      "main": [
-        [
-          {
-            "node": "onaylandi",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "girdiler": {
       "main": [
         [
@@ -2670,7 +3220,7 @@
       "main": [
         [
           {
-            "node": "icerik-kayit",
+            "node": "adaylar",
             "type": "main",
             "index": 0
           }
@@ -2704,17 +3254,6 @@
         [
           {
             "node": "Loop Over Items1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "onay-bekle": {
-      "main": [
-        [
-          {
-            "node": "If2",
             "type": "main",
             "index": 0
           }
@@ -2831,7 +3370,7 @@
         ],
         [
           {
-            "node": "Wait",
+            "node": "video-tekrar?",
             "type": "main",
             "index": 0
           }
@@ -2849,23 +3388,11 @@
         ],
         [
           {
-            "node": "yeni-video-onay",
+            "node": "revize?",
             "type": "main",
             "index": 0
           }
         ]
-      ]
-    },
-    "If3": {
-      "main": [
-        [
-          {
-            "node": "olustur",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        []
       ]
     },
     "tarih": {
@@ -2927,7 +3454,7 @@
       "main": [
         [
           {
-            "node": "video-onay?",
+            "node": "karar",
             "type": "main",
             "index": 0
           }
@@ -2939,17 +3466,6 @@
         [
           {
             "node": "DRY_RUN?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "yeni-video-onay": {
-      "main": [
-        [
-          {
-            "node": "If3",
             "type": "main",
             "index": 0
           }
@@ -2997,6 +3513,173 @@
         [
           {
             "node": "DRY_RUN skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "adaylar": {
+      "main": [
+        [
+          {
+            "node": "konu-sec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "konu-sec": {
+      "main": [
+        [
+          {
+            "node": "secilen-konu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "secilen-konu": {
+      "main": [
+        [
+          {
+            "node": "secildi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "secildi?": {
+      "main": [
+        [
+          {
+            "node": "icerik-kayit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "yeni-fikir?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "yeni-fikir?": {
+      "main": [
+        [
+          {
+            "node": "icerik-fikir-baslik-aciklama",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "konu-iptal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "apify-tekrar?": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "apify-hata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "video-tekrar?": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "video-hata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "karar": {
+      "main": [
+        [
+          {
+            "node": "video-onay?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "revize?": {
+      "main": [
+        [
+          {
+            "node": "revize-prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "reddedildi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "revize-prompt": {
+      "main": [
+        [
+          {
+            "node": "olustur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a video": {
+      "main": [
+        [
+          {
+            "node": "yayinlandi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY_RUN skip": {
+      "main": [
+        [
+          {
+            "node": "dry-run-kayit",
             "type": "main",
             "index": 0
           }
