@@ -109,3 +109,34 @@ Hiçbir kanalda açık değil. Studio'daki "Gelir elde etmeye başlayın" ekran�
 - Kişisel kanaldaki "Fatih's Genius Battle Plan" videosu: gizle / kaldır / bırak.
 - Money kanalı iletişim e-postası.
 - Science & History kanalları: kimlik onayı gelince açılacak (Claude açacak ve bu dosyayı güncelleyecek).
+
+---
+
+## 4. Cursor durumu (2026-09-24)
+
+| Görev | Durum | Nerede |
+|---|---|---|
+| Kural 0 — kişisel kanal kilidi (canlı n8n) | ✅ Kişisel kanal credential'ı (`YouTube account 3`) workflow'dan çıkarıldı. Upload'dan hemen önce `kanal-dogrula` → `kanal-kontrol` → `kanal-ok?`: yetkili kanal ID'si `HEDEF_KANAL_ID` ile birebir eşleşmeli ve engelli listede olmamalı; aksi halde Telegram'a `⛔` uyarısı. Haftalık Fatih turu durduruldu. | `n8n/scripts/apply_channel_guard.py` |
+| Kural 0 — worker kodu | ✅ `youtube/guard.py` `BLOCKED_CHANNEL_IDS`; her yazma işleminden önce `channels.list(mine=True)` doğrulaması; eski `kanallar/youtube_upload.py` de korumalı | `youtube/api.py`, testler `tests/test_channel_guard.py` |
+| G1.1 kanal config'leri | ✅ `channels/money_in_a_minute`, `science_in_a_minute`, `history_in_a_minute` (en, 27/28/27, marka renkleri, 14/17/20 UTC, başlangıç kataloğu). Science/History ID boş → upload kapalı | `channels/*/config.yaml` |
+| G1.2 kanal başına token | ✅ `tokens/<channel_key>.json` veya `YOUTUBE_TOKEN_JSON__<CHANNEL_KEY>`; eski tek `YOUTUBE_TOKEN_JSON` yok sayılıyor (uyarı loglanır) | `automation/bootstrap.py` |
+| G1.3 / G1.4 doğrulama + hard-block + birim testi | ✅ | `tests/test_channel_guard.py` |
+| G1.5 kişisel token'ı secret'lardan kaldır | ✅ repo tarafında (`.env.example`, `docker-compose.yml`). Worker hiçbir yerde deploy edilmediği için silinecek canlı secret yok | — |
+| G2 n8n | ⚠️ Farklı uygulandı, aşağıya bak | — |
+| G3.1–G3.8 | ✅ thumbnail 403 ayrı yakalanıyor ve video ID kaydediliyor · altyazı fallback'inde QA `captions_burned=false` ile fail · analytics metriği ve dimension düzeltildi, hatalar loglanıyor · director kanal medyanına göre göreli skor · engine cache · `schedule_publish` açılırsa `publishAt` · QA lisans kontrolü · Stüdyo thread hataları `errors` tablosuna | ilgili dosyalar |
+| G4 `containsSyntheticMedia` | ✅ worker upload'unda. ⚠️ n8n'in YouTube node'unda bu alan yok → n8n ile yüklenen videolarda Studio'dan elle işaretlenmeli (YouTube kişisel kanaldaki videoya otomatik etiket koymuş) | — |
+| G4 süre 20–45 sn, özgün senaryo | ⏳ Yeni üretim akışıyla (senaryo onayı → görsel onayı → çok sahneli video + seslendirme + altyazı) gelecek | — |
+
+### G2 neden farklı
+
+Belge `n8n/kanallar-cloud-orchestration.json` + Python worker yolunu varsayıyor. Bu yol (`n8n/archive/`) hiçbir sunucuda çalışmıyor; canlı ve tek çalışan sistem n8n Cloud'daki `PRIMARY: YouTube Full (sade)` workflow'u (araştırma → Gate 1 → Kie video → Gate 2 → YouTube node). Bu yüzden:
+
+- OAuth şimdilik n8n'de, **kanal başına ayrı YouTube credential** olarak (credential açılırken Google ekranında ilgili Brand kanal seçilir).
+- Kanal kilidi n8n'e eklendi (yukarıda); worker deploy edilirse aynı kural `youtube/guard.py` ile zaten geçerli.
+- `POST /api/produce?channel=<key>` ve `GET /api/channels` (`key, enabled, token_ok, channel_id_verified`) worker'a eklendi; worker deploy edildiğinde n8n bunlara geçebilir.
+
+### Kullanıcıdan beklenenler
+
+1. Science & History kimlik onayı gelince channel ID'leri bu dosyaya (ve `channels/*/config.yaml`'a) eklenmeli.
+2. n8n → Credentials → YouTube OAuth2 → Google ekranında **ilgili Brand kanalı** seçilerek kanal başına bağlantı (ör. `YouTube History in a Minute`). Fatih serisi History kanalına gidecek.
+3. Kişisel kanaldaki Fatih videosu için karar (gizle / kaldır / bırak).

@@ -71,7 +71,7 @@ flowchart TB
 
 ### A0 — Tetikleyici
 - `On form submission` — manuel: Konu, Hafta Sayısı (kullanılmıyor), İçerik Dili
-- `haftalik-tetik` — **her pazartesi 10:00 (Europe/Istanbul)** → `haftalik-girdi`: Konu `Fatih Sultan Mehmed`, dil `en`
+- `haftalik-tetik` — her pazartesi 10:00 (Europe/Istanbul) → `haftalik-girdi`: Konu `Fatih Sultan Mehmed`, dil `en`. **Şu an devre dışı** (History in a Minute bağlanana kadar)
 
 ### A1 — Girdiler
 **Node:** `girdiler` — form alanlarını `konu`, `hafta`, `dil` yapar.
@@ -133,6 +133,9 @@ Hata → `SEO fail` (Telegram), video üretilmez.
 - `video-onay?` PUBLISH → `indir`
 - `revize?` REVISE → `revize-prompt` (geri bildirimi prompt’a ekler, max 3) → `olustur`
 - REJECT → `reddedildi` (Sheets durum)
+
+### B5a — Kanal kilidi (docs/CHANNELS_STATUS.md, kural 0)
+`kanal-dogrula` (YouTube channels mine) → `kanal-kontrol` → `kanal-ok?`. Upload ancak yetkili kanal ID'si `yayin-ayari.HEDEF_KANAL_ID` ile aynıysa ve `ENGELLI_KANALLAR`'da (kişisel kanal `UCa-ulc77JRueoWa11LPQUVg`) değilse çalışır; aksi halde `kanal-engel` Telegram'a sebebi yazar. Şu an hedef History in a Minute, ID'si yok → upload kapalı.
 
 ### B5 — Yayın kapısı
 `yayin-ayari` (Code, `tarih` sonrası) tek anahtar: `YAYIN_ACIK`, `GIZLILIK`.
