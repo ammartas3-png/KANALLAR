@@ -135,7 +135,7 @@ Hata → `SEO fail` (Telegram), video üretilmez.
 - REJECT → `reddedildi` (Sheets durum)
 
 ### B5a — Kanal kilidi (docs/CHANNELS_STATUS.md, kural 0)
-`kanal-dogrula` (YouTube channels mine) → `kanal-kontrol` → `kanal-ok?`. Upload ancak yetkili kanal ID'si `yayin-ayari.HEDEF_KANAL_ID` ile aynıysa ve `ENGELLI_KANALLAR`'da (kişisel kanal `UCa-ulc77JRueoWa11LPQUVg`) değilse çalışır; aksi halde `kanal-engel` Telegram'a sebebi yazar. Şu an hedef History in a Minute, ID'si yok → upload kapalı.
+`kanal-dogrula` (YouTube channels mine) → `kanal-kontrol` → `kanal-ok?`. Upload ancak yetkili kanal ID'si `yayin-ayari.HEDEF_KANAL_ID` ile aynıysa ve `ENGELLI_KANALLAR`'da (kişisel kanal `UCa-ulc77JRueoWa11LPQUVg`) değilse çalışır; aksi halde `kanal-engel` Telegram'a sebebi yazar. Hedef History in a Minute (`UCDn9Qz6jZ_ikwm37yuD4NOg`); o kanala ait YouTube credential bağlanana kadar upload yine durur.
 
 ### B5 — Yayın kapısı
 `yayin-ayari` (Code, `tarih` sonrası) tek anahtar: `YAYIN_ACIK`, `GIZLILIK`.

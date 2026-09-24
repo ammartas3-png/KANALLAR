@@ -2957,7 +2957,7 @@
         876
       ],
       "parameters": {
-        "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: 'public', HEDEF_KANAL_ID: \"\", HEDEF_KANAL_ADI: \"History in a Minute\", ENGELLI_KANALLAR: [\"UCa-ulc77JRueoWa11LPQUVg\"] }, pairedItem: { item: 0 } }];"
+        "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: 'public', HEDEF_KANAL_ID: \"UCDn9Qz6jZ_ikwm37yuD4NOg\", HEDEF_KANAL_ADI: \"History in a Minute\", ENGELLI_KANALLAR: [\"UCa-ulc77JRueoWa11LPQUVg\"] }, pairedItem: { item: 0 } }];"
       }
     },
     {
@@ -3117,7 +3117,7 @@
       }
     },
     {
-      "id": "7ac43f46-906a-45ff-aae6-fd9f5668d908",
+      "id": "fd81832a-7383-4543-9004-831ce61c6141",
       "name": "kanal-dogrula",
       "type": "n8n-nodes-base.youTube",
       "typeVersion": 1,
@@ -3148,7 +3148,7 @@
       }
     },
     {
-      "id": "e67a7b67-fa1f-4f8d-a8c4-24e88225e48d",
+      "id": "017b383b-06e7-4752-b1ce-b8c24b109ab4",
       "name": "kanal-kontrol",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -3161,7 +3161,7 @@
       }
     },
     {
-      "id": "80734e3b-57ec-4fc5-afa3-64dbdaba8284",
+      "id": "de0ed74f-b276-4678-ac74-efff0bcf38af",
       "name": "kanal-ok?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -3179,7 +3179,7 @@
           },
           "conditions": [
             {
-              "id": "49ecd42d-0ef5-4d61-bcbd-ffa288f5eaa9",
+              "id": "9aaffd87-1453-4f33-83c3-1cdcff216d3f",
               "leftValue": "={{ $json.kanal_ok === true }}",
               "rightValue": "",
               "operator": {
@@ -3195,9 +3195,9 @@
       }
     },
     {
-      "id": "3dea9ec9-57cd-40c9-ab3f-e03bfd7ebeac",
+      "id": "6d27bd8d-3841-48d4-8060-164612c63025",
       "name": "kanal-engel",
-      "webhookId": "d084073d-ea82-4dc8-aa42-a4d4edadcd13",
+      "webhookId": "d0c93f9a-c698-45a4-aea2-b72beccc6b92",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [

@@ -2,7 +2,8 @@ id: science_in_a_minute
 name: Science in a Minute
 tagline: A real science fact that changes how you see the world
 # docs/CHANNELS_STATUS.md — empty youtube_channel_id means uploads are disabled for this channel.
-youtube_channel_id: ""
+youtube_channel_id: "UCjmDhWo0I7KIPKVTDBZZbqg"
+handle: "@ScienceInAMinuteHQ"
 niche: science
 language: en
 country: US

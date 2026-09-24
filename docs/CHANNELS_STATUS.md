@@ -31,10 +31,10 @@ Strateji: İngilizce içerik, Tier-1 izleyici (ABD/İngiltere/Avrupa), ortak mar
 | Kanal | Handle | Channel ID | Durum | Niş | Upload kategori |
 |---|---|---|---|---|---|
 | Money in a Minute | @MoneyInAMinuteShorts | `UCj6vC105nA-2P627Q01cIgw` | ✅ Açık, ayarlı, marka yayında | Kişisel finans eğitimi (yatırım tavsiyesi değil) | Eğitim (27) |
-| Science in a Minute | (henüz yok) | (henüz yok) | ⏳ YouTube kimlik doğrulaması bekleniyor (~24 saat) | Bilim & uzay | Bilim ve Teknoloji (28) |
-| History in a Minute | (henüz yok) | (henüz yok) | ⏳ Kimlik doğrulaması bekleniyor | Tarih hikâyeleri | Eğitim (27) |
+| Science in a Minute | @ScienceInAMinuteHQ | `UCjmDhWo0I7KIPKVTDBZZbqg` | ✅ Açık (2026-09-24) | Bilim & uzay | Bilim ve Teknoloji (28) |
+| History in a Minute | @HistoryInAMinuteShorts | `UCDn9Qz6jZ_ikwm37yuD4NOg` | ✅ Açık (2026-09-24) | Tarih hikâyeleri | Eğitim (27) |
 
-Science ve History açılınca bu tabloya handle + channel ID eklenecek.
+Üç kanal da açık; ID'ler `channels/*/config.yaml` içinde.
 
 ### Money in a Minute — YouTube Studio'da yapılan ayarlar
 
@@ -137,6 +137,6 @@ Belge `n8n/kanallar-cloud-orchestration.json` + Python worker yolunu varsayıyor
 
 ### Kullanıcıdan beklenenler
 
-1. Science & History kimlik onayı gelince channel ID'leri bu dosyaya (ve `channels/*/config.yaml`'a) eklenmeli.
+1. ~~Science & History channel ID'leri~~ ✅ eklendi (2026-09-24). n8n hedefi History in a Minute olarak ayarlandı.
 2. n8n → Credentials → YouTube OAuth2 → Google ekranında **ilgili Brand kanalı** seçilerek kanal başına bağlantı (ör. `YouTube History in a Minute`). Fatih serisi History kanalına gidecek.
 3. Kişisel kanaldaki Fatih videosu için karar (gizle / kaldır / bırak).

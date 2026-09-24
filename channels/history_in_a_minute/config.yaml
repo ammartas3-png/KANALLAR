@@ -2,7 +2,8 @@ id: history_in_a_minute
 name: History in a Minute
 tagline: One unforgettable moment from history, told in a minute
 # docs/CHANNELS_STATUS.md — empty youtube_channel_id means uploads are disabled for this channel.
-youtube_channel_id: ""
+youtube_channel_id: "UCDn9Qz6jZ_ikwm37yuD4NOg"
+handle: "@HistoryInAMinuteShorts"
 niche: history
 language: en
 country: US

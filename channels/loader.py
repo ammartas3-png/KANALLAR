@@ -41,6 +41,7 @@ class ChannelConfig(BaseModel):
     name: str
     tagline: str
     youtube_channel_id: str = ""
+    handle: str = ""
     niche: str = "science"
     language: str = "tr"
     country: str = "TR"

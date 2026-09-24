@@ -113,6 +113,7 @@ def test_upload_refuses_personal_token_before_sending_video(tmp_path, monkeypatc
 
 def test_upload_disabled_when_channel_id_missing(tmp_path, monkeypatch, fake_media):
     history = load_channel("history_in_a_minute")
+    history.youtube_channel_id = ""
     monkeypatch.setattr(yt, "_client", lambda key: pytest.fail("must not build a client"))
     with pytest.raises(ChannelGuardError):
         yt.upload_short(history, _script(), tmp_path / "v.mp4", None)
@@ -174,7 +175,8 @@ def test_brand_channel_configs_follow_channels_status():
     science = load_channel("science_in_a_minute")
     history = load_channel("history_in_a_minute")
     assert money.youtube_channel_id == MONEY
-    assert science.youtube_channel_id == "" and history.youtube_channel_id == ""
+    assert science.youtube_channel_id == "UCjmDhWo0I7KIPKVTDBZZbqg"
+    assert history.youtube_channel_id == "UCDn9Qz6jZ_ikwm37yuD4NOg"
     assert (money.upload.category_id, science.upload.category_id, history.upload.category_id) == ("27", "28", "27")
     for channel in (money, science, history):
         assert channel.language == "en" and channel.upload.default_language == "en"
