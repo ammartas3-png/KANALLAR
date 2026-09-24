@@ -4,6 +4,7 @@
 **Updated:** 2026-09-22
 
 ## What works
+- **İlk Short yayında:** https://youtube.com/shorts/Ok1KeDvXY3s (Fatih serisi, en) — araştırma → Gate 1 → Kie Veo → Gate 2 → YouTube uçtan uca çalıştı
 - Live: only **PRIMARY: YouTube Full (sade)** for Shorts (plus user’s unrelated Telegram/CRM workflows)
 - Layout: üst araştırma / alt video — Cursor sticky frames, Y gap 2200
 - SEO + DRY_RUN kept; noOp bridge removed (onaylandi → tarih)

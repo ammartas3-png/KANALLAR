@@ -80,3 +80,8 @@ Normal üretime dönmek için `icerik-fikir-baslik-aciklama` prompt’undaki
 - Kanal kontrolü (YouTube node, 13:45 UTC): TAŞDEMiR MA public, `longUploadsStatus=eligible`, 0 public video. Kotayı dolduran yükleme: 2026-09-22 19:43 UTC `KANALLAR pipeline test - flash test` (private, eski test). Proje limiti muhtemelen ~1 upload / 24 saat → ek deneme 19:50 UTC.
 - 16:00 UTC Schedule, render edilmiş ama yüklenmemiş satırı (`beklemede`) tekrar render etmeye çalıştı; Kie 402 (yetersiz kredi) ile durdu, kredi harcanmadı. Düzeltme: render biter bitmez satır `video-hazir` olur.
 - 19:48 UTC: execution 1438 API ile başarısız node’dan retry edildi (1443) → yine `429 Video Uploads per day`. Kayan 24 saat hipotezi yanlış; sonraki deneme 07:15 UTC (kota sıfırlandıktan sonra). Yine olursa proje limitine Cloud Console’dan bakılmalı.
+
+### ✅ Yayında (2026-09-24 07:15 UTC)
+- Execution 1438, kota sıfırlandıktan sonra API ile başarısız node’dan retry edildi (1444) → upload başarılı, Sheets `yayinlandi`.
+- https://youtube.com/shorts/Ok1KeDvXY3s — `privacyStatus=public`, `madeForKids=false`, işlendi (9 sn).
+- Proje limiti günde ~1 upload gibi davranıyor (sayım Pasifik gece yarısı sıfırlanıyor); haftalık seri için yeterli, test yüklemelerinden kaçınılmalı.
