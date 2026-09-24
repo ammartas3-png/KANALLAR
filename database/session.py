@@ -12,12 +12,21 @@ from config.settings import get_settings
 from database.models import Base
 
 
+_ENGINES: dict[str, Engine] = {}
+
+
 def get_engine(url: str | None = None) -> Engine:
     db_url = url or get_settings().database_url
-    if db_url.startswith("sqlite"):
-        Path("data").mkdir(parents=True, exist_ok=True)
-        return create_engine(db_url, connect_args={"check_same_thread": False}, future=True)
-    return create_engine(db_url, pool_pre_ping=True, future=True)
+    engine = _ENGINES.get(db_url)
+    if engine is None:
+        if db_url.startswith("sqlite"):
+            Path("data").mkdir(parents=True, exist_ok=True)
+            engine = create_engine(db_url, connect_args={"check_same_thread": False}, future=True)
+        else:
+            engine = create_engine(db_url, pool_pre_ping=True, future=True)
+        Base.metadata.create_all(engine)
+        _ENGINES[db_url] = engine
+    return engine
 
 
 def init_db(url: str | None = None) -> Engine:
@@ -28,8 +37,7 @@ def init_db(url: str | None = None) -> Engine:
 
 @contextmanager
 def get_session(url: str | None = None) -> Iterator[Session]:
-    engine = init_db(url)
-    factory = sessionmaker(engine, expire_on_commit=False, future=True)
+    factory = sessionmaker(get_engine(url), expire_on_commit=False, future=True)
     session = factory()
     try:
         yield session

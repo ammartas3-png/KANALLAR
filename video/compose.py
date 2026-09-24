@@ -49,13 +49,21 @@ def compose_short(channel: ChannelConfig, script: dict, audio: Path, work: Path)
         "yuv420p",
         str(output),
     ]
+    captions_burned = True
     try:
         run(encode[:6] + ["-vf", ass_filter] + encode[6:])
     except RenderError:
+        captions_burned = False
         run(encode)
     if not output.exists() or output.stat().st_size < 10_000:
         raise RenderError("Final Short üretilemedi")
-    return {"video": output, "thumb": thumb, "captions": ass, "duration": duration}
+    return {
+        "video": output,
+        "thumb": thumb,
+        "captions": ass,
+        "captions_burned": captions_burned,
+        "duration": duration,
+    }
 
 
 def _render_clips(slides: list[Path], durations: list[float], work: Path, size: tuple[int, int]) -> Path:

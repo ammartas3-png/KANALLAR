@@ -19,7 +19,7 @@ from database.models import Video
 from database.session import get_session, init_db
 from media.router import status_report
 from storage import storage_status
-from youtube.api import credentials_status
+from youtube.api import YouTubeConfigError, credentials_status
 
 WEB = APPS_DIR / "studio"
 templates = Jinja2Templates(directory=str(WEB / "templates"))
@@ -69,9 +69,67 @@ def home(request: Request) -> HTMLResponse:
     )
 
 
+def _run_logged(source: str, entity_id: str, fn, **payload) -> None:
+    """Background jobs must leave a trace: exceptions go to the errors table."""
+    import json as _json
+    import logging
+
+    from database.models import ErrorLog
+
+    try:
+        fn()
+    except Exception as exc:
+        logging.getLogger("kanallar.studio").exception("%s failed (%s)", source, entity_id)
+        with get_session() as session:
+            session.add(
+                ErrorLog(
+                    source=source,
+                    entity_id=entity_id or "",
+                    code=type(exc).__name__,
+                    message=str(exc)[:4000],
+                    payload_json=_json.dumps(payload, ensure_ascii=False, default=str),
+                )
+            )
+
+
+@app.get("/api/channels")
+def api_channels(verify: bool = False) -> list[dict]:
+    """Per-channel upload readiness for n8n: only enabled + token_ok (+ verified) channels are triggered."""
+    from channels.loader import list_channels
+    from youtube.api import verified_client
+    from youtube.guard import ChannelGuardError
+
+    out = []
+    for channel in list_channels():
+        token_ok = credentials_status(channel.id)["token"]
+        row = {
+            "key": channel.id,
+            "name": channel.name,
+            "enabled": bool(channel.youtube_channel_id),
+            "token_ok": token_ok,
+            "channel_id_verified": None,
+            "error": "",
+        }
+        if verify and row["enabled"] and token_ok:
+            try:
+                verified_client(channel)
+                row["channel_id_verified"] = True
+            except (ChannelGuardError, YouTubeConfigError) as exc:
+                row["channel_id_verified"] = False
+                row["error"] = str(exc)
+        out.append(row)
+    return out
+
+
 @app.post("/api/produce")
-def api_produce(topic: str | None = None, idea_id: str | None = None, channel_id: str | None = None) -> dict:
+def api_produce(
+    topic: str | None = None,
+    idea_id: str | None = None,
+    channel_id: str | None = None,
+    channel: str | None = None,
+) -> dict:
     """Start media pipeline ONLY for an approved topic (or explicit topic_id)."""
+    channel_id = channel_id or channel
 
     def _run() -> None:
         topic_key = topic
@@ -92,8 +150,13 @@ def api_produce(topic: str | None = None, idea_id: str | None = None, channel_id
         else:
             produce(channel_id=channel_id, topic_id=topic_key)
 
-    threading.Thread(target=_run, daemon=True).start()
-    return {"status": "started", "topic": topic, "idea_id": idea_id}
+    threading.Thread(
+        target=_run_logged,
+        args=("studio.produce", idea_id or topic or "", _run),
+        kwargs={"channel_id": channel_id, "topic": topic, "idea_id": idea_id},
+        daemon=True,
+    ).start()
+    return {"status": "started", "topic": topic, "idea_id": idea_id, "channel_id": channel_id}
 
 
 @app.post("/api/research")
@@ -206,7 +269,12 @@ def api_decide_topic(
         def _run() -> None:
             produce(channel_id=channel_id or None, topic_id=topic_id)
 
-        threading.Thread(target=_run, daemon=True).start()
+        threading.Thread(
+            target=_run_logged,
+            args=("studio.decide_topic", topic_id, _run),
+            kwargs={"channel_id": channel_id},
+            daemon=True,
+        ).start()
         out["produce"] = {"status": "started", "topic_id": topic_id}
     return out
 

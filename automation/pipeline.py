@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import shutil
 import uuid
+from datetime import datetime
 from pathlib import Path
 
 from agents.analytics_agent import collect as collect_analytics
@@ -113,6 +114,12 @@ def _persist_shell(video_id: str, channel_id: str, idea: dict, script: dict, ide
             video_row.channel_id = channel_id
 
 
+def _parse_publish_at(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
 def _record_upload(video_id: str, script: dict, upload_result: dict) -> None:
     with get_session() as session:
         session.add(
@@ -122,6 +129,7 @@ def _record_upload(video_id: str, script: dict, upload_result: dict) -> None:
                 youtube_video_id=upload_result.get("youtube_id") or "",
                 title=script["title"],
                 description=script["description"],
+                publish_time=_parse_publish_at(upload_result.get("publish_at")),
                 status=upload_result.get("status") or "pending",
             )
         )
@@ -269,6 +277,7 @@ def produce(
                         "video": str(rendered["video"]),
                         "thumb": str(rendered["thumb"]),
                         "captions": str(rendered["captions"]) if rendered.get("captions") else "",
+                        "captions_burned": bool(rendered.get("captions_burned")),
                         "duration": rendered["duration"],
                     },
                     ensure_ascii=False,
@@ -288,6 +297,7 @@ def produce(
                 "video": Path(render_meta["video"]),
                 "thumb": Path(render_meta["thumb"]) if render_meta.get("thumb") else None,
                 "captions": Path(render_meta["captions"]) if render_meta.get("captions") else None,
+                "captions_burned": bool(render_meta.get("captions_burned")),
                 "duration": render_meta["duration"],
             }
 
@@ -298,6 +308,8 @@ def produce(
                 script,
                 video_id=video_id,
                 script_id=script_id,
+                captions_burned=rendered.get("captions_burned", False),
+                assets=assets,
                 log_input={"file": str(rendered["video"])},
             )
             save_checkpoint(video_id, "qa", qa_result=qa)
@@ -356,7 +368,12 @@ def produce(
             )
             _record_upload(video_id, script, upload_result)
             if upload_result.get("status") == "uploaded":
-                save_checkpoint(video_id, "uploaded", youtube_id=upload_result.get("youtube_id"))
+                save_checkpoint(
+                    video_id,
+                    "uploaded",
+                    youtube_id=upload_result.get("youtube_id"),
+                    thumbnail_error=upload_result.get("thumbnail_error", ""),
+                )
                 final_status = "uploaded"
             else:
                 final_status = upload_result.get("status") or "upload_pending"
@@ -507,7 +524,12 @@ def approve_and_maybe_upload(
     _record_upload(video_id, script, upload_result)
     if upload_result.get("status") == "uploaded":
         yt_id = upload_result.get("youtube_id") or ""
-        save_checkpoint(video_id, VideoStatus.PUBLISHED, youtube_id=yt_id)
+        save_checkpoint(
+            video_id,
+            VideoStatus.PUBLISHED,
+            youtube_id=yt_id,
+            thumbnail_error=upload_result.get("thumbnail_error", ""),
+        )
         with get_session() as session:
             row = session.get(VideoRow, video_id)
             if row is not None:
