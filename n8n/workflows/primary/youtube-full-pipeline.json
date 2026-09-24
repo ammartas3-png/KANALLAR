@@ -1773,8 +1773,8 @@
       },
       "credentials": {
         "youTubeOAuth2Api": {
-          "id": "Fhs1nwYca2mB8qu5",
-          "name": "YouTube account 3"
+          "id": "VE4bJp6Jb8KaVmII",
+          "name": "YouTube account"
         }
       }
     },
@@ -2912,6 +2912,7 @@
     {
       "id": "c77972a0-f8eb-4018-b7a2-7a0fdd9f5e91",
       "name": "haftalik-tetik",
+      "disabled": true,
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -2956,7 +2957,7 @@
         876
       ],
       "parameters": {
-        "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: \"public\" }, pairedItem: { item: 0 } }];"
+        "jsCode": "return [{ json: { ...$json, YAYIN_ACIK: true, GIZLILIK: 'public', HEDEF_KANAL_ID: \"\", HEDEF_KANAL_ADI: \"History in a Minute\", ENGELLI_KANALLAR: [\"UCa-ulc77JRueoWa11LPQUVg\"] }, pairedItem: { item: 0 } }];"
       }
     },
     {
@@ -3112,6 +3113,108 @@
         "googleSheetsOAuth2Api": {
           "id": "VzXluO0biK8ubPky",
           "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "7ac43f46-906a-45ff-aae6-fd9f5668d908",
+      "name": "kanal-dogrula",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "position": [
+        3212,
+        848
+      ],
+      "parameters": {
+        "resource": "channel",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 1,
+        "part": [
+          "snippet"
+        ],
+        "filters": {
+          "mine": true
+        },
+        "options": {}
+      },
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "VE4bJp6Jb8KaVmII",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "id": "e67a7b67-fa1f-4f8d-a8c4-24e88225e48d",
+      "name": "kanal-kontrol",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3432,
+        848
+      ],
+      "parameters": {
+        "jsCode": "const cfg = $('yayin-ayari').first().json;\nconst ch = $input.first().json;\nconst id = ch.id || '';\nlet sebep = '';\nif (!cfg.HEDEF_KANAL_ID) sebep = `hedef kanal (${cfg.HEDEF_KANAL_ADI}) henüz tanımlı değil`;\nelse if (!id) sebep = `YouTube bağlantısı doğrulanamadı: ${ch.error || 'kanal yok'}`;\nelse if (cfg.ENGELLI_KANALLAR.includes(id)) sebep = `ENGELLİ kanal (${ch.snippet?.title || id})`;\nelse if (id !== cfg.HEDEF_KANAL_ID) sebep = `yanlış kanal: ${ch.snippet?.title || id}, beklenen ${cfg.HEDEF_KANAL_ADI}`;\nreturn [{ json: { kanal_ok: !sebep, sebep, kanal_id: id }, binary: $('indir').first().binary, pairedItem: { item: 0 } }];"
+      }
+    },
+    {
+      "id": "80734e3b-57ec-4fc5-afa3-64dbdaba8284",
+      "name": "kanal-ok?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3652,
+        848
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "49ecd42d-0ef5-4d61-bcbd-ffa288f5eaa9",
+              "leftValue": "={{ $json.kanal_ok === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3dea9ec9-57cd-40c9-ab3f-e03bfd7ebeac",
+      "name": "kanal-engel",
+      "webhookId": "d084073d-ea82-4dc8-aa42-a4d4edadcd13",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3652,
+        1048
+      ],
+      "parameters": {
+        "chatId": "8715342169",
+        "text": "=⛔ YouTube yüklemesi durduruldu: {{ $json.sebep }}\n{{ $('tarih-kontrol').item.json.baslik }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "3qCg1cWvW9uJ6I9T",
+          "name": "Telegram Yt_ammar_bot"
         }
       }
     }
@@ -3665,7 +3768,7 @@
       "main": [
         [
           {
-            "node": "Upload a video",
+            "node": "kanal-dogrula",
             "type": "main",
             "index": 0
           }
@@ -3994,6 +4097,46 @@
         [
           {
             "node": "video-gonder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kanal-dogrula": {
+      "main": [
+        [
+          {
+            "node": "kanal-kontrol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kanal-kontrol": {
+      "main": [
+        [
+          {
+            "node": "kanal-ok?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kanal-ok?": {
+      "main": [
+        [
+          {
+            "node": "Upload a video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "kanal-engel",
             "type": "main",
             "index": 0
           }
