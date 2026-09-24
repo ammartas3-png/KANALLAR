@@ -1,0 +1,46 @@
+id: science_in_a_minute
+name: Science in a Minute
+tagline: A real science fact that changes how you see the world
+# docs/CHANNELS_STATUS.md — empty youtube_channel_id means uploads are disabled for this channel.
+youtube_channel_id: "UCjmDhWo0I7KIPKVTDBZZbqg"
+handle: "@ScienceInAMinuteHQ"
+niche: science
+language: en
+country: US
+format: shorts
+catalog: catalog.yaml
+prompt: >
+  Plain US English, curious and exact. One verified fact per video, a vivid comparison in the first two seconds, no exaggeration or fear-selling.
+cta: Follow for one science fact a day.
+description_footer: |
+  Educational content. Facts checked against public scientific sources.
+  Narration and visuals are AI-assisted (synthetic voice and generated imagery); script is original.
+
+  #science #space #shorts
+brand:
+  primary: "#0B1220"
+  accent: "#38BDF8"
+  text: "#F4F1E8"
+  muted: "#9AA3B5"
+voice:
+  provider: auto
+  voice: en-US-AriaNeural
+  rate: "+0%"
+  language: en
+upload:
+  privacy: private
+  category_id: "28"
+  made_for_kids: false
+  default_language: en
+  tags:
+    - science
+    - space
+    - science facts
+    - astronomy
+    - biology
+    - physics
+    - science in a minute
+    - shorts
+  frequency_per_day: 1
+  schedule_hour: 17
+  schedule_publish: false

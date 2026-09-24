@@ -1,0 +1,30 @@
+id: bilim-dakikasi
+name: Bilim Dakikası
+tagline: 60 saniyede bir bilimsel gerçeği öğren
+language: tr
+niche: science
+format: shorts
+voice: tr-TR-AhmetNeural
+voice_rate: +4%
+catalog: science_tr
+brand:
+  primary: "#0A0E17"
+  accent: "#F4B942"
+  text: "#F4F1E8"
+  muted: "#9AA3B5"
+upload:
+  privacy: private
+  category_id: "28"
+  made_for_kids: false
+  default_language: tr
+  tags:
+    - bilim
+    - kısa video
+    - bilim dakikası
+    - bilimsel gerçekler
+cta: Beğen, takip et, bir sonraki gerçeği kaçırma.
+description_footer: |
+  Bu video eğitim amaçlıdır. Anlatım orijinaldir; görseller ve ses bu stüdyoda üretilmiştir.
+  Sentetik ses ve otomatik kurgu kullanılmıştır.
+
+  #bilim #shortsvideo #öğren

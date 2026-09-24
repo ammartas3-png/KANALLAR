@@ -1,0 +1,32 @@
+{
+  "name": "02-topic-selection",
+  "meta": {
+    "description": "Pass-through helper: research response already includes scored shortlist + idea rows."
+  },
+  "nodes": [
+    {
+      "id": "s1",
+      "name": "When called by another workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "s2",
+      "name": "Take shortlist top 3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0],
+      "parameters": {
+        "jsCode": "const j=$input.first().json; const short=(j.shortlist||[]).slice(0,3); return [{json:{...j, shortlist:short, status:'TOPIC_PENDING_APPROVAL'}}];"
+      }
+    }
+  ],
+  "connections": {
+    "When called by another workflow": {
+      "main": [[{ "node": "Take shortlist top 3", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

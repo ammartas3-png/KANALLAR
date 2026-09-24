@@ -1,0 +1,30 @@
+id: tarih-kisa
+name: Tarih Kısa
+tagline: Bir dakikada unutulmayan bir tarih sahnesi
+language: tr
+niche: history
+format: shorts
+voice: tr-TR-EmelNeural
+voice_rate: +3%
+catalog: history_tr
+brand:
+  primary: "#140C0A"
+  accent: "#E8A87C"
+  text: "#F7EFE6"
+  muted: "#C4B2A6"
+upload:
+  privacy: private
+  category_id: "27"
+  made_for_kids: false
+  default_language: tr
+  tags:
+    - tarih
+    - kısa video
+    - tarih kısa
+    - medeniyet
+cta: "Kaydırmadan önce bir cümle daha: tarihi kim anlatırsa o hatırlar."
+description_footer: |
+  Bu video eğitim amaçlıdır. Anlatım orijinaldir; görseller ve ses bu stüdyoda üretilmiştir.
+  Sentetik ses ve otomatik kurgu kullanılmıştır.
+
+  #tarih #shortsvideo #öğren

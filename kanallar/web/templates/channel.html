@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ channel.name }} · Kanallar{% endblock %}
+{% block body %}
+<section class="hero compact">
+  <p class="eyebrow">{{ channel.niche }} · {{ channel.format }}</p>
+  <h1>{{ channel.name }}</h1>
+  <p class="lede">{{ channel.tagline }}</p>
+  <div class="actions">
+    <button class="btn primary" data-produce="{{ channel.id }}">Yeni video üret</button>
+  </div>
+</section>
+<section>
+  <h3 class="section-title">Üretimler</h3>
+  {% if channel.jobs %}
+  <div class="jobs">
+    {% for job in channel.jobs %}
+    <a class="job-row" href="/jobs/{{ job.id }}">
+      <div>
+        <strong>{{ job.title }}</strong>
+        <span>{{ job.topic_id }} · {{ job.created_at }}</span>
+      </div>
+      <em class="status {{ job.status }}">{{ steps.get(job.step, job.status) }}</em>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">Henüz video yok. İlk Shorts’u üretmek için butona bas.</p>
+  {% endif %}
+</section>
+{% endblock %}

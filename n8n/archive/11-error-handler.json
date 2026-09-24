@@ -1,0 +1,46 @@
+{
+  "name": "11-error-handler",
+  "meta": {
+    "description": "Central error handler stub. Notify Telegram; patch workflow_run FAILED. No secrets in logs."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "err",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const e = $input.first().json;\nconst msg = `Kanallar error\\nworkflow=${e.workflow?.name || ''}\\nmessage=${(e.execution?.error?.message || e.message || '').toString().slice(0,400)}`;\nreturn [{ json: { telegram_text: msg, level: 'error' } }];"
+      },
+      "id": "fmt",
+      "name": "Sanitize error message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "content": "Attach Telegram Send Message using n8n credential.\\nNever log API keys / OAuth tokens.",
+        "height": 160,
+        "width": 300
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [520, -40]
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [[{ "node": "Sanitize error message", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "kanallar" }, { "name": "errors" }],
+  "versionId": "m1"
+}

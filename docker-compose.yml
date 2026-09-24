@@ -1,0 +1,51 @@
+# Cloud-first stack — Mac/local install gerekmez.
+# Kullanım: host'ta (Railway/Fly/VM) veya `docker compose up`
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: kanallar
+      POSTGRES_PASSWORD: kanallar
+      POSTGRES_DB: kanallar
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kanallar"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      RUN_MODE: cloud
+      DATABASE_URL: postgresql+psycopg://kanallar:kanallar@db:5432/kanallar
+      KANALLAR_HOST: "0.0.0.0"
+      KANALLAR_PORT: "8080"
+      REQUIRE_HUMAN_APPROVAL: "true"
+      MEDIA_QUALITY: local
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      STORAGE_BUCKET: ${STORAGE_BUCKET:-}
+      STORAGE_ACCESS_KEY: ${STORAGE_ACCESS_KEY:-}
+      STORAGE_SECRET_KEY: ${STORAGE_SECRET_KEY:-}
+      STORAGE_ENDPOINT: ${STORAGE_ENDPOINT:-}
+      STORAGE_PUBLIC_BASE_URL: ${STORAGE_PUBLIC_BASE_URL:-}
+      YOUTUBE_CLIENT_SECRETS_JSON: ${YOUTUBE_CLIENT_SECRETS_JSON:-}
+      YOUTUBE_TOKEN_JSON__MONEY_IN_A_MINUTE: ${YOUTUBE_TOKEN_JSON__MONEY_IN_A_MINUTE:-}
+      YOUTUBE_TOKEN_JSON__SCIENCE_IN_A_MINUTE: ${YOUTUBE_TOKEN_JSON__SCIENCE_IN_A_MINUTE:-}
+      YOUTUBE_TOKEN_JSON__HISTORY_IN_A_MINUTE: ${YOUTUBE_TOKEN_JSON__HISTORY_IN_A_MINUTE:-}
+      KIE_API_KEY: ${KIE_API_KEY:-}
+      HF_API_KEY_ID: ${HF_API_KEY_ID:-}
+      HF_API_KEY_SECRET: ${HF_API_KEY_SECRET:-}
+      WORKER_PRODUCE_CRON: ${WORKER_PRODUCE_CRON:-0 8 * * *}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - mediadata:/app/content
+
+volumes:
+  pgdata:
+  mediadata:

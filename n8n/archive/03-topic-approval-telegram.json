@@ -1,0 +1,69 @@
+{
+  "name": "03-topic-approval-telegram",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "Topic approval gate via Telegram. Uses worker approval tokens. Wait resumes on webhook."
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "exec-trigger",
+      "name": "When called by another workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.KANALLAR_BASE_URL}}/api/approvals/topic",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "idea_id", "value": "={{$json.idea_id}}" },
+            { "name": "channel_id", "value": "={{$json.channel_id}}" }
+          ]
+        },
+        "options": { "timeout": 15000 }
+      },
+      "id": "issue-token",
+      "name": "Issue topic token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst base = $env.KANALLAR_BASE_URL || '';\nconst topic = $('When called by another workflow').first().json;\nconst msg = [\n  `Kanal: ${topic.channel_id || ''}`,\n  `Konu: ${topic.topic || ''}`,\n  `Açı: ${topic.angle || ''}`,\n  `Hook: ${topic.hook_candidate || ''}`,\n  `Neden: ${topic.why || ''}`,\n  '',\n  `Token: ${item.token}`,\n  `Decide: POST ${base}/api/approvals/topic/decide?token=...&decision=APPROVE|REJECT|NEW_IDEAS`\n].join('\\n');\nreturn [{ json: { ...item, ...topic, telegram_text: msg, resume_hint: 'Wire Telegram + Wait webhook in n8n UI with bot credential' } }];"
+      },
+      "id": "fmt",
+      "name": "Format Telegram text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 0]
+    },
+    {
+      "parameters": {
+        "content": "## Telegram setup (n8n UI)\n\n1. Add Telegram node → send `telegram_text` to your chat\n2. Inline buttons: APPROVE / REJECT / NEW_IDEAS\n3. Wait node (On Webhook Call) — resume with decision\n4. HTTP → `/api/approvals/topic/decide`\n\nDo not embed bot token in this JSON export.",
+        "height": 260,
+        "width": 360
+      },
+      "id": "note",
+      "name": "Telegram wiring note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [780, -40]
+    }
+  ],
+  "connections": {
+    "When called by another workflow": {
+      "main": [[{ "node": "Issue topic token", "type": "main", "index": 0 }]]
+    },
+    "Issue topic token": {
+      "main": [[{ "node": "Format Telegram text", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "kanallar" }, { "name": "approval" }],
+  "versionId": "m1"
+}

@@ -1,0 +1,32 @@
+- id: octopus-three-hearts
+  title: The Octopus Has Three Hearts
+  hook: An octopus has three hearts, and one of them stops when it swims.
+  facts:
+    - Two hearts pump blood through the gills; the third pumps it to the body.
+    - Its blood uses copper-based hemocyanin, which makes it blue.
+    - That is one reason octopuses often crawl instead of swim.
+  closer: Nature solved the same problem three times in one animal.
+  tags: [biology, ocean]
+  visual: deep ocean ink and copper light
+
+- id: voyager-golden-record
+  title: Voyager's Golden Record
+  hook: In 1977 we launched a gold record into interstellar space, just in case someone finds it.
+  facts:
+    - It carries greetings in 55 languages, music, and sounds of Earth.
+    - Voyager 1 is the most distant human-made object.
+    - Its signal still reaches us, taking almost a day to arrive.
+  closer: We sent a hello with no idea who might answer.
+  tags: [space, astronomy]
+  visual: golden disc drifting past a distant star field
+
+- id: tardigrade
+  title: The Animal That Survived Space
+  hook: A creature smaller than a grain of sand survived the vacuum of space.
+  facts:
+    - Tardigrades can dry out and almost stop their metabolism.
+    - In 2007 some were exposed to open space and survived.
+    - They tolerate radiation far beyond what a human can.
+  closer: Sometimes the toughest armour is the ability to pause life.
+  tags: [biology, space]
+  visual: microscopic crystal creature in starlight

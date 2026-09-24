@@ -1,0 +1,13 @@
+{
+  "id": "shorts-hook-3scene-cta",
+  "size": [1080, 1920],
+  "fps": 30,
+  "flow": ["HOOK", "Scene 1", "Scene 2", "Scene 3", "CTA"],
+  "features": [
+    "dynamic_subtitles",
+    "word_highlight",
+    "zoom_pan",
+    "logo_branding",
+    "automatic_scene_duration"
+  ]
+}

@@ -1,0 +1,781 @@
+{
+  "name": "youtube-paylasim (backup)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        -160
+      ],
+      "id": "b51bb9aa-5680-429e-b78c-c8b01031bd36",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        -192
+      ],
+      "id": "f49ed617-3d4a-4afa-adb0-8ed0d5c69b77",
+      "name": "Wait",
+      "webhookId": "0a01cc7e-74d7-4ac9-a363-38e709aafb76"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5d820fc5-0e8c-4966-b029-8672294183c0",
+              "leftValue": "={{$json.status}}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        -192
+      ],
+      "id": "b2a4f1ec-7be4-44f7-87ef-473e9b353327",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6da5324a-2461-468a-bf22-4ae777bb1729",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2176,
+        -208
+      ],
+      "id": "534b4212-1683-43e5-8ebb-819d00e39f27",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee042dcb-e147-4286-b3b7-e9a83652b146",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2864,
+        -64
+      ],
+      "id": "abb7a738-e43d-45a9-9e80-e179f8c9957b",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $('tarih-kontrol').item.json.baslik }}",
+        "regionCode": "TR",
+        "categoryId": "22",
+        "options": {
+          "description": "={{ $('tarih-kontrol').item.json.aciklama }}"
+        }
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        2988,
+        -368
+      ],
+      "id": "1540e970-a93f-4437-b323-bb16355028a4",
+      "name": "Upload a video"
+    },
+    {
+      "parameters": {
+        "jsCode": "const aylar = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', \n               'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];\n\n// TSİ için UTC+3\nconst now = new Date();\nconst tpiTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));\n\nconst gun = tpiTime.getUTCDate();\nconst ay = aylar[tpiTime.getUTCMonth()];\nconst yil = tpiTime.getUTCFullYear();\n\nconst bugunTarih = `${gun} ${ay} ${yil}`;\n\nreturn [{ json: { bugunTarih } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        -160
+      ],
+      "id": "a8be79f1-eb49-4600-8872-6f7716cd3b27",
+      "name": "tarih"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8",
+          "mode": "list",
+          "cachedResultName": "icerik-takvim",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sayfa1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DvH3odfp_kBxWzMImzkbP6lu-LCJHgxwBebOj9zTXU8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        -160
+      ],
+      "id": "cb789152-0c04-4435-b355-47944eca3e76",
+      "name": "icerikler",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "DTs3NyX0QtAz2bXi",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b776dd28-0ae2-4c88-9d5e-fba9030774a8",
+              "leftValue": "={{ $('tarih').item.json.bugunTarih }}",
+              "rightValue": "={{ $json.tarih }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        -160
+      ],
+      "id": "830dda97-281a-42b0-bda1-3abd6830cc9e",
+      "name": "tarih-kontrol"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gateway-api.prototipal.com/api/long-story/videos",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer "
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json[\"sahne-prompt\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1104,
+        -192
+      ],
+      "id": "742fccea-47dd-41a4-98a9-f7279c91c9a1",
+      "name": "olustur"
+    },
+    {
+      "parameters": {
+        "url": "=https://gateway-api.prototipal.com/api/long-story/videos/{{ $('olustur').item.json.video_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer "
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1600,
+        -192
+      ],
+      "id": "39850a28-e9e5-4f85-bf93-505339982e35",
+      "name": "kontrol"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "=Videonuz oluşturuldu paylaşım yapılsın mı ?\n{{$json.final_video_url}}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {},
+        "chatId": "8715342169"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        -208
+      ],
+      "id": "ba86f134-7565-4992-a784-881ccae00c5c",
+      "name": "onay?",
+      "webhookId": "a17a7556-3c12-4585-ac83-c73c518d16b4",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$node[\"kontrol\"].json[\"final_video_url\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2560,
+        -368
+      ],
+      "id": "8d515681-f9b7-4c89-8928-851e00cb013d",
+      "name": "indir"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "Yeniden video oluşturulsun mu ?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {},
+        "chatId": "8715342169"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2624,
+        -80
+      ],
+      "id": "f7ef23a4-c7b4-4e87-8e1a-44d5fa9c7b74",
+      "name": "yeni-video-onay",
+      "webhookId": "4bdc8a61-9775-4fb0-8fb7-76fa3927f1cc",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## İÇERİK TARİHİ KONTROLÜ\n",
+        "height": 336,
+        "width": 672
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "f72bb7c8-5d8a-49ff-b48e-1ac74d6536c5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## VİDEO OLUŞTURMA VE KULLANICI ONAYI\n",
+        "height": 320,
+        "width": 1216,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1072,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "e8a886b6-89fc-40fe-94f3-74dba26cd12b",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## PAYLAŞIM\n",
+        "height": 272,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2496,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "ef58b3c5-1502-4ee1-bfc3-4120f7a24313",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## TEKRAR OLUŞTUR\n",
+        "height": 304,
+        "width": 528,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2560,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "1419e3c3-581d-4544-895f-2c88561d921e",
+      "name": "Sticky Note3"
+    },
+    {
+      "id": "de068f20-dabb-4d20-905f-42c97ec9cdb0",
+      "name": "SEO preflight",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        752,
+        60
+      ],
+      "parameters": {
+        "jsCode": "const row=$input.first().json; const title=String(row.baslik||'').trim(); const desc=String(row.aciklama||'').trim(); const maxTitle=40; const issues=[]; if(!title)issues.push('baslik bos'); else if(title.length>maxTitle)issues.push('baslik uzun'); if(!desc||desc.length<20)issues.push('aciklama'); return [{json:{...row,seo_ok:issues.length===0,seo_issues:issues.join('; ')||'ok'}}];"
+      }
+    },
+    {
+      "id": "dabb3031-893a-4ab7-adb6-8f4151118a98",
+      "name": "SEO OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        972,
+        60
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "37379aa5-0f9e-4ad3-9392-9ccf4ae2a092",
+              "leftValue": "={{ $json.seo_ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f12ce285-c243-4cac-b406-7dd87c32bc0d",
+      "name": "SEO fail",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1192,
+        220
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "8715342169",
+        "text": "=SEO FAIL\n{{$json.seo_issues}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "36197fed-453a-4b26-a8ef-5305586e9778",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "id": "ef657b03-6c04-48e9-8590-597bc10f9ec3",
+      "name": "DRY_RUN?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2748,
+        -368
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "49b0c6f7-01af-4715-8981-3230b8604942",
+              "leftValue": "={{String($env.DRY_RUN || 'true').toLowerCase()}}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "8da62bc3-1525-4770-ad0f-47c38eca5f57",
+      "name": "DRY_RUN skip",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2988,
+        -188
+      ],
+      "parameters": {
+        "operation": "sendMessage",
+        "chatId": "8715342169",
+        "text": "DRY_RUN skip",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "webhookId": "eb40c46f-a538-4bda-9765-d9759ec31ccb",
+      "credentials": {
+        "telegramApi": {
+          "id": "CnjYVDcTJNiA0igk",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "tarih",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "kontrol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "onay?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "indir",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "yeni-video-onay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "olustur",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "tarih": {
+      "main": [
+        [
+          {
+            "node": "icerikler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "icerikler": {
+      "main": [
+        [
+          {
+            "node": "tarih-kontrol",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tarih-kontrol": {
+      "main": [
+        [
+          {
+            "node": "SEO preflight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "olustur": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kontrol": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "onay?": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "indir": {
+      "main": [
+        [
+          {
+            "node": "DRY_RUN?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "yeni-video-onay": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO preflight": {
+      "main": [
+        [
+          {
+            "node": "SEO OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO OK?": {
+      "main": [
+        [
+          {
+            "node": "olustur",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SEO fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DRY_RUN?": {
+      "main": [
+        [
+          {
+            "node": "Upload a video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DRY_RUN skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "43679e52-ac0c-49b6-96ff-beb29427c573",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "003a9ae3dba371754ae5d918b688a4b816eee1ca87966505b27018250488ab53"
+  },
+  "id": "cuCh1RuatDjapp46",
+  "tags": []
+}

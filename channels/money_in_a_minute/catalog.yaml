@@ -1,0 +1,32 @@
+- id: rule-of-72
+  title: The Rule of 72
+  hook: Divide 72 by your interest rate and you get how many years it takes your money to double.
+  facts:
+    - At 6 percent a year, money doubles in about 12 years. At 9 percent, about 8.
+    - The same rule works against you on debt; a 24 percent card balance doubles in about 3 years.
+    - It is an estimate that works best for rates between 4 and 12 percent.
+  closer: Before you save or borrow, ask how long until it doubles.
+  tags: [compound interest, saving, debt]
+  visual: glowing coins stacking and doubling on a dark desk
+
+- id: pay-yourself-first
+  title: Pay Yourself First
+  hook: Most people save what is left at the end of the month. That is usually nothing.
+  facts:
+    - Move a fixed amount to savings the day your pay arrives, before any spending.
+    - Automating the transfer removes the monthly decision you keep losing.
+    - Start with an amount you will not notice, then raise it with every pay rise.
+  closer: Savings are a bill you pay to your future self.
+  tags: [budgeting, saving money, habits]
+  visual: paycheck splitting into two glowing streams
+
+- id: credit-utilization
+  title: The 30 Percent Credit Rule
+  hook: Your credit score can drop even if you pay every bill on time.
+  facts:
+    - Utilization is how much of your card limit you are using on the statement date.
+    - Keeping it under about 30 percent is a common guideline; lower is usually better.
+    - Paying before the statement closes can lower the reported balance.
+  closer: It is not only whether you pay, it is how much you show.
+  tags: [credit score, credit cards]
+  visual: a credit card gauge moving from red to green
