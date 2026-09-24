@@ -1,0 +1,44 @@
+id: history_in_a_minute
+name: History in a Minute
+tagline: One unforgettable moment from history, told in a minute
+# docs/CHANNELS_STATUS.md — empty youtube_channel_id means uploads are disabled for this channel.
+youtube_channel_id: ""
+niche: history
+language: en
+country: US
+format: shorts
+catalog: catalog.yaml
+prompt: >
+  Plain US English, cinematic storyteller voice. Original script from historical chronicles; never adapt TV series or films scene by scene. Open on a concrete moment, end on a single memorable line.
+cta: Follow for one history story a day.
+description_footer: |
+  Educational content based on historical sources; dramatised visuals are illustrative.
+  Narration and visuals are AI-assisted (synthetic voice and generated imagery); script is original.
+
+  #history #historyshorts #shorts
+brand:
+  primary: "#0B1220"
+  accent: "#F5B142"
+  text: "#F4F1E8"
+  muted: "#9AA3B5"
+voice:
+  provider: auto
+  voice: en-US-GuyNeural
+  rate: "+0%"
+  language: en
+upload:
+  privacy: private
+  category_id: "27"
+  made_for_kids: false
+  default_language: en
+  tags:
+    - history
+    - history facts
+    - ottoman empire
+    - ancient history
+    - world history
+    - history in a minute
+    - shorts
+  frequency_per_day: 1
+  schedule_hour: 20
+  schedule_publish: false

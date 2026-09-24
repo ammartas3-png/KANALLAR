@@ -46,22 +46,24 @@ def test_sync_artifacts(tmp_path, monkeypatch):
     assert "video" in meta["urls"]
 
 
-def test_bootstrap_writes_token(tmp_path, monkeypatch):
+def test_bootstrap_writes_per_channel_tokens_and_ignores_personal(tmp_path, monkeypatch):
     secrets = {"installed": {"client_id": "x", "client_secret": "y"}}
     token = {"token": "abc", "refresh_token": "r", "token_uri": "https://oauth2.googleapis.com/token", "client_id": "x", "client_secret": "y"}
     monkeypatch.setenv("YOUTUBE_CLIENT_SECRETS", str(tmp_path / "cs.json"))
-    monkeypatch.setenv("YOUTUBE_TOKEN", str(tmp_path / "tok.json"))
+    monkeypatch.setenv("YOUTUBE_TOKENS_DIR", str(tmp_path / "tokens"))
     monkeypatch.setenv("YOUTUBE_CLIENT_SECRETS_JSON", json.dumps(secrets))
     monkeypatch.setenv("YOUTUBE_TOKEN_JSON", json.dumps(token))
+    monkeypatch.setenv("YOUTUBE_TOKEN_JSON__MONEY_IN_A_MINUTE", json.dumps(token))
     from config.settings import get_settings
     from automation.bootstrap import bootstrap_cloud_secrets
 
     get_settings.cache_clear()
     result = bootstrap_cloud_secrets()
     assert result["client_secrets_from_env"] is True
-    assert result["token_from_env"] is True
+    assert result["channel_tokens"] == ["money_in_a_minute"]
     assert (tmp_path / "cs.json").exists()
-    assert (tmp_path / "tok.json").exists()
+    assert (tmp_path / "tokens" / "money_in_a_minute.json").exists()
+    assert sorted(p.name for p in (tmp_path / "tokens").iterdir()) == ["money_in_a_minute.json"]
 
 
 def test_health_endpoint(tmp_path, monkeypatch):

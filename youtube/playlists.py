@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from youtube.api import _client
 
-
-def add_to_playlist(youtube_video_id: str, playlist_id: str) -> dict:
-    youtube = _client()
+def add_to_playlist(youtube, youtube_video_id: str, playlist_id: str) -> dict:
+    """Uses the caller's already channel-verified client."""
     body = {
         "snippet": {
             "playlistId": playlist_id,

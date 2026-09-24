@@ -27,10 +27,10 @@ class Settings(BaseSettings):
     elevenlabs_api_key: str = ""
     google_tts_api_key: str = ""
     youtube_client_secrets: str = "client_secret.json"
-    youtube_token: str = "token.json"
-    # Prefer these on cloud hosts (paste JSON or base64) — no Mac file copy
+    # One OAuth token per brand channel: tokens/<channel_key>.json, or env YOUTUBE_TOKEN_JSON__<CHANNEL_KEY>
+    youtube_tokens_dir: str = "tokens"
+    # Prefer this on cloud hosts (paste JSON or base64) — no Mac file copy
     youtube_client_secrets_json: str = ""
-    youtube_token_json: str = ""
     youtube_api_key: str = ""
     pexels_api_key: str = ""
     # Media gateways (optional until keys exist)

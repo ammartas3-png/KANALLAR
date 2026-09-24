@@ -76,7 +76,7 @@ def main() -> None:
         "Cloud worker starting run_mode=%s storage=%s youtube=%s",
         settings.run_mode,
         storage_status(),
-        {k: boot[k] for k in ("client_secrets_from_env", "token_from_env")},
+        {k: boot[k] for k in ("client_secrets_from_env", "channel_tokens")},
     )
     if settings.worker_enable_studio:
         thread = threading.Thread(target=run_studio_background, name="studio", daemon=True)

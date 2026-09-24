@@ -1,0 +1,46 @@
+id: money_in_a_minute
+name: Money in a Minute
+tagline: One money idea you can use today, in under a minute
+# docs/CHANNELS_STATUS.md — empty youtube_channel_id means uploads are disabled for this channel.
+youtube_channel_id: "UCj6vC105nA-2P627Q01cIgw"
+niche: personal_finance
+language: en
+country: US
+format: shorts
+catalog: catalog.yaml
+prompt: >
+  Plain US English, calm and practical. One concrete money idea per video with a real number or example. Never give personalised investment advice or predict prices.
+cta: Follow for one money idea a day.
+description_footer: |
+  Educational content only. Not financial advice.
+  Narration and visuals are AI-assisted (synthetic voice and generated imagery); script is original.
+
+  #personalfinance #moneytips #shorts
+brand:
+  primary: "#0B1220"
+  accent: "#22C55E"
+  text: "#F4F1E8"
+  muted: "#9AA3B5"
+voice:
+  provider: auto
+  voice: en-US-GuyNeural
+  rate: "+0%"
+  language: en
+upload:
+  privacy: private
+  category_id: "27"
+  made_for_kids: false
+  default_language: en
+  tags:
+    - personal finance
+    - money tips
+    - financial literacy
+    - budgeting
+    - credit score
+    - compound interest
+    - saving money
+    - money in a minute
+    - shorts
+  frequency_per_day: 1
+  schedule_hour: 14
+  schedule_publish: false

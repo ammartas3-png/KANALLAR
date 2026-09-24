@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import os
 from pathlib import Path
 
 from config.paths import ROOT, ensure_runtime_dirs
@@ -33,31 +34,43 @@ def _write_json_secret(path: Path, raw: str, label: str) -> bool:
     return True
 
 
+TOKEN_ENV_PREFIX = "YOUTUBE_TOKEN_JSON__"
+
+
+def channel_token_envs(environ: dict[str, str]) -> dict[str, str]:
+    """Map YOUTUBE_TOKEN_JSON__<CHANNEL_KEY> env vars to channel keys (lowercase)."""
+    return {
+        name[len(TOKEN_ENV_PREFIX):].lower(): value
+        for name, value in environ.items()
+        if name.startswith(TOKEN_ENV_PREFIX) and value.strip()
+    }
+
+
 def bootstrap_cloud_secrets() -> dict:
     """Materialize OAuth JSON files from env so Mac/local disk is never required."""
+    from youtube.api import token_path, tokens_dir
+
     ensure_runtime_dirs()
     settings = get_settings()
     secrets_path = Path(settings.youtube_client_secrets)
     if not secrets_path.is_absolute():
         secrets_path = ROOT / secrets_path
-    token_path = Path(settings.youtube_token)
-    if not token_path.is_absolute():
-        token_path = ROOT / token_path
 
     wrote_secrets = _write_json_secret(
         secrets_path,
         settings.youtube_client_secrets_json,
         "YOUTUBE_CLIENT_SECRETS_JSON",
     )
-    wrote_token = _write_json_secret(
-        token_path,
-        settings.youtube_token_json,
-        "YOUTUBE_TOKEN_JSON",
-    )
+    if os.environ.get("YOUTUBE_TOKEN_JSON", "").strip():
+        log.warning("YOUTUBE_TOKEN_JSON is ignored: it belongs to the blocked personal channel")
+    tokens = {
+        key: _write_json_secret(token_path(key), raw, f"{TOKEN_ENV_PREFIX}{key.upper()}")
+        for key, raw in channel_token_envs(dict(os.environ)).items()
+    }
     return {
         "client_secrets_from_env": wrote_secrets or secrets_path.exists(),
-        "token_from_env": wrote_token or token_path.exists(),
+        "channel_tokens": sorted(k for k, ok in tokens.items() if ok),
         "client_secrets_path": str(secrets_path),
-        "token_path": str(token_path),
+        "tokens_dir": str(tokens_dir()),
         "run_mode": settings.run_mode,
     }

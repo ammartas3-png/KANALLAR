@@ -24,6 +24,8 @@ class UploadRules(BaseModel):
     tags: list[str] = Field(default_factory=list)
     frequency_per_day: int = 1
     schedule_hour: int = 20
+    # When true, uploads are private with publishAt at schedule_hour UTC (still after human approval).
+    schedule_publish: bool = False
     playlist_id: str = ""
 
 
@@ -68,6 +70,14 @@ def load_channel(channel_id: str | None = None, root: Path | None = None) -> Cha
         raise FileNotFoundError(f"Kanal yok: {channel_id}")
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     return ChannelConfig.model_validate(data)
+
+
+def list_channels(root: Path | None = None) -> list[ChannelConfig]:
+    base = root or CHANNELS_DIR
+    return [
+        load_channel(path.parent.name, root=base)
+        for path in sorted(base.glob("*/config.yaml"))
+    ]
 
 
 def list_mvp_channel() -> ChannelConfig:

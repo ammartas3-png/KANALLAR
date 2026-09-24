@@ -1,0 +1,32 @@
+- id: ships-over-land-1453
+  title: The Fleet That Crossed a Hill
+  hook: In 1453 an army moved its warships over land to get past a giant harbour chain.
+  facts:
+    - A great chain blocked the Golden Horn, the harbour of Constantinople.
+    - Dozens of ships were hauled on greased wooden tracks over the hills of Galata in one night.
+    - At dawn the defenders found enemy ships inside the harbour they thought was sealed.
+  closer: When the sea was closed, they turned the land into water.
+  tags: [ottoman empire, 1453, siege]
+  visual: wooden warships sliding over a moonlit hill on greased logs
+
+- id: great-bombard
+  title: The Cannon That Broke a Wall
+  hook: The walls of Constantinople stood for a thousand years. Then came a cannon over eight metres long.
+  facts:
+    - A Hungarian engineer offered to cast giant bronze guns for the besiegers.
+    - The largest could fire stones weighing hundreds of kilograms.
+    - It needed hours to cool between shots, so crews repaired breaches at night.
+  closer: Medieval walls met the age of gunpowder in a single spring.
+  tags: [siege, gunpowder, 1453]
+  visual: a massive bronze cannon glowing at dusk before ancient walls
+
+- id: library-of-alexandria
+  title: What Really Happened to the Library of Alexandria
+  hook: The Library of Alexandria did not burn in one night.
+  facts:
+    - Its decline took centuries, through fires, budget cuts and political turmoil.
+    - Scholars were expelled long before the last scrolls disappeared.
+    - Knowledge is often lost by neglect, not by one dramatic fire.
+  closer: The quiet ending is the real warning.
+  tags: [ancient history, egypt]
+  visual: dusty scrolls in fading lamplight inside a vast hall

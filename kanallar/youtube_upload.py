@@ -6,6 +6,7 @@ from typing import Any
 
 from kanallar.config import ChannelConfig
 from kanallar.paths import ROOT
+from youtube.guard import assert_upload_allowed
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
@@ -59,6 +60,8 @@ def upload_video(channel: ChannelConfig, script: dict[str, Any], video: Path, th
         saved.write_text(creds.to_json(), encoding="utf-8")
 
     youtube = build("youtube", "v3", credentials=creds)
+    items = youtube.channels().list(part="id", mine=True).execute().get("items") or []
+    assert_upload_allowed(getattr(channel, "youtube_channel_id", ""), items[0]["id"] if items else "")
     body = {
         "snippet": {
             "title": script["title"][:100],
@@ -71,6 +74,7 @@ def upload_video(channel: ChannelConfig, script: dict[str, Any], video: Path, th
         "status": {
             "privacyStatus": channel.upload.privacy,
             "selfDeclaredMadeForKids": channel.upload.made_for_kids,
+            "containsSyntheticMedia": True,
         },
     }
     media = MediaFileUpload(str(video), mimetype="video/mp4", resumable=True)
